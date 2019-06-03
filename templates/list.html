@@ -7,20 +7,29 @@
     <table>
 
         <thead>
-        <tr>
-            {% for key,value in user_questions[0].items() %}
-                <th> {{ key|replace("_"," ")|title }}</th>
-            {% endfor %}
-        </tr>
+            <tr>
+                {% for key,value in user_questions[0].items() %}
+                    <th> {{ key|replace("_"," ")|title }}</th>
+                {% endfor %}
+            </tr>
         </thead>
 
         <tbody>
 
             {% for question in user_questions %}
                <tr>
-                   {% for key,value in question.items() %}
-                       <td> {{ value }}</td>
-                   {% endfor %}
+                   {% autoescape false %}
+                       {% for key,value in question.items() %}
+                           {% if key == "image" %}
+                               <td><img src = " {{ value }}" alt = "No image"></td>
+                            {% elif key == "title" %}
+                               <td><a href = "#"></td>
+                           {% else %}
+                                 <td>{{ value}}
+                           {% endif %}
+
+                       {% endfor %}
+                   {% endautoescape %}
                </tr>
             {% endfor %}
 
