@@ -19,9 +19,16 @@
             {% for question in user_questions %}
                <tr>
                    {% autoescape false %}
-                   {% for key,value in question.items() %}
-                       <td> {{ value}}</td>
-                   {% endfor %}
+                       {% for key,value in question.items() %}
+                           {% if key == "image" %}
+                               <td><img src = " {{ value }}" alt = "No image"></td>
+                            {% elif key == "title" %}
+                               <td><a href = "#"></td>
+                           {% else %}
+                                 <td>{{ value}}
+                           {% endif %}
+
+                       {% endfor %}
                    {% endautoescape %}
                </tr>
             {% endfor %}

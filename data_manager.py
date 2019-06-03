@@ -6,7 +6,7 @@ def get_post_time(user_data):
     for data in user_data:
         for header, info in data.items():
             if header == 'submission_time':
-                data[header] = time.asctime(time.gmtime(info))
+                data[header] = time.asctime(time.gmtime(int(info)))
 
     return user_data
 
@@ -20,10 +20,3 @@ def add_line_breaks_to_data(user_data):
 
     return user_data
 
-
-
-def replace_image(user_data):
-    for data in user_data:
-        for header, info in data.items():
-            if header == "image":
-                data["image"] = "<img src=\"" + info + "\" alt= \"" + info + "\" />"

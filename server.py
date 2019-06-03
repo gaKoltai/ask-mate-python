@@ -8,7 +8,8 @@ app = Flask(__name__)
 @app.route('/')
 def route_list():
     user_questions = connection.get_info_from_file(connection.QUESTION_FILE)
-    data_manager.replace_image(user_questions)
+    data_manager.add_line_breaks_to_data(user_questions)
+    data_manager.get_post_time(user_questions)
     return render_template('list.html', user_questions =user_questions)
 
 
