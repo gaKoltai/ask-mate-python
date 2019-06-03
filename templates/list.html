@@ -21,11 +21,11 @@
                    {% autoescape false %}
                        {% for key,value in question.items() %}
                            {% if key == "image" %}
-                               <td><img src = " {{ value }}" alt = "No image"></td>
-                            {% elif key == "title" %}
-                               <td><a href = "#"></td>
+                                <td><img src = " {{ value }}" alt = "No image"></td>
+                           {% elif key == "title" %}
+                                <td><a href = "#"></a></td>
                            {% else %}
-                                 <td>{{ value}}
+                                <td>{{ value}} </td>
                            {% endif %}
 
                        {% endfor %}
