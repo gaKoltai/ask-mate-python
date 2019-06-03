@@ -7,20 +7,22 @@
     <table>
 
         <thead>
-        <tr>
-            {% for key,value in user_questions[0].items() %}
-                <th> {{ key|replace("_"," ")|title }}</th>
-            {% endfor %}
-        </tr>
+            <tr>
+                {% for key,value in user_questions[0].items() %}
+                    <th> {{ key|replace("_"," ")|title }}</th>
+                {% endfor %}
+            </tr>
         </thead>
 
         <tbody>
 
             {% for question in user_questions %}
                <tr>
+                   {% autoescape false %}
                    {% for key,value in question.items() %}
-                       <td> {{ value }}</td>
+                       <td> {{ value}}</td>
                    {% endfor %}
+                   {% endautoescape %}
                </tr>
             {% endfor %}
 
