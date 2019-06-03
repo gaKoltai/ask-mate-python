@@ -1,0 +1,31 @@
+<!doctype html>
+<head>
+    <title>List</title>
+
+</head>
+<body>
+    <table>
+
+        <thead>
+        <tr>
+            {% for key,value in user_questions[0].items() %}
+                <th> {{ key|replace("_"," ")|title }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+
+        <tbody>
+
+            {% for question in user_questions %}
+               <tr>
+                   {% for key,value in question.items() %}
+                       <td> {{ value }}</td>
+                   {% endfor %}
+               </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+
+</body>
