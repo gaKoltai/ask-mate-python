@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Display a question</title>
+</head>
+<body>
+    <h1>Display question</h1>
+    <table>
+
+        <thead>
+        <tr>
+            {% for key in question%}
+            <th> {{ key|replace("_"," ")|title }}</th>
+            {% endfor %}
+        </tr>
+
+        </thead>
+        <tbody>
+
+            <tr>
+                {% for value in question.values()%}
+                <td> {{ value }}</td>
+                 {% endfor %}
+            </tr>
+
+        </tbody>
+
+    </table>
+    <h2>Answers:</h2>
+    <table>
+
+        <thead>
+        <tr>
+            {% for key in answers[0]%}
+            <th> {{ key|replace("_"," ")|title }}</th>
+            {% endfor %}
+        </tr>
+
+        </thead>
+        <tbody>
+            {% for answer in answers %}
+            <tr>
+                {% for value in answer.values()%}
+                <td> {{ value }}</td>
+                 {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</body>
+</html>
