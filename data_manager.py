@@ -1,12 +1,12 @@
 import connection
-import time
+from time import asctime, gmtime
 
 
 def get_post_time(user_data):
     for data in user_data:
         for header, info in data.items():
             if header == 'submission_time':
-                data[header] = time.asctime(time.gmtime(int(info)))
+                data[header] = asctime(gmtime(int(info)))
 
     return user_data
 
