@@ -1,5 +1,6 @@
 import connection
 from time import asctime, gmtime
+import util
 
 
 def get_post_time(user_data):
@@ -43,6 +44,7 @@ def add_line_breaks_to_data(user_data):
 def get_question_by_id(question_id):
     searched_question = {}
     questions = connection.get_info_from_file(connection.QUESTION_FILE)
+    get_post_time(questions)
     for question in questions:
         if question['id'] == str(question_id):
             for item, value in question.items():
@@ -53,6 +55,7 @@ def get_question_by_id(question_id):
 def get_answers_by_question_id(question_id):
     searched_answers = []
     answers = connection.get_info_from_file(connection.ANSWER_FILE)
+    get_post_time(answers)
     for answer in answers:
         if answer['question_id'] == str(question_id):
             searched_answers.append(answer)
@@ -63,3 +66,14 @@ def get_new_id(file_name):
     new_id = len(connection.get_info_from_file(file_name))
 
     return new_id
+
+def new_question_entry(entry_data):
+    id = get_new_id(connection.QUESTION_FILE)
+    post_time = util.get_local_time()
+
+    new_entry = {'id':id, 'submission_time':post_time, 'view_number':0, 'vote_number': 0 }
+
+    for header, data in entry_data.items():
+        new_entry[header] = data
+
+    return new_entry
