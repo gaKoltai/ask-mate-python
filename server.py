@@ -42,6 +42,22 @@ def route_ask_new_question():
     return render_template('new_question.html')
 
 
+@app.route('/question/<int:question_id>/edit', methods=['GET', 'POST'])
+def route_edit_question(question_id):
+
+    question = data_manager.get_answers_by_question_id(question_id)
+
+    if request.method == 'POST':
+
+        questions_with_edit = data_manager.edit_question(request.form, question)
+        connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions_with_edit)
+
+        return redirect(url_for(route_question_with_answer, question_id=question['id']))
+
+
+    return render_template('edit_question.html', question=question)
+
+
 @app.route('/question/<int:question_id>/<vote>')
 def route_vote(question_id=None, vote = None):
     data_manager.vote(question_id, vote)

@@ -74,3 +74,13 @@ def new_question_entry(entry_data):
         new_entry[header] = data
 
     return new_entry
+
+def edit_question(edited_info, edited_question):
+    questions = connection.get_info_from_file(connection.QUESTION_FILE)
+    for question in questions:
+        if question['id'] == edited_question['id']:
+            for header, info in edited_info:
+                question[header] = info
+
+    return questions
+
