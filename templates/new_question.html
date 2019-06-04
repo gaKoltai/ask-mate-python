@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add a new question</title>
+</head>
+<body>
+    <h1>Post a new question</h1>
+    <form action="/ask-question" method="post">
+        <input type="hidden" name="id" id="id" value="{{ id }}" >
+        <input type="hidden" name="submission_time" id="submission_time" value="{{ time }}">
+        <input type="hidden" name="view_number" id="view_number" value="0">
+        <input type="hidden" name="vote_number" id="vote_number" value="0">
+        <p>
+            <label for="title">Question title:</label>
+        </p>
+        <p>
+            <input type="text" name="title" id="title" minlength="5" required>
+        </p>
+        <p>
+            <label for="message">Your question:</label>
+        <p>
+            <textarea name="message" id="message" cols="30" rows="10"></textarea>
+        <p>
+            <input type="hidden" name="image" id="image" value="images/image1.png">
+            <button type="Submit">Submit question</button>
+        </p>
+    </form>
+</body>
+</html>

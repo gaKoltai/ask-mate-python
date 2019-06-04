@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import connection
 import data_manager
+import util
 
 app = Flask(__name__)
 
@@ -24,6 +25,24 @@ def route_question_with_answer(question_id=None):
         question = data_manager.get_question_by_id(question_id)
         answers = data_manager.get_answers_by_question_id(question_id)
     return render_template('question_with_answers.html', question=question, answers=answers)
+
+@app.route('/ask-question', methods=['GET', 'POST'])
+def route_ask_new_question():
+
+    question = {}
+    id = data_manager.get_new_id(connection.QUESTION_FILE)
+    post_time = util.get_local_time()
+
+    if request.method == 'POST':
+
+        for header, info in request.form.items():
+            question[header] = info
+
+        connection.pass_user_story_to_file(question, connection.QUESTION_FILE, connection.QUESTION_HEADER)
+
+        return redirect('/')
+
+    return render_template('new_question.html', id= id, time=post_time)
 
 
 @app.route('/question/<int:question_id>/<vote>')
