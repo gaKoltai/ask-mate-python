@@ -1,12 +1,12 @@
 import connection
-import time
-
+from time import asctime, gmtime
+import util
 
 def get_post_time(user_data):
     for data in user_data:
         for header, info in data.items():
             if header == 'submission_time':
-                data[header] = time.asctime(time.gmtime(int(info)))
+                data[header] = asctime(gmtime(int(info)))
 
     return user_data
 
@@ -15,9 +15,9 @@ def vote(id, up_or_down):
     questions = connection.get_info_from_file(connection.QUESTION_FILE)
     for question in questions:
         if id == int(question['id']):
-            question['vote'] = int(question['vote'])
-            question['vote'] += 1 if up_or_down == "vote-up" else -1
-            question['vote'] = str(question['vote'])
+            question['vote_number'] = int(question['vote_number'])
+            question['vote_number'] += 1 if up_or_down == "vote-up" else -1
+            question['vote_number'] = str(question['vote_number'])
     connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions)
 
 
@@ -50,10 +50,16 @@ def get_answers_by_question_id(question_id):
     return searched_answers
 
 
+def get_new_id(file_name):
+    new_id = len(connection.get_info_from_file(file_name))
+
+    return new_id
+
+
 def add_answer(question_id, answer):
     answers = get_answers_by_question_id(question_id)
     new_answer = {'id': str(int(answers[-1]['id']) + 1),
-                  'submission_time': util.get_time(),
+                  'submission_time': util.get_local_time(),
                   'vote_number': 0,
                   'question_id': question_id,
                   'message' : answer,
