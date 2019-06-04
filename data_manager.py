@@ -12,7 +12,13 @@ def get_post_time(user_data):
 
 
 def vote(id, up_or_down):
-    pass
+    questions = connection.get_info_from_file(connection.QUESTION_FILE)
+    for question in questions:
+        if id == int(question['id']):
+            question['vote'] = int(question['vote'])
+            question['vote'] += 1 if up_or_down == "vote-up" else -1
+            question['vote'] = str(question['vote'])
+    connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions)
 
 
 def add_line_breaks_to_data(user_data):
@@ -27,7 +33,7 @@ def add_line_breaks_to_data(user_data):
 
 def get_question_by_id(question_id):
     searched_question = {}
-    questions = get_post_time(connection.get_info_from_file(connection.QUESTION_FILE))
+    questions = connection.get_info_from_file(connection.QUESTION_FILE)
     for question in questions:
         if question['id'] == str(question_id):
             for item, value in question.items():
@@ -37,7 +43,7 @@ def get_question_by_id(question_id):
 
 def get_answers_by_question_id(question_id):
     searched_answers = []
-    answers = get_post_time(connection.get_info_from_file(connection.ANSWER_FILE))
+    answers = connection.get_info_from_file(connection.ANSWER_FILE)
     for answer in answers:
         if answer['question_id'] == str(question_id):
             searched_answers.append(answer)
