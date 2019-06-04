@@ -15,9 +15,9 @@ def vote(id, up_or_down):
     questions = connection.get_info_from_file(connection.QUESTION_FILE)
     for question in questions:
         if id == int(question['id']):
-            question['vote'] = int(question['vote'])
-            question['vote'] += 1 if up_or_down == "vote-up" else -1
-            question['vote'] = str(question['vote'])
+            question['vote_number'] = int(question['vote_number'])
+            question['vote_number'] += 1 if up_or_down == "vote-up" else -1
+            question['vote_number'] = str(question['vote_number'])
     connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions)
 
 
