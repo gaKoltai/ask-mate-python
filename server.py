@@ -6,12 +6,17 @@ import util
 app = Flask(__name__)
 
 
-@app.route('/')
-def route_list():
-    user_questions = connection.get_info_from_file(connection.QUESTION_FILE)
-    data_manager.add_line_breaks_to_data(user_questions)
-    data_manager.get_post_time(user_questions)
-    return render_template('list.html', user_questions =user_questions)
+@app.route('/', methods = ['POST', 'GET'])
+def route_questions(vote = None, id=None):
+    if request.method == 'GET':
+        user_questions = connection.get_info_from_file(connection.QUESTION_FILE)
+        data_manager.add_line_breaks_to_data(user_questions)
+        data_manager.get_post_time(user_questions)
+        return render_template('list.html', user_questions =user_questions)
+    if request.method == 'POST':
+        if vote:
+            data_manager.vote(vote, id)
+            return redirect(url_for('route_questions'))
 
 
 @app.route('/question/<int:question_id>')
@@ -38,6 +43,12 @@ def route_ask_new_question():
         return redirect('/')
 
     return render_template('new_question.html', id= id, time=post_time)
+
+
+@app.route('/question/<int:question_id>/<vote>')
+def route_vote(question_id=None, vote = None):
+    data_manager.vote(question_id, vote)
+    return redirect(url_for('route_questions'))
 
 
 if __name__ == '__main__':

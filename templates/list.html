@@ -21,7 +21,11 @@
                    {% autoescape false %}
                        {% for key,value in question.items() %}
                            {% if key == "image" %}
-                                <td><img src = " {{ value }}" alt = "No image"></td>
+                                <td><img width="20" height = "20"  src = " {{ value }}"></td>
+                           {% elif key == "vote" %}
+                               <td>{{value}}
+                               <a href = "{{url_for('route_vote', vote = 'vote-up', question_id = question.id)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote-up"></a>
+                               <a href = "{{url_for('route_vote', vote = 'vote-down', question_id = question.id)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote-down"></a></td>
                            {% elif key == "title" %}
                                 <td><a href = "{{ url_for('route_question_with_answer',question_id = question.id) }}">{{ value }}</a></td>
                            {% else %}
