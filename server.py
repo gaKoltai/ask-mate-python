@@ -31,7 +31,7 @@ def route_question_with_answer(question_id=None):
     if question_id is not None:
         question = data_manager.get_question_by_id(question_id)
         answers = data_manager.get_answers_by_question_id(question_id)
-    return render_template('question_with_answers.html', question=question, answers=answers)
+    return render_template('question_with_answers.html', question=question, answers=answers, question_id=question_id)
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -51,6 +51,16 @@ def route_ask_new_question():
 def route_vote(question_id=None, vote = None):
     data_manager.vote(question_id, vote)
     return redirect(url_for('route_questions'))
+
+
+@app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
+def route_new_answer(question_id=None):
+    if request.method == 'POST':
+        answer = request.form.get('answer')
+        data_manager.add_answer(question_id, answer)
+        return redirect(url_for('route_question_with_answer', question_id=question_id))
+    question = data_manager.get_question_by_id(question_id)
+    return render_template('add_answer.html', question=question, question_id=question_id)
 
 
 if __name__ == '__main__':

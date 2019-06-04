@@ -77,3 +77,15 @@ def new_question_entry(entry_data):
         new_entry[header] = data
 
     return new_entry
+
+
+def add_answer(question_id, answer):
+    answers = connection.get_info_from_file(connection.ANSWER_FILE)
+    new_answer = {'id': str(int(answers[-1]['id']) + 1),
+                  'submission_time': util.get_local_time(),
+                  'vote_number': 0,
+                  'question_id': question_id,
+                  'message': answer,
+                  "image": 'No image'}
+    answers.append(new_answer)
+    connection.write_data_to_file(connection.ANSWER_FILE,connection.ANSWER_HEADER, answers)
