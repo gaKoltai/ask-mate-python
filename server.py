@@ -49,7 +49,7 @@ def route_ask_new_question():
 @app.route('/question/<int:question_id>/edit', methods=['GET', 'POST'])
 def route_edit_question(question_id):
 
-    question = data_manager.get_answers_by_question_id(question_id)
+    question = data_manager.get_question_by_id(question_id)
 
     if request.method == 'POST':
 
@@ -59,7 +59,7 @@ def route_edit_question(question_id):
         return redirect(url_for(route_question_with_answer, question_id=question['id']))
 
 
-    return render_template('edit_question.html', question=question)
+    return render_template('edit_question.html', question=question, question_id=question_id)
 
 
 @app.route('/question/<int:question_id>/<vote>')
