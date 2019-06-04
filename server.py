@@ -22,7 +22,8 @@ def route_questions(vote = None, id=None):
             data_manager.vote(vote, id)
             return redirect(url_for('route_questions'))
         else:
-            return redirect(url_for('route_questions', order_by = request.form['order_by'], order_direction = request.form['order_direction']))
+            return redirect(url_for('route_questions', order_by=request.form['order_by'],
+                                    order_direction = request.form['order_direction']))
 
 
 @app.route('/question/<int:question_id>')
