@@ -15,7 +15,10 @@ def get_post_time(user_data):
 def sort_data(data, order_by, order_direction):
     is_reversed = False if order_direction == "asc" else True
     order_by = order_by if order_by else 'submission_time'
-    return sorted(data, key=lambda item: item[order_by], reverse=is_reversed)
+    if order_by == 'id' or order_by == 'view_number' or order_by == 'vote_number' or order_by == 'submission_time':
+        return sorted(data, key=lambda item: int(item[order_by]), reverse=is_reversed)
+    else:
+        return sorted(data, key=lambda item: item[order_by], reverse=is_reversed)
 
 
 def vote(id, up_or_down):
@@ -84,3 +87,15 @@ def edit_question(edited_info, edited_question):
 
     return questions
 
+
+
+def add_answer(question_id, answer):
+    answers = connection.get_info_from_file(connection.ANSWER_FILE)
+    new_answer = {'id': str(int(answers[-1]['id']) + 1),
+                  'submission_time': util.get_local_time(),
+                  'vote_number': 0,
+                  'question_id': question_id,
+                  'message': answer,
+                  "image": 'No image'}
+    answers.append(new_answer)
+    connection.write_data_to_file(connection.ANSWER_FILE,connection.ANSWER_HEADER, answers)
