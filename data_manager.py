@@ -12,6 +12,12 @@ def get_post_time(user_data):
     return user_data
 
 
+def sort_data(data, order_by, order_direction):
+    is_reversed = False if order_direction == "asc" else True
+    order_by = order_by if order_by else 'submission_time'
+    return sorted(data, key=lambda item: item[order_by], reverse=is_reversed)
+
+
 def vote(id, up_or_down):
     questions = connection.get_info_from_file(connection.QUESTION_FILE)
     for question in questions:
