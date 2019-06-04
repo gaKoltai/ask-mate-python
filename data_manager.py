@@ -38,3 +38,9 @@ def get_answers_by_question_id(question_id):
         if answer['question_id'] == str(question_id):
             searched_answers.append(answer)
     return searched_answers
+
+
+def get_new_id(file_name):
+    new_id = len(connection.get_info_from_file(file_name))
+
+    return new_id
