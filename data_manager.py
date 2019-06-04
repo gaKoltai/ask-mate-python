@@ -11,6 +11,10 @@ def get_post_time(user_data):
     return user_data
 
 
+def vote(id, up_or_down):
+    pass
+
+
 def add_line_breaks_to_data(user_data):
 
     for data in user_data:
