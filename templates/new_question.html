@@ -6,11 +6,7 @@
 </head>
 <body>
     <h1>Post a new question</h1>
-    <form action="/ask-question" method="post">
-        <input type="hidden" name="id" id="id" value="{{ id }}" >
-        <input type="hidden" name="submission_time" id="submission_time" value="{{ time }}">
-        <input type="hidden" name="view_number" id="view_number" value="0">
-        <input type="hidden" name="vote_number" id="vote_number" value="0">
+    <form action="/add-question" method="post">
         <p>
             <label for="title">Question title:</label>
         </p>
