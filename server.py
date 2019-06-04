@@ -12,14 +12,17 @@ def route_questions(vote = None, id=None):
     if request.method == 'GET':
         user_questions = connection.get_info_from_file(connection.QUESTION_FILE)
         data_manager.add_line_breaks_to_data(user_questions)
+        user_questions = data_manager.sort_data(user_questions, request.args.get('order_by'),
+                                                request.args.get('order_direction'))
         data_manager.get_post_time(user_questions)
-
-        user_questions = data_manager.sort_data(user_questions, request.args.get('order_by'), request.args.get('order_direction'))
-        return render_template('list.html', user_questions =user_questions)
+        return render_template('list.html', user_questions =user_questions, order_by = request.args.get('order_by'),
+                               order_direction=request.args.get('order_direction'))
     if request.method == 'POST':
         if vote:
             data_manager.vote(vote, id)
             return redirect(url_for('route_questions'))
+        else:
+            return redirect(url_for('route_questions', order_by = request.form['order_by'], order_direction = request.form['order_direction']))
 
 
 @app.route('/question/<int:question_id>')
@@ -30,23 +33,17 @@ def route_question_with_answer(question_id=None):
     return render_template('question_with_answers.html', question=question, answers=answers, question_id=question_id)
 
 
-@app.route('/ask-question', methods=['GET', 'POST'])
+@app.route('/add-question', methods=['GET', 'POST'])
 def route_ask_new_question():
-
-    question = {}
-    id = data_manager.get_new_id(connection.QUESTION_FILE)
-    post_time = util.get_local_time()
 
     if request.method == 'POST':
 
-        for header, info in request.form.items():
-            question[header] = info
+        new_question = data_manager.new_question_entry(request.form)
+        connection.pass_user_story_to_file(new_question, connection.QUESTION_FILE, connection.QUESTION_HEADER)
 
-        connection.pass_user_story_to_file(question, connection.QUESTION_FILE, connection.QUESTION_HEADER)
+        return redirect(url_for(route_question_with_answer, question_id=new_question['id']))
 
-        return redirect('/')
-
-    return render_template('new_question.html', id= id, time=post_time)
+    return render_template('new_question.html')
 
 
 @app.route('/question/<int:question_id>/<vote>')

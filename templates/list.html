@@ -1,9 +1,23 @@
 <!doctype html>
 <head>
-    <title>List</title>
+    <title>List Questions</title>
 
 </head>
 <body>
+    <h1>Questions</h1>
+    <form action = "{{url_for('route_questions')}}" method = 'POST'>
+        <p>Order by:</p>
+        <select name = "order_by">
+            {% for key,value in user_questions[0].items() %}
+                    <option value = "{{key}}" {{"selected" if order_by == key or (order_by == None and key == "submission_time") }}> {{ key|replace("_"," ")|title }}</option>
+                {% endfor %}
+        </select>
+        <select name = "order_direction">
+            <option {{"selected" if order_direction == "asc" }} value = "asc">ascending</option>
+            <option {{"selected" if order_direction == "desc" or order_direction == None}} value = "desc">descending</option>
+        </select>
+        <button type = "submit">Sort</button>
+        </form>
     <table>
 
         <thead>
@@ -39,7 +53,7 @@
 
         </tbody>
     </table>
-    <p><a href="/ask-question">Post a new question</a></p>
+    <p><a href="/add-question">Post a new question</a></p>
 
 
 </body>
