@@ -21,6 +21,17 @@ def route_question_with_answer(question_id=None):
     return render_template('question_with_answers.html', question=question, answers=answers)
 
 
+@app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
+def route_new_answer(question_id=None):
+    if request.method == 'POST':
+        answer = request.form.get('message')
+        data_manager.add_answer(question_id, answer)
+        return redirect(f'/question/{question_id}')
+    if question_id is not None:
+        question = data_manager.get_question_by_id(question_id)
+    return render_template('add_answer.html', question=question)
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
