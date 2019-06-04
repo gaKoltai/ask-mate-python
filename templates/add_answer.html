@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add answer</title>
+</head>
+<body>
+<h1>Add Answer</h1>
+<h2>Question:</h2>
+<p>
+    {{question['message']}}
+</p>
+<form action="route_new_answer", method="post">
+    <label for="answer">Answer:</label><br>
+    <textarea id="answer" name="answer" minlength="10" cols="40" rows="6"></textarea>
+</form>
+</body>
+</html>
