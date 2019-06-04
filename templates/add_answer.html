@@ -8,11 +8,12 @@
 <h1>Add Answer</h1>
 <h2>Question:</h2>
 <p>
-    {{question['message']}}
+    {{question['title']}}
 </p>
-<form action="route_new_answer", method="post">
+<form action="{{url_for('route_new_answer', question_id = question_id)}}" method="post">
     <label for="answer">Answer:</label><br>
-    <textarea id="answer" name="answer" minlength="10" cols="40" rows="6"></textarea>
+    <textarea id="answer" name="answer" minlength="10" cols="40" rows="6"></textarea><br>
+    <button type="submit">Submit</button>
 </form>
 </body>
 </html>
