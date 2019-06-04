@@ -37,7 +37,7 @@ def route_ask_new_question():
         new_question = data_manager.new_question_entry(request.form)
         connection.pass_user_story_to_file(new_question, connection.QUESTION_FILE, connection.QUESTION_HEADER)
 
-        return redirect(url_for(f'route_question_with_answer', question_id= new_question['id']))
+        return redirect(url_for(route_question_with_answer, question_id=new_question['id']))
 
     return render_template('new_question.html')
 
