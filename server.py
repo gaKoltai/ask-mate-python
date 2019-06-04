@@ -14,12 +14,16 @@ def route_questions(vote = None, id=None):
         data_manager.add_line_breaks_to_data(user_questions)
         data_manager.get_post_time(user_questions)
 
-        user_questions = data_manager.sort_data(user_questions, request.args.get('order_by'), request.args.get('order_direction'))
-        return render_template('list.html', user_questions =user_questions)
+        user_questions = data_manager.sort_data(user_questions, request.args.get('order_by'),
+                                                request.args.get('order_direction'))
+        return render_template('list.html', user_questions =user_questions, order_by = request.args.get('order_by'),
+                               order_direction=request.args.get('order_direction'))
     if request.method == 'POST':
         if vote:
             data_manager.vote(vote, id)
             return redirect(url_for('route_questions'))
+        else:
+            return redirect(url_for('route_questions', order_by = request.form['order_by'], order_direction = request.form['order_direction']))
 
 
 @app.route('/question/<int:question_id>')

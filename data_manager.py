@@ -14,7 +14,10 @@ def get_post_time(user_data):
 def sort_data(data, order_by, order_direction):
     is_reversed = False if order_direction == "asc" else True
     order_by = order_by if order_by else 'submission_time'
-    return sorted(data, key=lambda item: item[order_by], reverse=is_reversed)
+    if order_by == 'id' or order_by == 'view_number' or order_by == 'vote_number' or order_by == 'submission_time':
+        return sorted(data, key=lambda item: int(item[order_by]), reverse=is_reversed)
+    else:
+        return sorted(data, key=lambda item: item[order_by], reverse=is_reversed)
 
 
 def vote(id, up_or_down):
