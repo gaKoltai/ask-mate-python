@@ -19,9 +19,13 @@
         <tbody>
 
             <tr>
-                {% for value in question.values()%}
-                <td> {{ value }}</td>
-                 {% endfor %}
+                {% for key,value in question.items() %}
+                           {% if key == "image" %}
+                                <td><img src = " {{ value }}" alt = "No image"></td>
+                           {% else %}
+                                <td>{{ value}} </td>
+                           {% endif %}
+                {% endfor %}
             </tr>
 
         </tbody>
@@ -41,9 +45,13 @@
         <tbody>
             {% for answer in answers %}
             <tr>
-                {% for value in answer.values()%}
-                <td> {{ value }}</td>
-                 {% endfor %}
+                {% for key,value in answer.items() %}
+                           {% if key == "image" %}
+                                <td><img src = " {{ value }}" alt = "No image"></td>
+                           {% else %}
+                                <td>{{ value}} </td>
+                           {% endif %}
+                {% endfor %}
             </tr>
             {% endfor %}
         </tbody>
