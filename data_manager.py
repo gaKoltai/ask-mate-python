@@ -12,7 +12,13 @@ def get_post_time(user_data):
 
 
 def vote(id, up_or_down):
-    pass
+    questions = connection.get_info_from_file(connection.QUESTION_FILE)
+    for question in questions:
+        if id == int(question['id']):
+            question['vote'] = int(question['vote'])
+            question['vote'] += 1 if up_or_down == "vote-up" else -1
+            question['vote'] = str(question['vote'])
+    connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions)
 
 
 def add_line_breaks_to_data(user_data):

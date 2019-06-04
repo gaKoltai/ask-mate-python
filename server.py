@@ -29,7 +29,7 @@ def route_question_with_answer(question_id=None):
 @app.route('/question/<int:question_id>/<vote>')
 def route_vote(question_id=None, vote = None):
     data_manager.vote(question_id, vote)
-    return redirect(render_template(url_for('route_questions')))
+    return redirect(url_for('route_questions'))
 
 
 if __name__ == '__main__':
