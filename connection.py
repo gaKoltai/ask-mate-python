@@ -13,8 +13,8 @@ def get_info_from_file(file_name):
     return user_data
 
 
-def pass_user_story_to_file(user_data, file_name):
+def pass_user_story_to_file(user_data, file_name, header):
 
     with open(file_name, 'a', newline='') as csv_file:
-        writer = csv.DictWriter(csv_file)
+        writer = csv.DictWriter(csv_file, header)
         writer.writerow(user_data)
