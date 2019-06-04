@@ -63,12 +63,12 @@ def get_new_id(file_name):
 
 
 def add_answer(question_id, answer):
-    answers = get_answers_by_question_id(question_id)
+    answers = connection.get_info_from_file(connection.ANSWER_FILE)
     new_answer = {'id': str(int(answers[-1]['id']) + 1),
                   'submission_time': util.get_local_time(),
                   'vote_number': 0,
                   'question_id': question_id,
-                  'message' : answer,
+                  'message': answer,
                   "image": 'No image'}
     answers.append(new_answer)
     connection.write_data_to_file(connection.ANSWER_FILE,connection.ANSWER_HEADER, answers)
