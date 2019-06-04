@@ -23,7 +23,7 @@
                            {% if key == "image" %}
                                 <td><img src = " {{ value }}" alt = "No image"></td>
                            {% elif key == "title" %}
-                                <td><a href = "#">{{ value }}</a></td>
+                                <td><a href = "{{ url_for('route_question_with_answer',question_id = question.id) }}">{{ value }}</a></td>
                            {% else %}
                                 <td>{{ value}} </td>
                            {% endif %}
