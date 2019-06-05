@@ -78,7 +78,8 @@ def get_answers_by_question_id(question_id):
 
 
 def get_new_id(file_name):
-    new_id = len(connection.get_info_from_file(file_name))
+
+    new_id = max((int(data['id']) for data in connection.get_info_from_file(file_name))) + 1
 
     return new_id
 
@@ -109,7 +110,7 @@ def edit_question(edited_info, question_id):
 
 def add_answer(question_id, answer, image_name):
     answers = connection.get_info_from_file(connection.ANSWER_FILE)
-    new_answer = {'id': str(int(answers[-1]['id']) + 1),
+    new_answer = {'id': get_new_id(connection.ANSWER_FILE),
                   'submission_time': util.get_local_time(),
                   'vote_number': 0,
                   'question_id': question_id,
