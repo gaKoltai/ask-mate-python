@@ -59,6 +59,7 @@
                                 <td>{{ value}} </td>
                            {% endif %}
                 {% endfor %}
+                <td><a href="{{url_for('route_delete_answer', answer_id=answer['id'])}}">Delete answer</a></td>
             </tr>
             {% endfor %}
         </tbody>
