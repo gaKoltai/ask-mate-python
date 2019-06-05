@@ -6,7 +6,7 @@
 </head>
 <body>
     <h1>Post a new question</h1>
-    <form action="/add-question" method="post">
+    <form action="/add-question" method="post" enctype="multipart/form-data">
         <p>
             <label for="title">Question title:</label>
         </p>
@@ -17,8 +17,14 @@
             <label for="message">Your question:</label>
         <p>
             <textarea name="message" id="message" cols="30" rows="10"></textarea>
+        </p>
         <p>
-            <input type="hidden" name="image" id="image" value="images/image1.png">
+            <label for="image">Upload image</label>
+        </p>
+        <p>
+            <input type="file" name="image" id="image" alt="No image">
+        </p>
+        <p>
             <button type="Submit">Submit question</button>
         </p>
     </form>
