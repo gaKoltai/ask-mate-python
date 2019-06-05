@@ -19,12 +19,8 @@ def route_questions(vote = None, id=None):
         return render_template('list.html', user_questions =user_questions, order_by = request.args.get('order_by'),
                                order_direction=request.args.get('order_direction'))
     if request.method == 'POST':
-        if vote:
-            data_manager.vote(vote, id)
-            return redirect(url_for('route_questions'))
-        else:
-            return redirect(url_for('route_questions', order_by=request.form['order_by'],
-                                    order_direction = request.form['order_direction']))
+        return redirect(url_for('route_questions', order_by=request.form['order_by'],
+                                order_direction = request.form['order_direction']))
 
 
 @app.route('/question/<int:question_id>')
@@ -64,14 +60,21 @@ def route_edit_question(question_id):
 
         return redirect(url_for('route_question_with_answer', question_id=question_id))
 
-
     return render_template('edit_question.html', question=question, question_id=question_id)
 
 
-@app.route('/question/<int:question_id>/<vote>')
-def route_vote(question_id=None, vote = None):
-    data_manager.vote(question_id, vote)
-    return redirect(url_for('route_questions'))
+@app.route('/question/<int:item_id>/<vote>')
+@app.route('/question/<int:item_id>/<vote>/<q_or_a>')
+@app.route('/question/<int:question_id>/<vote>/<q_or_a>/<int:item_id>')
+def route_vote(item_id=None, vote=None, q_or_a=None, question_id=None):
+    data_manager.vote(item_id, vote, q_or_a)
+    print(q_or_a, item_id, vote)
+    if q_or_a == "question":
+        return redirect(url_for('route_questions',
+                                order_by=request.args.get('order_by'),
+                                order_direction=request.args.get('order_direction')))
+    else:
+        return redirect(url_for('route_question_with_answer', question_id=question_id))
 
 
 @app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
@@ -87,6 +90,13 @@ def route_new_answer(question_id=None):
 
     question = data_manager.get_question_by_id(question_id)
     return render_template('add_answer.html', question=question, question_id=question_id)
+
+
+@app.route('/answer/<int:answer_id>/delete')
+def route_delete_answer(answer_id):
+    question_id = data_manager.get_question_id_by_answer_id(answer_id)
+    data_manager.delete_answer_by_answer_id(answer_id)
+    return redirect(url_for('route_question_with_answer', question_id=question_id))
 
 
 if __name__ == '__main__':
