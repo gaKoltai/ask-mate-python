@@ -117,7 +117,7 @@ def add_answer(question_id, answer, image_name):
                   "image": f'{connection.UPLOAD_FOLDER}/{image_name}'}
 
     answers.append(new_answer)
-    connection.write_data_to_file(connection.ANSWER_FILE,connection.ANSWER_HEADER, answers)
+    connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
 
 
 def allowed_file(filename):
@@ -137,15 +137,22 @@ def delete_answer_by_answer_id(answer_id, img):
         if answer['id'] == str(answer_id):
             answers.remove(answer)
     connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
-    os.remove(f'/static/{img}')
+    os.remove(f'/{img}')
 
 
-def get_question_id_and_img_by_answer_id(answer_id):
+def get_question_id_by_answer_id(answer_id):
     answers = connection.get_info_from_file(connection.ANSWER_FILE)
     question_id = None
-    img = None
     for answer in answers:
         if answer['id'] == str(answer_id):
             question_id = int(answer['question_id'])
-            img = answer['image']
-    return (question_id, img)
+    return question_id
+
+
+def get_image_by_answer_id(answer_id):
+    answers = connection.get_info_from_file(connection.ANSWER_FILE)
+    img = None
+    for answer in answers:
+        if answer['id'] == str(answer_id):
+            img = str(answer['image'])
+    return img
