@@ -60,7 +60,6 @@ def add_line_breaks_to_data(user_data):
 def get_question_by_id(question_id):
     searched_question = {}
     questions = connection.get_info_from_file(connection.QUESTION_FILE)
-    get_post_time(questions)
     for question in questions:
         if question['id'] == str(question_id):
             for item, value in question.items():
