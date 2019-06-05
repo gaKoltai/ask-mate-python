@@ -9,11 +9,11 @@ BUT in my theme i also using jquery via webpack so the loading order is now foll
 jquery
 booklet
 app.js (bundled file with webpack, including jquery)",static/image1.png
-2,1493015432,1364,58,Drawing canvas with an image picked with Cordova Camera Plugin,"I'm getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I'm on IOS, it throws errors such as cross origin issue, or that I'm trying to use an unknown format.
+2,1493015432,1364,61,Drawing canvas with an image picked with Cordova Camera Plugin,"I'm getting an image from device and drawing a canvas with filters using Pixi JS. It works all well using computer to get an image. But when I'm on IOS, it throws errors such as cross origin issue, or that I'm trying to use an unknown format.
 
 This is the code I'm using to draw the image (that works on web/desktop but not cordova built ios app)",
 3,1559648235,0,9,asdsadsadíyxíyxíyxíyx,sdasadasdasdasíxsíyxyíxyíxíyxíy,images/image1.png
 4,1559648585,0,0,scsadasdsa,dsasdasdsadsad,images/image1.png
-5,1559648643,0,8,scsadasdsa,dsasdasdsadsad,images/image1.png
-6,1559657438,0,0,yxcyxcyxcyxc,cycxcxycyxcxyc,images/image1.png
-7,1559657540,0,0,QQQQQQQQQQQQ,adsasdsdghhhhhhh,images/image1.png
+5,1559648643,0,9,scsadasdsa,dsasdasdsadsad,images/image1.png
+6,1559657438,0,1,yxcyxcyxcyxc,cycxcxycyxcxyc,images/image1.png
+7,1559657540,0,5,QQQQQQQQQQQQ,adsasdsdghhhhhhh,images/image1.png
