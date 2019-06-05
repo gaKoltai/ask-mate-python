@@ -102,3 +102,6 @@ ENV/
 
 # pycharm files
 .idea/
+
+#CSV files
+*.csv

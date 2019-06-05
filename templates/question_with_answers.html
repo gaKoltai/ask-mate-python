@@ -5,13 +5,15 @@
     <title>Display a question</title>
 </head>
 <body>
-    <h1>Display question</h1>
+    <h1>{{ question['title'] }}</h1>
     <table>
 
         <thead>
         <tr>
-            {% for key in question%}
-            <th> {{ key|replace("_"," ")|title }}</th>
+            {% for key in question %}
+                {%  if key != 'title' %}
+                    <th> {{ key|replace("_"," ")|title }}</th>
+                {% endif %}
             {% endfor %}
         </tr>
 
@@ -22,7 +24,7 @@
                 {% for key,value in question.items() %}
                            {% if key == "image" %}
                                 <td><img src = " {{ value }}" alt = "No image"></td>
-                           {% else %}
+                           {% elif key!= 'title' %}
                                 <td>{{ value}} </td>
                            {% endif %}
                 {% endfor %}
@@ -31,6 +33,7 @@
         </tbody>
 
     </table>
+    <h4><a href="{{ url_for ('route_edit_question', question_id=question_id) }}">Edit question</a></h4>
     <h2>Answers:</h2>
     <table>
 
@@ -57,6 +60,6 @@
         </tbody>
 
     </table>
-<a href="{{url_for('route_new_answer', question_id = question_id)}}">Add new answer</a>
+    <h4><a href="{{url_for('route_new_answer', question_id = question_id)}}">Add new answer</a></h4>
 </body>
 </html>
