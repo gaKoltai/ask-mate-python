@@ -134,10 +134,13 @@ def upload_file(file):
 
 def delete_answer_by_answer_id(answer_id):
     answers = connection.get_info_from_file(connection.ANSWER_FILE)
-    del_answer = None
     for answer in answers:
         if answer['id'] == str(answer_id):
             answers.remove(answer)
+            try:
+                os.remove(answer['image'])
+            except FileNotFoundError:
+                pass
     connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
 
 
