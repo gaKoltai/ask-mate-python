@@ -51,6 +51,10 @@
                 {% for key,value in answer.items() %}
                            {% if key == "image" %}
                                 <td><img src = " {{ value }}" alt = "No image"></td>
+                           {% elif key == "vote_number" %}
+                               <td>{{value}}
+                               <a href = "{{url_for('route_vote', vote = 'vote-up', q_or_a = 'answer',item_id = answer.id, question_id =question.id)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
+                               <a href = "{{url_for('route_vote', vote = 'vote-down', q_or_a = 'answer', item_id = answer.id,question_id =question.id)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
                            {% else %}
                                 <td>{{ value}} </td>
                            {% endif %}
