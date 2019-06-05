@@ -4,7 +4,8 @@ ANSWER_HEADER = ["id","submission_time","vote_number","question_id","message","i
 QUESTION_HEADER = ["id","submission_time","view_number","vote_number","title","message","image"]
 ANSWER_FILE = "sample_data/answer.csv"
 QUESTION_FILE = "sample_data/question.csv"
-
+UPLOAD_FOLDER = "static"
+ALLOWED_FILE_EXTENSIONS = set([ 'png', 'jpg', 'jpeg', 'gif'])
 
 def get_info_from_file(file_name):
     with open(file_name) as csv_file:

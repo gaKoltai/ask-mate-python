@@ -3,6 +3,7 @@ import connection
 import data_manager
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 
 
 @app.route('/', methods = ['POST', 'GET'])
@@ -34,7 +35,9 @@ def route_ask_new_question():
 
     if request.method == 'POST':
 
-        new_question = data_manager.new_question_entry(request.form)
+        data_manager.upload_file(request.files['image'])
+
+        new_question = data_manager.new_question_entry(request.form, request.files['image'].filename)
         connection.pass_user_story_to_file(new_question, connection.QUESTION_FILE, connection.QUESTION_HEADER)
 
         return redirect(url_for('route_question_with_answer', question_id=new_question['id']))
@@ -51,7 +54,7 @@ def route_edit_question(question_id):
 
         edited_info = request.form
 
-        questions_with_edit = data_manager.edit_question(edited_info, question)
+        questions_with_edit = data_manager.edit_question(edited_info, question_id)
         connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions_with_edit)
 
         return redirect(url_for('route_question_with_answer', question_id=question_id))
@@ -76,9 +79,14 @@ def route_vote(item_id=None, vote=None, q_or_a=None, question_id=None):
 @app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
 def route_new_answer(question_id=None):
     if request.method == 'POST':
+
         answer = request.form.get('answer')
-        data_manager.add_answer(question_id, answer)
+
+        data_manager.upload_file(request.files['image'])
+        data_manager.add_answer(question_id, answer, request.files['image'].filename)
+
         return redirect(url_for('route_question_with_answer', question_id=question_id))
+
     question = data_manager.get_question_by_id(question_id)
     return render_template('add_answer.html', question=question, question_id=question_id)
 
