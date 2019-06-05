@@ -6,7 +6,6 @@ from werkzeug.utils import secure_filename
 from server import app
 
 
-
 def get_post_time(user_data):
     for data in user_data:
         for header, info in data.items():
@@ -42,8 +41,14 @@ def vote(item_id, up_or_down, q_or_a):
     connection.write_data_to_file(f, header, items)
 
 
-def add_line_breaks_to_data(user_data):
+def increment_view_number(item_id):
+    question = get_question_by_id(item_id)
+    question['view_number'] = str(int(question['view_number'])+1)
+    questions = edit_question(question, item_id)
+    connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions)
 
+
+def add_line_breaks_to_data(user_data):
     for data in user_data:
         for header, info in data.items():
             if type(info) == str:
@@ -78,6 +83,7 @@ def get_new_id(file_name):
 
     return new_id
 
+
 def new_question_entry(entry_data, image_name):
 
     new_entry = {'id':get_new_id(connection.QUESTION_FILE),
@@ -90,6 +96,7 @@ def new_question_entry(entry_data, image_name):
         new_entry[header] = data
 
     return new_entry
+
 
 def edit_question(edited_info, question_id):
     questions = connection.get_info_from_file(connection.QUESTION_FILE)
