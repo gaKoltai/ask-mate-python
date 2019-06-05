@@ -30,7 +30,6 @@ def vote(item_id, up_or_down, q_or_a):
         header = connection.ANSWER_HEADER
 
     items = connection.get_info_from_file(f)
-    print(items)
     for item in items:
         if item_id == int(item['id']):
             item['vote_number'] = int(item['vote_number'])
@@ -74,6 +73,7 @@ def get_new_id(file_name):
     new_id = len(connection.get_info_from_file(file_name))
 
     return new_id
+
 
 def new_question_entry(entry_data):
     id = get_new_id(connection.QUESTION_FILE)

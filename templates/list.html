@@ -38,8 +38,8 @@
                                 <td><img width="20" height = "20"  src = "{{ value }}"></td>
                            {% elif key == "vote_number" %}
                                <td>{{value}}
-                               <a href = "{{url_for('route_vote', vote = 'vote-up', item_id = question.id, q_or_a = 'question')}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
-                               <a href = "{{url_for('route_vote', vote = 'vote-down', item_id = question.id, q_or_a = 'question')}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
+                               <a href = "{{url_for('route_vote', vote = 'vote-up', item_id = question.id, q_or_a = 'question', order_by = order_by, order_direction=order_direction)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
+                               <a href = "{{url_for('route_vote', vote = 'vote-down', item_id = question.id, q_or_a = 'question', order_by = order_by, order_direction=order_direction)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
                            {% elif key == "title" %}
                                 <td><a href = "{{ url_for('route_question_with_answer',question_id = question.id) }}">{{ value }}</a></td>
                            {% else %}
