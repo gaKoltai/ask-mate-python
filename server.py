@@ -55,7 +55,7 @@ def route_edit_question(question_id):
 
         edited_info = request.form
 
-        questions_with_edit = data_manager.edit_question(edited_info, question)
+        questions_with_edit = data_manager.edit_question(edited_info, question_id)
         connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions_with_edit)
 
         return redirect(url_for('route_question_with_answer', question_id=question_id))

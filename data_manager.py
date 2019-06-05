@@ -91,10 +91,10 @@ def new_question_entry(entry_data, image_name):
 
     return new_entry
 
-def edit_question(edited_info, edited_question):
+def edit_question(edited_info, question_id):
     questions = connection.get_info_from_file(connection.QUESTION_FILE)
     for question in questions:
-        if question['id'] == edited_question['id']:
+        if question['id'] == str(question_id):
             for header, info in edited_info.items():
                 question[header] = edited_info[header]
 
