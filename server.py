@@ -81,6 +81,13 @@ def route_new_answer(question_id=None):
     return render_template('add_answer.html', question=question, question_id=question_id)
 
 
+@app.route('/answer/<int:answer_id>/delete')
+def route_delete_answer(answer_id):
+    question_id = data_manager.get_question_id_by_answer_id(answer_id)
+    data_manager.delete_answer_by_answer_id(answer_id)
+    return redirect(url_for('route_question_with_answer', question_id=question_id))
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
