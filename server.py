@@ -72,7 +72,6 @@ def route_edit_question(question_id):
 @app.route('/question/<int:question_id>/<vote>/<q_or_a>/<int:item_id>')
 def route_vote(item_id=None, vote=None, q_or_a=None, question_id=None):
     data_manager.vote(item_id, vote, q_or_a)
-    print(q_or_a, item_id, vote)
     if q_or_a == "question":
         return redirect(url_for('route_questions',
                                 order_by=request.args.get('order_by'),
