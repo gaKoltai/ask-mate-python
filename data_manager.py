@@ -1,6 +1,10 @@
 import connection
 from time import asctime, gmtime
 import util
+import os
+from werkzeug.utils import secure_filename
+from server import app
+
 
 
 def get_post_time(user_data):
@@ -67,11 +71,13 @@ def get_new_id(file_name):
 
     return new_id
 
-def new_question_entry(entry_data):
-    id = get_new_id(connection.QUESTION_FILE)
-    post_time = util.get_local_time()
+def new_question_entry(entry_data, image_name):
 
-    new_entry = {'id':id, 'submission_time':post_time, 'view_number':0, 'vote_number': 0 }
+    new_entry = {'id':get_new_id(connection.QUESTION_FILE),
+                 'submission_time':util.get_local_time(),
+                 'view_number':0,
+                 'vote_number': 0,
+                 'image': f'{connection.UPLOAD_FOLDER}/{image_name}'}
 
     for header, data in entry_data.items():
         new_entry[header] = data
@@ -89,13 +95,25 @@ def edit_question(edited_info, edited_question):
 
 
 
-def add_answer(question_id, answer):
+def add_answer(question_id, answer, image_name):
+
     answers = connection.get_info_from_file(connection.ANSWER_FILE)
     new_answer = {'id': str(int(answers[-1]['id']) + 1),
                   'submission_time': util.get_local_time(),
                   'vote_number': 0,
                   'question_id': question_id,
                   'message': answer,
-                  "image": 'No image'}
+                  "image": f'{connection.UPLOAD_FOLDER}/{image_name}'}
+
     answers.append(new_answer)
     connection.write_data_to_file(connection.ANSWER_FILE,connection.ANSWER_HEADER, answers)
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in connection.ALLOWED_FILE_EXTENSIONS
+
+def upload_file(file):
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
