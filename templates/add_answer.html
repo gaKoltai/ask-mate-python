@@ -10,9 +10,19 @@
 <p>
     {{question['title']}}
 </p>
-<form action="{{url_for('route_new_answer', question_id = question_id)}}" method="post">
-    <label for="answer">Answer:</label><br>
-    <textarea id="answer" name="answer" minlength="10" cols="40" rows="6"></textarea><br>
+<form action="{{url_for('route_new_answer', question_id = question_id)}}" method="post" enctype="multipart/form-data">
+    <p>
+        <label for="answer">Answer:</label>
+    </p>
+    <p>
+        <textarea id="answer" name="answer" minlength="10" cols="40" rows="6"></textarea><br>
+    </p>
+    <p>
+        <label for="image">Upload image</label>
+    </p>
+    <p>
+        <input type="file" name="image" id="image" alt="No image">
+    </p>
     <button type="submit">Submit</button>
 </form>
 </body>
