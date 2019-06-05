@@ -131,7 +131,7 @@ def upload_file(file):
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 
-def delete_answer_by_answer_id(answer_id, img):
+def delete_answer_by_answer_id(answer_id):
     answers = connection.get_info_from_file(connection.ANSWER_FILE)
     for answer in answers:
         if answer['id'] == str(answer_id):
@@ -141,7 +141,6 @@ def delete_answer_by_answer_id(answer_id, img):
             except FileNotFoundError:
                 pass
     connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
-    os.remove(f'/{img}')
 
 
 def get_question_id_by_answer_id(answer_id):
@@ -151,12 +150,3 @@ def get_question_id_by_answer_id(answer_id):
         if answer['id'] == str(answer_id):
             question_id = int(answer['question_id'])
     return question_id
-
-
-def get_image_by_answer_id(answer_id):
-    answers = connection.get_info_from_file(connection.ANSWER_FILE)
-    img = None
-    for answer in answers:
-        if answer['id'] == str(answer_id):
-            img = str(answer['image'])
-    return img
