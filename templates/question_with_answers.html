@@ -59,12 +59,13 @@
                                 <td>{{ value}} </td>
                            {% endif %}
                 {% endfor %}
+                <td><a href="{{url_for('route_delete_answer', answer_id=answer['id'])}}">Delete answer</a></td>
             </tr>
             {% endfor %}
         </tbody>
 
     </table>
-    <h4><a href="{{url_for('route_questions')}}">Return to questions</a></h4>
     <h4><a href="{{url_for('route_new_answer', question_id = question_id)}}">Add new answer</a></h4>
+    <h4><a href="{{url_for('route_questions')}}">Return to questions</a></h4>
 </body>
-</html>
+

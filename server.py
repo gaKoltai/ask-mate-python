@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import connection
 import data_manager
-import util
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
@@ -72,7 +71,6 @@ def route_edit_question(question_id):
 @app.route('/question/<int:question_id>/<vote>/<q_or_a>/<int:item_id>')
 def route_vote(item_id=None, vote=None, q_or_a=None, question_id=None):
     data_manager.vote(item_id, vote, q_or_a)
-    print(q_or_a, item_id, vote)
     if q_or_a == "question":
         return redirect(url_for('route_questions',
                                 order_by=request.args.get('order_by'),
@@ -99,7 +97,8 @@ def route_new_answer(question_id=None):
 @app.route('/answer/<int:answer_id>/delete')
 def route_delete_answer(answer_id):
     question_id = data_manager.get_question_id_by_answer_id(answer_id)
-    data_manager.delete_answer_by_answer_id(answer_id)
+    img = data_manager.get_image_by_answer_id(answer_id)
+    data_manager.delete_answer_by_answer_id(answer_id, img)
     return redirect(url_for('route_question_with_answer', question_id=question_id))
 
 
