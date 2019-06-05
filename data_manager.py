@@ -108,7 +108,6 @@ def edit_question(edited_info, question_id):
 
 
 def add_answer(question_id, answer, image_name):
-
     answers = connection.get_info_from_file(connection.ANSWER_FILE)
     new_answer = {'id': str(int(answers[-1]['id']) + 1),
                   'submission_time': util.get_local_time(),
@@ -118,7 +117,7 @@ def add_answer(question_id, answer, image_name):
                   "image": f'{connection.UPLOAD_FOLDER}/{image_name}'}
 
     answers.append(new_answer)
-    connection.write_data_to_file(connection.ANSWER_FILE,connection.ANSWER_HEADER, answers)
+    connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
 
 
 def allowed_file(filename):
@@ -132,7 +131,7 @@ def upload_file(file):
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
 
-def delete_answer_by_answer_id(answer_id):
+def delete_answer_by_answer_id(answer_id, img):
     answers = connection.get_info_from_file(connection.ANSWER_FILE)
     for answer in answers:
         if answer['id'] == str(answer_id):
@@ -142,6 +141,7 @@ def delete_answer_by_answer_id(answer_id):
             except FileNotFoundError:
                 pass
     connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
+    os.remove(f'/{img}')
 
 
 def get_question_id_by_answer_id(answer_id):
@@ -151,3 +151,12 @@ def get_question_id_by_answer_id(answer_id):
         if answer['id'] == str(answer_id):
             question_id = int(answer['question_id'])
     return question_id
+
+
+def get_image_by_answer_id(answer_id):
+    answers = connection.get_info_from_file(connection.ANSWER_FILE)
+    img = None
+    for answer in answers:
+        if answer['id'] == str(answer_id):
+            img = str(answer['image'])
+    return img

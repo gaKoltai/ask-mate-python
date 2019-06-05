@@ -1,0 +1,74 @@
+html,
+body {
+    background-color: #fff;
+    color: #555;
+    font-family: 'Roboto', 'Lato', 'Arial', sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+h1,
+h2,
+h3{
+    font-weight: 300;
+    text-transform:uppercase;}
+
+p{
+    font-size: 90%;
+    line-height: 145%;}
+
+
+td{
+    padding: 20px 10px 20px 10px;
+}
+
+
+a:link, a:visited{
+    color: #1792e6;
+    text-decoration: none;
+    padding-bottom: 1px;
+    border-bottom: 1px solid #1792e6;
+    transition: border-bottom 0.2s, color 0.2s;
+}
+
+a:hover,a:active {
+    color: #555;
+    border-bottom: 1px solid transparent;
+}
+
+.vote-button:link,
+.vote-button:visited{
+    border:0;
+}
+
+
+table {
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border-bottom: 1px solid black;
+}
+
+th{
+    text-align: center;
+}
+
+td{
+    text-align: left;
+    vertical-align:middle;
+
+}
+img {
+    opacity: 0.7;
+    height: auto;
+    transform: scale(1);
+    transition: transform 0.5s, opacity 0.5s;
+
+}
+
+
+img:hover{
+    transform: scale(1.25);
+}
+

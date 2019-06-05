@@ -1,21 +1,21 @@
 <!doctype html>
 <head>
     <title>List Questions</title>
-
+    <link rel = "stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}">
 </head>
 <body>
     <h1>Questions</h1>
     <form action = "{{url_for('route_questions')}}" method = 'POST'>
         <p>Order by:</p>
-        <select name = "order_by">
-            {% for key,value in user_questions[0].items() %}
-                    <option value = "{{key}}" {{"selected" if order_by == key or (order_by == None and key == "submission_time") }}> {{ key|replace("_"," ")|title }}</option>
-                {% endfor %}
-        </select>
-        <select name = "order_direction">
-            <option {{"selected" if order_direction == "asc" }} value = "asc">ascending</option>
-            <option {{"selected" if order_direction == "desc" or order_direction == None}} value = "desc">descending</option>
-        </select>
+            <select name = "order_by">
+                {% for key,value in user_questions[0].items() %}
+                        <option value = "{{key}}" {{"selected" if order_by == key or (order_by == None and key == "submission_time") }}> {{ key|replace("_"," ")|title }}</option>
+                    {% endfor %}
+            </select>
+            <select name = "order_direction">
+                <option {{"selected" if order_direction == "asc" }} value = "asc">ascending</option>
+                <option {{"selected" if order_direction == "desc" or order_direction == None}} value = "desc">descending</option>
+            </select>
         <button type = "submit">Sort</button>
         </form>
     <table>
@@ -23,7 +23,9 @@
         <thead>
             <tr>
                 {% for key,value in user_questions[0].items() %}
+                    {% if key != "image"%}
                     <th> {{ key|replace("_"," ")|title }}</th>
+                    {% endif %}
                 {% endfor %}
             </tr>
         </thead>
@@ -31,29 +33,29 @@
         <tbody>
 
             {% for question in user_questions %}
+
                <tr>
                    {% autoescape false %}
                        {% for key,value in question.items() %}
-                           {% if key == "image" %}
-                                <td><img width="20" height = "20"  src = "{{ value }}"></td>
-                           {% elif key == "vote_number" %}
+                           {% if key == "vote_number" %}
                                <td>{{value}}
-                               <a href = "{{url_for('route_vote', vote = 'vote-up', item_id = question.id, q_or_a = 'question', order_by = order_by, order_direction=order_direction)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
-                               <a href = "{{url_for('route_vote', vote = 'vote-down', item_id = question.id, q_or_a = 'question', order_by = order_by, order_direction=order_direction)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
+                               <a class = "vote-button" href = "{{url_for('route_vote', vote = 'vote-up', item_id = question.id, q_or_a = 'question', order_by = order_by, order_direction=order_direction)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
+                               <a class = "vote-button" href = "{{url_for('route_vote', vote = 'vote-down', item_id = question.id, q_or_a = 'question', order_by = order_by, order_direction=order_direction)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
                            {% elif key == "title" %}
                                 <td><a href = "{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">{{ value }}</a></td>
-                           {% else %}
+                           {% elif key != "image"%}
                                 <td>{{ value}} </td>
                            {% endif %}
 
                        {% endfor %}
                    {% endautoescape %}
                </tr>
+
             {% endfor %}
 
         </tbody>
     </table>
-    <p><a href="/add-question">Post a new question</a></p>
+    <p><a class = "link" href="/add-question">Post a new question</a></p>
 
 
 </body>
