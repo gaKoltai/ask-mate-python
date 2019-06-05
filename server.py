@@ -25,11 +25,13 @@ def route_questions(vote = None, id=None):
 
 @app.route('/question/<int:question_id>')
 def route_question_with_answer(question_id=None):
-    if question_id is not None:
-        question = data_manager.get_question_by_id(question_id)
-        answers = data_manager.get_answers_by_question_id(question_id)
     if request.args.get('view_number_increment'):
         data_manager.increment_view_number(question_id)
+    if question_id is not None:
+        question = data_manager.get_question_by_id(question_id)
+        data_manager.get_post_time([question])
+        answers = data_manager.get_answers_by_question_id(question_id)
+
     return render_template('question_with_answers.html', question=question, answers=answers, question_id=question_id)
 
 
