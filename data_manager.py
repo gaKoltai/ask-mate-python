@@ -38,8 +38,14 @@ def vote(item_id, up_or_down, q_or_a):
     connection.write_data_to_file(f, header, items)
 
 
-def add_line_breaks_to_data(user_data):
+def increment_view_number(item_id):
+    question = get_question_by_id(item_id)
+    question['view_number'] = str(int(question['view_number'])+1)
+    questions = edit_question(question, item_id)
+    connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions)
 
+
+def add_line_breaks_to_data(user_data):
     for data in user_data:
         for header, info in data.items():
             if type(info) == str:
@@ -85,6 +91,7 @@ def new_question_entry(entry_data):
         new_entry[header] = data
 
     return new_entry
+
 
 def edit_question(edited_info, edited_question):
     questions = connection.get_info_from_file(connection.QUESTION_FILE)
