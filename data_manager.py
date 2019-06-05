@@ -21,14 +21,22 @@ def sort_data(data, order_by, order_direction):
         return sorted(data, key=lambda item: item[order_by], reverse=is_reversed)
 
 
-def vote(id, up_or_down):
-    questions = connection.get_info_from_file(connection.QUESTION_FILE)
-    for question in questions:
-        if id == int(question['id']):
-            question['vote_number'] = int(question['vote_number'])
-            question['vote_number'] += 1 if up_or_down == "vote-up" else -1
-            question['vote_number'] = str(question['vote_number'])
-    connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions)
+def vote(item_id, up_or_down, q_or_a):
+    if q_or_a == "question":
+        f = connection.QUESTION_FILE
+        header = connection.QUESTION_HEADER
+    else:
+        f = connection.ANSWER_FILE
+        header = connection.ANSWER_HEADER
+
+    items = connection.get_info_from_file(f)
+    print(items)
+    for item in items:
+        if item_id == int(item['id']):
+            item['vote_number'] = int(item['vote_number'])
+            item['vote_number'] += 1 if up_or_down == "vote-up" else -1
+            item['vote_number'] = str(item['vote_number'])
+    connection.write_data_to_file(f, header, items)
 
 
 def add_line_breaks_to_data(user_data):

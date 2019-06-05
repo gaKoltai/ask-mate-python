@@ -105,3 +105,4 @@ ENV/
 
 #CSV files
 *.csv
+sample_data/
