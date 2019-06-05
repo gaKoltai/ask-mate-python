@@ -18,7 +18,7 @@
         <p>
             <textarea name="message" id="message" cols="30" rows="10" required>{{ question['message'] }}</textarea>
         <p>
-            <input type="hidden" name="image" id="image" value="images/image1.png">
+            <input type="hidden" name="image" id="image" value="{{ question['image'] }}">
             <button type="Submit">Submit question</button>
         </p>
     </form>

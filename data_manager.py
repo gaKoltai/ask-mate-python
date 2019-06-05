@@ -1,5 +1,5 @@
 import connection
-from time import asctime, gmtime
+from time import asctime, localtime
 import util
 import os
 from werkzeug.utils import secure_filename
@@ -10,7 +10,7 @@ def get_post_time(user_data):
     for data in user_data:
         for header, info in data.items():
             if header == 'submission_time':
-                data[header] = asctime(gmtime(int(info)))
+                data[header] = asctime(localtime(int(info)))
 
     return user_data
 
