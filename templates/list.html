@@ -38,13 +38,15 @@
                    {% autoescape false %}
                        {% for key,value in question.items() %}
                            {% if key == "vote_number" %}
-                               <td>{{value}}
+                               <td><p class = "vote-item">{{value}}</p>
                                <a class = "vote-button" href = "{{url_for('route_vote', vote = 'vote-up', item_id = question.id, q_or_a = 'question', order_by = order_by, order_direction=order_direction)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
                                <a class = "vote-button" href = "{{url_for('route_vote', vote = 'vote-down', item_id = question.id, q_or_a = 'question', order_by = order_by, order_direction=order_direction)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
                            {% elif key == "title" %}
                                 <td><a href = "{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">{{ value }}</a></td>
+                           {% elif key == "message" %}
+                                <td class = "message" >{{ value }} </td>
                            {% elif key != "image"%}
-                                <td>{{ value}} </td>
+                                <td>{{ value }} </td>
                            {% endif %}
 
                        {% endfor %}

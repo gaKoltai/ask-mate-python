@@ -5,6 +5,7 @@ body {
     font-family: 'Roboto', 'Lato', 'Arial', sans-serif;
     font-size: 20px;
     font-weight: 300;
+    
 }
 
 h1,
@@ -42,20 +43,32 @@ a:hover,a:active {
 }
 
 
+.vote-item{
+
+    margin-bottom: 5px;
+}
+
+
 table {
   border-collapse: collapse;
 }
 
 table, th, td {
   border-bottom: 1px solid black;
+    padding-right: 10px;
 }
 
 th{
+    padding-bottom: 10px;
     text-align: center;
 }
 
-td{
+.message{
     text-align: left;
+}
+
+td{
+    text-align: center;
     vertical-align:middle;
 
 }
