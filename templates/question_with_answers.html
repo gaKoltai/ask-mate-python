@@ -17,6 +17,7 @@
                     <th> {{ key|replace("_"," ")|title }}</th>
                 {% endif %}
             {% endfor %}
+
         </tr>
 
         </thead>
@@ -25,7 +26,7 @@
             <tr>
                 {% for key,value in question.items() %}
                            {% if key == "image" %}
-                                <td><img src = "/{{ value }}" alt = "No image" height="20" width="20"></td>
+                                <td>{% if value %}<img src = "/{{ value }}" alt = "No image" height="20" width="20">{% endif %}</td>
                            {% elif key!= 'title' %}
                                 <td>{{ value}} </td>
                            {% endif %}
@@ -36,6 +37,7 @@
 
     </table>
     <h4><a href="{{ url_for ('route_edit_question', question_id=question_id) }}">Edit question</a></h4>
+    {% if answers %}
     <h2>Answers:</h2>
     <table>
 
@@ -44,6 +46,7 @@
             {% for key in answers[0]%}
             <th> {{ key|replace("_"," ")|title }}</th>
             {% endfor %}
+            <th></th>
         </tr>
 
         </thead>
@@ -52,11 +55,14 @@
             <tr>
                 {% for key,value in answer.items() %}
                            {% if key == "image" %}
-                                <td><img src = "/{{ value }}" alt = "No image" width="20" height="20"></td>
+
+                                <td>{% if value %}<img src = "/{{ value }}" alt = "No image" width="20" height="20">{% endif %}</td>
                            {% elif key == "vote_number" %}
-                               <td>{{value}}
-                               <a href = "{{url_for('route_vote', vote = 'vote-up', q_or_a = 'answer',item_id = answer.id, question_id =question.id)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
-                               <a href = "{{url_for('route_vote', vote = 'vote-down', q_or_a = 'answer', item_id = answer.id,question_id =question.id)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
+                               <td><p class = "vote-item">{{value}}</p>
+                               <a class = "vote-button" href = "{{url_for('route_vote', vote = 'vote-up', q_or_a = 'answer',item_id = answer.id, question_id =question.id)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
+                               <a class = "vote-button" href = "{{url_for('route_vote', vote = 'vote-down', q_or_a = 'answer', item_id = answer.id,question_id =question.id)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
+                           {% elif key == "message" %}
+                                <td class = "message" >{{ value }} </td>
                            {% else %}
                                 <td>{{ value}} </td>
                            {% endif %}
@@ -67,6 +73,7 @@
         </tbody>
 
     </table>
+    {% endif %}
     <h4><a href="{{url_for('route_new_answer', question_id = question_id)}}">Add new answer</a></h4>
     <h4><a href="{{url_for('route_questions')}}">Return to questions</a></h4>
 
