@@ -41,7 +41,7 @@ def route_ask_new_question():
 
         data_manager.upload_file(request.files['image'])
 
-        new_question = data_manager.new_question_entry(request.form, request.files['image'].filename)
+        new_question = data_manager.add_question(request.form, request.files['image'].filename)
         connection.pass_user_story_to_file(new_question, connection.QUESTION_FILE, connection.QUESTION_HEADER)
 
         return redirect(url_for('route_question_with_answer', question_id=new_question['id']))

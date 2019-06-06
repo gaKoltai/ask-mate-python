@@ -84,13 +84,19 @@ def get_new_id(file_name):
     return new_id
 
 
-def new_question_entry(entry_data, image_name):
+def add_question(entry_data, image_name):
+
+    if image_name == '':
+        image_path = ''
+
+    else:
+        image_path = f'{connection.UPLOAD_FOLDER}/{image_name}'
 
     new_entry = {'id':get_new_id(connection.QUESTION_FILE),
                  'submission_time':util.get_local_time(),
                  'view_number':0,
                  'vote_number': 0,
-                 'image': f'{connection.UPLOAD_FOLDER}/{image_name}'}
+                 'image': image_path}
 
     for header, data in entry_data.items():
         new_entry[header] = data
@@ -109,13 +115,19 @@ def edit_question(edited_info, question_id):
 
 
 def add_answer(question_id, answer, image_name):
+
+    if image_name == '':
+        image_path = ''
+    else:
+        image_path = f'{connection.UPLOAD_FOLDER}/{image_name}'
+
     answers = connection.get_info_from_file(connection.ANSWER_FILE)
     new_answer = {'id': get_new_id(connection.ANSWER_FILE),
                   'submission_time': util.get_local_time(),
                   'vote_number': 0,
                   'question_id': question_id,
                   'message': answer,
-                  "image": f'{connection.UPLOAD_FOLDER}/{image_name}'}
+                  "image": image_path}
 
     answers.append(new_answer)
     connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
