@@ -6,6 +6,7 @@
 </head>
 <body>
     <h1>Questions</h1>
+    <div class = "questions-header">
     <form action = "{{url_for('route_questions')}}" method = 'POST'>
         <p>Order by:</p>
         <div class="select-style";>
@@ -24,6 +25,7 @@
         <button type = "submit">Sort</button>
         </form>
     <p><a class = "link" href="/add-question">Post a new question</a></p>
+    </div>
     <table>
 
         <thead>
