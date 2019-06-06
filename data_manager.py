@@ -78,8 +78,10 @@ def get_answers_by_question_id(question_id):
 
 
 def get_new_id(file_name):
-
-    new_id = max((int(data['id']) for data in connection.get_info_from_file(file_name))) + 1
+    try:
+        new_id = max((int(data['id']) for data in connection.get_info_from_file(file_name))) + 1
+    except ValueError:
+        new_id = 0
 
     return new_id
 
