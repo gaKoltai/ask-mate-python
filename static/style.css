@@ -82,6 +82,15 @@ img {
 }
 
 
+form{
+    margin: 20px;
+}
+textarea, input{
+    width : 600px;
+}
+
+
+
 img:hover{
     transform: scale(1.25);
 }
