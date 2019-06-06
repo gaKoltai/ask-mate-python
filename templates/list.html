@@ -33,6 +33,7 @@
                     <th> {{ key|replace("_"," ")|title }}</th>
                     {% endif %}
                 {% endfor %}
+                <th></th>
             </tr>
         </thead>
 
@@ -57,6 +58,7 @@
 
                        {% endfor %}
                    {% endautoescape %}
+                   <td><a href="{{url_for('route_delete_question', question_id=question['id'])}}">Delete question</a></td>
                </tr>
 
             {% endfor %}

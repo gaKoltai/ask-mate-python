@@ -163,3 +163,18 @@ def get_question_id_by_answer_id(answer_id):
         if answer['id'] == str(answer_id):
             question_id = int(answer['question_id'])
     return question_id
+
+
+def delete_question(question_id):
+    questions = connection.get_info_from_file(connection.QUESTION_FILE)
+    for question in questions:
+        if question['id'] == str(question_id):
+            questions.remove(question)
+            searched_answers = get_answers_by_question_id(question['id'])
+            for answer in searched_answers:
+                delete_answer_by_answer_id(answer['id'])
+            try:
+                os.remove(question['image'])
+            except FileNotFoundError:
+                pass
+    connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions)

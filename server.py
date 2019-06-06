@@ -101,6 +101,11 @@ def route_delete_answer(answer_id):
     return redirect(url_for('route_question_with_answer', question_id=question_id))
 
 
+@app.route('/question/<question_id>/delete')
+def route_delete_question(question_id=None):
+    data_manager.delete_question(question_id)
+    return redirect(url_for('route_questions'))
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
