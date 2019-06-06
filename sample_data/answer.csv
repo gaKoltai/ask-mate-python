@@ -1,11 +1,7 @@
 id,submission_time,vote_number,question_id,message,image
-0,1493398154,8,0,You need to use brackets: my_list = [],
-1,1493088154,35,0,Look it up in the Python docs,
 2,1559652657,3,5,"Szerintem ez nagyon értelmes kérdés!
 ",No image
 3,1559652677,1,5,"Mi alapján ad id-t ez a fos?
 ",No image
 4,1559652843,0,5,Hello halohó,No image
 5,1559735651,2,3,This is a test answer,static/1-for-instead-of-4-for.png
-6,1559808567,0,4,"Hello, how are you?
-",static/
