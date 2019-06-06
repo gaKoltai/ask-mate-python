@@ -176,10 +176,6 @@ def delete_question(question_id):
             searched_answers = get_answers_by_question_id(question['id'])
             for answer in searched_answers:
                 delete_answer_by_answer_id(answer['id'])
-                try:
-                    os.remove(answer['image'])
-                except FileNotFoundError:
-                    pass
             try:
                 os.remove(question['image'])
             except FileNotFoundError:
