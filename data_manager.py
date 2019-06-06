@@ -153,6 +153,7 @@ def delete_answer_by_answer_id(answer_id):
                 os.remove(answer['image'])
             except FileNotFoundError:
                 pass
+
     connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
 
 
@@ -173,8 +174,13 @@ def delete_question(question_id):
             searched_answers = get_answers_by_question_id(question['id'])
             for answer in searched_answers:
                 delete_answer_by_answer_id(answer['id'])
+                try:
+                    os.remove(answer['image'])
+                except FileNotFoundError:
+                    pass
             try:
                 os.remove(question['image'])
             except FileNotFoundError:
                 pass
-    connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions)
+
+    return questions

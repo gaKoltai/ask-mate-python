@@ -8,7 +8,7 @@ app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 
 @app.route('/', methods = ['POST', 'GET'])
 @app.route('/list', methods = ['POST', 'GET'])
-def route_questions(vote = None, id=None):
+def route_questions():
     if request.method == 'GET':
         user_questions = connection.get_info_from_file(connection.QUESTION_FILE)
         data_manager.add_line_breaks_to_data(user_questions)
@@ -103,7 +103,8 @@ def route_delete_answer(answer_id):
 
 @app.route('/question/<question_id>/delete')
 def route_delete_question(question_id=None):
-    data_manager.delete_question(question_id)
+    edited_questions = data_manager.delete_question(question_id)
+    connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, edited_questions)
     return redirect(url_for('route_questions'))
 
 if __name__ == '__main__':
