@@ -29,7 +29,7 @@
                            {% if key == "image" %}
                                 <td>{% if value %}<img src = "/{{ value }}" alt = "No image" height="20" width="20">{% endif %}</td>
                            {% elif key!= 'title' %}
-                                <td>{{ value}} </td>
+                                <td>{{ value|urlize(40) }} </td>
                            {% endif %}
                 {% endfor %}
             </tr>
@@ -63,7 +63,7 @@
                                <a class = "vote-button" href = "{{url_for('route_vote', vote = 'vote-up', q_or_a = 'answer',item_id = answer.id, question_id =question.id)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
                                <a class = "vote-button" href = "{{url_for('route_vote', vote = 'vote-down', q_or_a = 'answer', item_id = answer.id,question_id =question.id)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
                            {% elif key == "message" %}
-                                <td class = "message" >{{ value }} </td>
+                                <td class = "message" >{{ value|urlize(40) }}</td>
                            {% else %}
                                 <td>{{ value}} </td>
                            {% endif %}
