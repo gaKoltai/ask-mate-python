@@ -10,16 +10,16 @@ app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 @app.route('/list', methods = ['POST', 'GET'])
 def route_questions():
     if request.method == 'GET':
-        user_questions = connection.get_info_from_file(connection.QUESTION_FILE)
+        user_questions = data_manager.get_data_from_db('question')
         data_manager.add_line_breaks_to_data(user_questions)
-        user_questions = data_manager.sort_data(user_questions, request.args.get('order_by'),
-                                                request.args.get('order_direction'))
-        data_manager.get_post_time(user_questions)
-        return render_template('list.html', user_questions =user_questions, order_by = request.args.get('order_by'),
-                               order_direction=request.args.get('order_direction'))
-    if request.method == 'POST':
-        return redirect(url_for('route_questions', order_by=request.form['order_by'],
-                                order_direction = request.form['order_direction']))
+        #user_questions = data_manager.sort_data(user_questions, request.args.get('order_by'),
+                                                #request.args.get('order_direction'))
+        #data_manager.get_post_time(user_questions)
+        return render_template('list.html', user_questions =user_questions) #order_by = request.args.get('order_by'),
+                               #order_direction=request.args.get('order_direction'))
+    #if request.method == 'POST':
+        #return redirect(url_for('route_questions', order_by=request.form['order_by'],
+                                #order_direction = request.form['order_direction']))
 
 
 @app.route('/question/<int:question_id>')
@@ -42,9 +42,9 @@ def route_ask_new_question():
         data_manager.upload_file(request.files['image'])
 
         new_question = data_manager.add_question(request.form, request.files['image'].filename)
-        connection.pass_user_story_to_file(new_question, connection.QUESTION_FILE, connection.QUESTION_HEADER)
+        data_manager.add_question_to_db(new_question)
 
-        return redirect(url_for('route_question_with_answer', question_id=new_question['id']))
+        return redirect('/')
 
     return render_template('new_question.html')
 
