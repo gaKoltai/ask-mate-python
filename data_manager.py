@@ -81,15 +81,15 @@ def add_line_breaks_to_data(user_data):
 
     return user_data
 
+@connection.connection_handler
+def get_question_by_id(cursor,question_id):
+    cursor.execute("""
+                    SELECT * FROM question
+                    WHERE id = %(question_id)s;
+    """,{'question_id':question_id})
 
-def get_question_by_id(question_id):
-    searched_question = {}
-    questions = connection.get_info_from_file(connection.QUESTION_FILE)
-    for question in questions:
-        if question['id'] == str(question_id):
-            for item, value in question.items():
-                searched_question[item] = value
-    return searched_question
+    question = cursor.fetchall()
+    return question[0]
 
 
 def get_answers_by_question_id(question_id):
@@ -128,8 +128,8 @@ def edit_question(cursor, edited_info, question_id):
     cursor.execute("""
                     UPDATE question
                     SET (title, message) = (%(title)s, %(message)s)
-                    WHERE id = %s;
-    """,edited_info,question_id)
+                    WHERE id = %(question_id)s;
+    """,edited_info,{'question_id':question_id})
 
 
 @connection.connection_handler
