@@ -94,16 +94,16 @@ def add_question(entry_data, image_name):
     else:
         image_path = f'{connection.UPLOAD_FOLDER}/{image_name}'
 
-    new_entry = {'id':get_new_id(connection.QUESTION_FILE),
+    new_question = {'id':get_new_id(connection.QUESTION_FILE),
                  'submission_time':util.get_local_time(),
                  'view_number':0,
                  'vote_number': 0,
                  'image': image_path}
 
     for header, data in entry_data.items():
-        new_entry[header] = data
+        new_question[header] = data
 
-    return new_entry
+    return new_question
 
 
 def edit_question(edited_info, question_id):
