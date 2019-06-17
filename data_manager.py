@@ -21,8 +21,8 @@ def get_data_from_db(cursor, table):
 def add_question_to_db(cursor, data):
     cursor.execute("""
                     INSERT INTO question
-                    (id, submission_time, view_number, vote_number, title, message, image)
-                    VALUES(%(id)s, %(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);    
+                    (submission_time, view_number, vote_number, title, message, image)
+                    VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);    
                     """,data)
 
 
@@ -88,16 +88,9 @@ def get_answers_by_question_id(question_id):
     return searched_answers
 
 
-def get_new_id(file_name):
-    try:
-        new_id = max((int(data['id']) for data in get_data_from_db(file_name))) + 1
-    except ValueError:
-        new_id = 0
-
-    return new_id
-
-
 def add_question(question, image_name):
+
+    new_question = {}
 
     if image_name == '':
         image_path = ''
@@ -105,13 +98,16 @@ def add_question(question, image_name):
     else:
         image_path = f'{connection.UPLOAD_FOLDER}/{image_name}'
 
-    new_question = {'id':get_new_id('question'),
-                  'submission_time':datetime.now(),
+    for header,data in question.items():
+        new_question[header] = data
+
+
+    new_question_default = {'submission_time':datetime.now(),
                   'view_number':0,
                   'vote_number': 0,
                   'image': image_path}
 
-    for header, data in question.items():
+    for header, data in new_question_default.items():
         new_question[header] = data
 
     return new_question
