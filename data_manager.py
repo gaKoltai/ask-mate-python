@@ -203,7 +203,3 @@ def get_tag_id(cursor, question_id):
     if tag_id:
         return tag_id[0]['tag_id']
 
-
-if __name__ == '__main__':
-    delete_question("5")
-    print(get_question_id_by_answer_id('4'))
