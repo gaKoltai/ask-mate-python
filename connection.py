@@ -59,13 +59,6 @@ def connection_handler(function):
     return wrapper
 
 
-def get_info_from_file(file_name):
-    with open(file_name) as csv_file:
-        user_data = [data for data in csv.DictReader(csv_file)]
-
-    return user_data
-
-
 def write_data_to_file(file_name, header, data):
     with open(file_name, "w", newline='') as csv_file:
         writer = csv.DictWriter(csv_file, header)
