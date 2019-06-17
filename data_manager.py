@@ -153,17 +153,18 @@ def delete_answer_by_answer_id(answer_id):
     connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
 
 
-def get_question_id_by_answer_id(answer_id):
-    answers = connection.get_info_from_file(connection.ANSWER_FILE)
-    question_id = None
-    for answer in answers:
-        if answer['id'] == str(answer_id):
-            question_id = int(answer['question_id'])
-    return question_id
+@connection.connection_handler
+def get_question_id_by_answer_id(cursor, answer_id):
+    cursor.execute("""
+        SELECT question_id FROM answer
+        WHERE id= %(answer_id)s;
+    """, {'answer_id':answer_id})
+    question_id = cursor.fetchall()
+    if question_id:
+        return question_id[0]['question_id']
 
 
 def delete_question(question_id):
-
     delete_from_table('answer', 'question_id', question_id)
     delete_from_table('comment', 'question_id', question_id)
     tag_id = get_tag_id(question_id)
@@ -192,3 +193,4 @@ def get_tag_id(cursor, question_id):
 
 if __name__ == '__main__':
     delete_question("5")
+    print(get_question_id_by_answer_id('4'))
