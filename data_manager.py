@@ -1,17 +1,30 @@
 import connection
-from time import asctime, localtime
+from datetime import datetime
 import util
 import os
 from werkzeug.utils import secure_filename
+from psycopg2 import sql
 
 
+@connection.connection_handler
+def get_data_from_db(cursor, table):
 
-def get_post_time(user_data):
-    for data in user_data:
-        for header, info in data.items():
-            if header == 'submission_time':
-                data[header] = asctime(localtime(int(info)))
-    return user_data
+    cursor.execute(
+        sql.SQL("SELECT * FROM {table}").format(table=sql.Identifier(table))
+    )
+
+    data = cursor.fetchall()
+
+    return data
+
+@connection.connection_handler
+def add_question_to_db(cursor, data):
+    cursor.execute("""
+                    INSERT INTO question
+                    (id, submission_time, view_number, vote_number, title, message, image)
+                    VALUES(%(id)s, %(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);    
+                    """,data)
+
 
 
 def sort_data(data, order_by, order_direction):
@@ -77,14 +90,14 @@ def get_answers_by_question_id(question_id):
 
 def get_new_id(file_name):
     try:
-        new_id = max((int(data['id']) for data in connection.get_info_from_file(file_name))) + 1
+        new_id = max((int(data['id']) for data in get_data_from_db(file_name))) + 1
     except ValueError:
         new_id = 0
 
     return new_id
 
 
-def add_question(entry_data, image_name):
+def add_question(question, image_name):
 
     if image_name == '':
         image_path = ''
@@ -92,13 +105,13 @@ def add_question(entry_data, image_name):
     else:
         image_path = f'{connection.UPLOAD_FOLDER}/{image_name}'
 
-    new_question = {'id':get_new_id(connection.QUESTION_FILE),
-                 'submission_time':util.get_local_time(),
-                 'view_number':0,
-                 'vote_number': 0,
-                 'image': image_path}
+    new_question = {'id':get_new_id('question'),
+                  'submission_time':datetime.now(),
+                  'view_number':0,
+                  'vote_number': 0,
+                  'image': image_path}
 
-    for header, data in entry_data.items():
+    for header, data in question.items():
         new_question[header] = data
 
     return new_question
@@ -121,11 +134,11 @@ def add_answer(question_id, answer, image_name):
         image_path = f'{connection.UPLOAD_FOLDER}/{image_name}'
     answers = connection.get_info_from_file(connection.ANSWER_FILE)
     new_answer = {'id': get_new_id(connection.ANSWER_FILE),
-                  'submission_time': util.get_local_time(),
-                  'vote_number': 0,
-                  'question_id': question_id,
-                  'message': answer,
-                  "image": image_path}
+                   'submission_time': util.get_local_time(),
+                   'vote_number': 0,
+                   'question_id': question_id,
+                   'message': answer,
+                   "image": image_path}
     answers.append(new_answer)
     connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
 
