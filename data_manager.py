@@ -7,15 +7,20 @@ from psycopg2 import sql
 
 
 @connection.connection_handler
-def get_data_from_db(cursor, table):
-
-    cursor.execute(
-        sql.SQL("SELECT * FROM {table}").format(table=sql.Identifier(table))
-    )
-
+def get_data_from_db(cursor, table, order_by= None, order_direction=None):
+    order_by = 'submission_time' if not order_by else order_by
+    if order_direction == "desc":
+        cursor.execute(
+            sql.SQL("select * from {table} ORDER BY {order_by} DESC").
+                format(table=sql.Identifier(table),
+                       order_by=sql.Identifier(order_by)))
+    else:
+        cursor.execute(
+            sql.SQL("select * from {table} ORDER BY {order_by}").
+                format(table=sql.Identifier(table), order_by=sql.Identifier(order_by)))
     data = cursor.fetchall()
-
     return data
+
 
 @connection.connection_handler
 def add_question_to_db(cursor, data):
@@ -24,7 +29,6 @@ def add_question_to_db(cursor, data):
                     (id, submission_time, view_number, vote_number, title, message, image)
                     VALUES(%(id)s, %(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);    
                     """,data)
-
 
 
 def sort_data(data, order_by, order_direction):
