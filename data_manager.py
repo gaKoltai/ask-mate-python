@@ -26,8 +26,8 @@ def get_data_from_db(cursor, table, order_by= None, order_direction=None):
 def add_question_to_db(cursor, data):
     cursor.execute("""
                     INSERT INTO question
-                    (id, submission_time, view_number, vote_number, title, message, image)
-                    VALUES(%(id)s, %(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);    
+                    (submission_time, view_number, vote_number, title, message, image)
+                    VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);    
                     """,data)
 
 
@@ -92,43 +92,35 @@ def get_answers_by_question_id(question_id):
     return searched_answers
 
 
-def get_new_id(file_name):
-    try:
-        new_id = max((int(data['id']) for data in get_data_from_db(file_name))) + 1
-    except ValueError:
-        new_id = 0
-
-    return new_id
-
-
 def add_question(question, image_name):
+
+    new_question = {}
 
     if image_name == '':
         image_path = ''
-
     else:
         image_path = f'{connection.UPLOAD_FOLDER}/{image_name}'
 
-    new_question = {'id':get_new_id('question'),
-                  'submission_time':datetime.now(),
-                  'view_number':0,
+    for header,data in question.items():
+        new_question[header] = data
+
+    new_question_default = {'submission_time':datetime.now(),
+                  'view_number': 0,
                   'vote_number': 0,
                   'image': image_path}
-
-    for header, data in question.items():
+    for header, data in new_question_default.items():
         new_question[header] = data
 
     return new_question
 
+@connection.connection_handler
+def edit_question(cursor, edited_info, question_id):
+    cursor.execute("""
+                    UPDATE question
+                    SET (title, message) = (%(title)s, %(message)s)
+                    WHERE id = %s;
+    """,edited_info,question_id)
 
-def edit_question(edited_info, question_id):
-    questions = connection.get_info_from_file(connection.QUESTION_FILE)
-    for question in questions:
-        if question['id'] == str(question_id):
-            for header, info in edited_info.items():
-                question[header] = edited_info[header]
-
-    return questions
 
 
 def add_answer(question_id, answer, image_name):
@@ -159,8 +151,15 @@ def upload_file(file):
 
 
 def delete_answer_by_answer_id(answer_id):
-    delete_from_table('comment', 'answer_id', answer_id)
-    delete_from_table('answer', 'id', answer_id)
+    answers = connection.get_info_from_file(connection.ANSWER_FILE)
+    for answer in answers:
+        if answer['id'] == str(answer_id):
+            answers.remove(answer)
+            try:
+                os.remove(answer['image'])
+            except FileNotFoundError:
+                pass
+    connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
 
 
 @connection.connection_handler
