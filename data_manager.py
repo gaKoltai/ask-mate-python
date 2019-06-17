@@ -3,6 +3,7 @@ from time import asctime, localtime
 import util
 import os
 from werkzeug.utils import secure_filename
+from psycopg2 import sql
 
 
 def get_post_time(user_data):
@@ -162,15 +163,32 @@ def get_question_id_by_answer_id(answer_id):
 
 
 def delete_question(question_id):
-    questions = connection.get_info_from_file(connection.QUESTION_FILE)
-    for question in questions:
-        if question['id'] == str(question_id):
-            questions.remove(question)
-            searched_answers = get_answers_by_question_id(question['id'])
-            for answer in searched_answers:
-                delete_answer_by_answer_id(answer['id'])
-            try:
-                os.remove(question['image'])
-            except FileNotFoundError:
-                pass
-    return questions
+
+    delete_from_table('answer', 'question_id', question_id)
+    delete_from_table('comment', 'question_id', question_id)
+    tag_id = get_tag_id(question_id)
+    if tag_id:
+        delete_from_table('tag', 'id', tag_id)
+    delete_from_table('question_tag', 'question_id', question_id)
+    delete_from_table('question', 'id', question_id)
+
+
+@connection.connection_handler
+def delete_from_table(cursor, table, parameter, value):
+    cursor.execute(sql.SQL("delete from {0} where {1} = %s")
+                   .format(sql.Identifier(table),
+                           sql.Identifier(parameter)), value)
+
+
+@connection.connection_handler
+def get_tag_id(cursor, question_id):
+    cursor.execute("""
+        SELECT tag_id from question_tag WHERE question_id=%(question_id)s
+    """, {'question_id':question_id})
+    tag_id = cursor.fetchall()
+    if tag_id:
+        return tag_id[0]['tag_id']
+
+
+if __name__ == '__main__':
+    delete_question("5")
