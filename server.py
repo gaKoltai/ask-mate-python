@@ -25,7 +25,7 @@ def route_questions():
 @app.route('/question/<int:question_id>')
 def route_question_with_answer(question_id=None):
     if request.args.get('view_number_increment'):
-        data_manager.increment_view_number(question_id)
+        data_manager.increment_view_number(item_id=question_id)
     if question_id is not None:
         question = data_manager.get_question_by_id(question_id)
         data_manager.get_post_time([question])
