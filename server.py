@@ -107,6 +107,7 @@ def route_delete_question(question_id=None):
     connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, edited_questions)
     return redirect(url_for('route_questions'))
 
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
