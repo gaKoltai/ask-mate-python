@@ -11,7 +11,6 @@ def get_post_time(user_data):
         for header, info in data.items():
             if header == 'submission_time':
                 data[header] = asctime(localtime(int(info)))
-
     return user_data
 
 
@@ -31,7 +30,6 @@ def vote(item_id, up_or_down, q_or_a):
     else:
         f = connection.ANSWER_FILE
         header = connection.ANSWER_HEADER
-
     items = connection.get_info_from_file(f)
     for item in items:
         if item_id == int(item['id']):
@@ -117,12 +115,10 @@ def edit_question(edited_info, question_id):
 
 
 def add_answer(question_id, answer, image_name):
-
     if image_name == '':
         image_path = ''
     else:
         image_path = f'{connection.UPLOAD_FOLDER}/{image_name}'
-
     answers = connection.get_info_from_file(connection.ANSWER_FILE)
     new_answer = {'id': get_new_id(connection.ANSWER_FILE),
                   'submission_time': util.get_local_time(),
@@ -130,7 +126,6 @@ def add_answer(question_id, answer, image_name):
                   'question_id': question_id,
                   'message': answer,
                   "image": image_path}
-
     answers.append(new_answer)
     connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
 
@@ -155,7 +150,6 @@ def delete_answer_by_answer_id(answer_id):
                 os.remove(answer['image'])
             except FileNotFoundError:
                 pass
-
     connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
 
 
@@ -180,5 +174,4 @@ def delete_question(question_id):
                 os.remove(question['image'])
             except FileNotFoundError:
                 pass
-
     return questions
