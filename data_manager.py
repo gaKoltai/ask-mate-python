@@ -54,18 +54,12 @@ def vote(item_id, up_or_down, q_or_a):
 
 @connection.connection_handler
 def increment_view_number(cursor, item_id):
-    '''
-    question = get_question_by_id(item_id)
-    question[0]['view_number'] = str(int(question[0]['view_number'])+1)
-    questions = edit_question(question, item_id)
-    connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions)
-    '''
     cursor.execute('''
                     UPDATE question
                     SET view_number = (SELECT view_number
                                         FROM question
                                         WHERE id = %(question_id)s) + 1
-                    WHERE id = %(question_id)s
+                    WHERE id = %(question_id)s;
                     ''',
                    {'question_id': item_id})
 
@@ -81,14 +75,6 @@ def add_line_breaks_to_data(user_data):
 
 @connection.connection_handler
 def get_question_by_id(cursor, question_id):
-    '''
-    searched_question = {}
-    questions = connection.get_info_from_file(connection.QUESTION_FILE)
-    for question in questions:
-        if question['id'] == str(question_id):
-            for item, value in question.items():
-                searched_question[item] = value
-    '''
     cursor.execute('''
                     SELECT *
                     FROM question
@@ -96,16 +82,18 @@ def get_question_by_id(cursor, question_id):
                     ''',
                    {'question_id': question_id})
     searched_question = cursor.fetchall()
-    return searched_question
+    return searched_question[0]
 
 
-def get_answers_by_question_id(question_id):
-    searched_answers = []
-    answers = connection.get_info_from_file(connection.ANSWER_FILE)
-    get_post_time(answers)
-    for answer in answers:
-        if answer['question_id'] == str(question_id):
-            searched_answers.append(answer)
+@connection.connection_handler
+def get_answers_by_question_id(cursor, question_id):
+    cursor.execute('''
+                    SELECT *
+                    FROM answer
+                    WHERE question_id = %(question_id)s;
+                    ''',
+                   {'question_id': question_id})
+    searched_answers = cursor.fetchall()
     return searched_answers
 
 
