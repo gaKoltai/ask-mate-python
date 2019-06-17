@@ -63,15 +63,10 @@ def increment_view_number(cursor, item_id):
                     SET view_number = (SELECT view_number
                                         FROM question
                                         WHERE id = %(question_id)s) + 1
-                    WHERE id = %(question_id);
+                    WHERE id = %(question_id)s;
                     ''',
                    {'question_id': item_id})
-    '''
-    question = get_question_by_id(item_id)
-    question['view_number'] = str(int(question['view_number'])+1)
-    questions = edit_question(question, item_id)
-    connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions)
-    '''
+
 
 def add_line_breaks_to_data(user_data):
     for data in user_data:
@@ -80,6 +75,7 @@ def add_line_breaks_to_data(user_data):
                 data[header] = info.replace('\n', '<br>')
 
     return user_data
+
 
 @connection.connection_handler
 def get_question_by_id(cursor,question_id):
@@ -92,13 +88,15 @@ def get_question_by_id(cursor,question_id):
     return question[0]
 
 
-def get_answers_by_question_id(question_id):
-    searched_answers = []
-    answers = connection.get_info_from_file(connection.ANSWER_FILE)
-    get_post_time(answers)
-    for answer in answers:
-        if answer['question_id'] == str(question_id):
-            searched_answers.append(answer)
+@connection.connection_handler
+def get_answers_by_question_id(cursor, question_id):
+    cursor.execute('''
+                    SELECT *
+                    FROM answer
+                    WHERE question_id = %(question_id)s
+                    ''',
+                   {'question_id': question_id})
+    searched_answers = cursor.fetchall()
     return searched_answers
 
 
@@ -122,6 +120,7 @@ def add_question(question, image_name):
         new_question[header] = data
 
     return new_question
+
 
 @connection.connection_handler
 def edit_question(cursor, edited_info, question_id):
@@ -150,17 +149,6 @@ def add_answer(cursor, question_id, answer, image_name):
                     'message': answer,
                     'image': image_path}
                    )
-    '''
-    answers = connection.get_info_from_file(connection.ANSWER_FILE)
-    new_answer = {'id': get_new_id(connection.ANSWER_FILE),
-                   'submission_time': util.get_local_time(),
-                   'vote_number': 0,
-                   'question_id': question_id,
-                   'message': answer,
-                   "image": image_path}
-    answers.append(new_answer)
-    connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
-    '''
 
 
 def allowed_file(filename):

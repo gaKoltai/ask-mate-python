@@ -25,14 +25,14 @@ def route_questions():
 
 @app.route('/question/<int:question_id>')
 def route_question_with_answer(question_id=None):
-    #if request.args.get('view_number_increment'):
-       # data_manager.increment_view_number(item_id=question_id)
+    if request.args.get('view_number_increment'):
+        data_manager.increment_view_number(item_id=question_id)
     if question_id is not None:
         question = data_manager.get_question_by_id(question_id=question_id)
         # data_manager.get_post_time([question])
-        #answers = data_manager.get_answers_by_question_id(question_id=question_id)
+        answers = data_manager.get_answers_by_question_id(question_id=question_id)
 
-    return render_template('question_with_answers.html', question=question,question_id=question_id)
+    return render_template('question_with_answers.html', question=question, question_id=question_id, answers=answers)
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
@@ -53,7 +53,7 @@ def route_ask_new_question():
 @app.route('/question/<int:question_id>/edit', methods=['GET', 'POST'])
 def route_edit_question(question_id):
 
-    question = data_manager.get_question_by_id(question_id)
+    question = data_manager.get_question_by_id(question_id=question_id)
 
     if request.method == 'POST':
 
@@ -86,11 +86,11 @@ def route_new_answer(question_id=None):
         answer = request.form.get('answer')
 
         data_manager.upload_file(request.files['image'])
-        data_manager.add_answer(question_id, answer, request.files['image'].filename)
+        data_manager.add_answer(question_id=question_id, answer=answer, image_name=request.files['image'].filename)
 
         return redirect(url_for('route_question_with_answer', question_id=question_id))
 
-    question = data_manager.get_question_by_id(question_id)
+    question = data_manager.get_question_by_id(question_id=question_id)
     return render_template('add_answer.html', question=question, question_id=question_id)
 
 
