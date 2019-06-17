@@ -103,8 +103,7 @@ def route_delete_answer(answer_id):
 
 @app.route('/question/<question_id>/delete')
 def route_delete_question(question_id=None):
-    edited_questions = data_manager.delete_question(question_id)
-    connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, edited_questions)
+    data_manager.delete_question(question_id)
     return redirect(url_for('route_questions'))
 
 
