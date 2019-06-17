@@ -3,7 +3,7 @@ from time import asctime, localtime
 import util
 import os
 from werkzeug.utils import secure_filename
-from server import app
+
 
 
 def get_post_time(user_data):
@@ -143,7 +143,7 @@ def allowed_file(filename):
 def upload_file(file):
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file.save(os.path.join(connection.UPLOAD_FOLDER, filename))
 
 
 def delete_answer_by_answer_id(answer_id):
