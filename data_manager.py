@@ -3,7 +3,6 @@ from time import asctime, localtime
 import util
 import os
 from werkzeug.utils import secure_filename
-from server import app
 
 
 def get_post_time(user_data):
