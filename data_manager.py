@@ -52,16 +52,11 @@ def vote(item_id, up_or_down, q_or_a):
     connection.write_data_to_file(f, header, items)
 
 
-@connection.connection_handler
-def increment_view_number(cursor, item_id):
-    cursor.execute('''
-                    UPDATE question
-                    SET view_number = (SELECT view_number
-                                        FROM question
-                                        WHERE id = %(question_id)s) + 1
-                    WHERE id = %(question_id)s;
-                    ''',
-                   {'question_id': item_id})
+def increment_view_number(item_id):
+    question = get_question_by_id(item_id)
+    question['view_number'] = str(int(question['view_number'])+1)
+    questions = edit_question(question, item_id)
+    connection.write_data_to_file(connection.QUESTION_FILE, connection.QUESTION_HEADER, questions)
 
 
 def add_line_breaks_to_data(user_data):
@@ -73,27 +68,23 @@ def add_line_breaks_to_data(user_data):
     return user_data
 
 
-@connection.connection_handler
-def get_question_by_id(cursor, question_id):
-    cursor.execute('''
-                    SELECT *
-                    FROM question
-                    WHERE id = %(question_id)s;
-                    ''',
-                   {'question_id': question_id})
-    searched_question = cursor.fetchall()
-    return searched_question[0]
+def get_question_by_id(question_id):
+    searched_question = {}
+    questions = connection.get_info_from_file(connection.QUESTION_FILE)
+    for question in questions:
+        if question['id'] == str(question_id):
+            for item, value in question.items():
+                searched_question[item] = value
+    return searched_question
 
 
-@connection.connection_handler
-def get_answers_by_question_id(cursor, question_id):
-    cursor.execute('''
-                    SELECT *
-                    FROM answer
-                    WHERE question_id = %(question_id)s;
-                    ''',
-                   {'question_id': question_id})
-    searched_answers = cursor.fetchall()
+def get_answers_by_question_id(question_id):
+    searched_answers = []
+    answers = connection.get_info_from_file(connection.ANSWER_FILE)
+    get_post_time(answers)
+    for answer in answers:
+        if answer['question_id'] == str(question_id):
+            searched_answers.append(answer)
     return searched_answers
 
 
@@ -103,33 +94,29 @@ def add_question(question, image_name):
 
     if image_name == '':
         image_path = ''
-
     else:
         image_path = f'{connection.UPLOAD_FOLDER}/{image_name}'
 
     for header,data in question.items():
         new_question[header] = data
 
-
     new_question_default = {'submission_time':datetime.now(),
-                  'view_number':0,
+                  'view_number': 0,
                   'vote_number': 0,
                   'image': image_path}
-
     for header, data in new_question_default.items():
         new_question[header] = data
 
     return new_question
 
+@connection.connection_handler
+def edit_question(cursor, edited_info, question_id):
+    cursor.execute("""
+                    UPDATE question
+                    SET (title, message) = (%(title)s, %(message)s)
+                    WHERE id = %s;
+    """,edited_info,question_id)
 
-def edit_question(edited_info, question_id):
-    questions = connection.get_info_from_file(connection.QUESTION_FILE)
-    for question in questions:
-        if question['id'] == str(question_id):
-            for header, info in edited_info.items():
-                question[header] = edited_info[header]
-
-    return questions
 
 
 def add_answer(question_id, answer, image_name):
@@ -160,8 +147,15 @@ def upload_file(file):
 
 
 def delete_answer_by_answer_id(answer_id):
-    delete_from_table('comment', 'answer_id', answer_id)
-    delete_from_table('answer', 'id', answer_id)
+    answers = connection.get_info_from_file(connection.ANSWER_FILE)
+    for answer in answers:
+        if answer['id'] == str(answer_id):
+            answers.remove(answer)
+            try:
+                os.remove(answer['image'])
+            except FileNotFoundError:
+                pass
+    connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
 
 
 @connection.connection_handler
