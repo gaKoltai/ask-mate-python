@@ -117,6 +117,17 @@ def route_delete_question(question_id=None):
     return redirect(url_for('route_questions'))
 
 
+@app.route('/search')
+def route_search():
+
+    search_phrase = request.args.get('search')
+    questions = data_manager.search_questions(search_phrase)
+
+    return render_template('search.html', user_questions=questions)
+
+
+
+
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
 def route_new_question_comment(question_id=None):
     if request.method == 'POST':
