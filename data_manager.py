@@ -201,3 +201,29 @@ def get_tag_id(cursor, question_id):
     if tag_id:
         return tag_id[0]['tag_id']
 
+
+@connection.connection_handler
+def add_comment_to_question(cursor, comment_message, question_id):
+    dt = datetime.now()
+    cursor.execute('''
+                    INSERT INTO comment
+                    (question_id, answer_id, message, submission_time, edited_count)
+                     VALUES (%(question_id)s,
+                                NULL,
+                                %(message)s,
+                                %(time)s,
+                                0);
+                    ''', {'question_id': question_id,
+                          'message': comment_message,
+                          'time': dt})
+
+
+@connection.connection_handler
+def get_comment_by_question_id(cursor, question_id):
+    cursor.execute('''
+                    SELECT id, message, submission_time, edited_count FROM comment
+                    WHERE question_id = %(q_id)s;
+                    ''',
+                   {'q_id': question_id})
+    comment = cursor.fetchall()
+    return comment

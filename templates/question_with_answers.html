@@ -38,6 +38,37 @@
 
     </table>
     <h4><a href="{{ url_for ('route_edit_question', question_id=question_id) }}">Edit question</a></h4>
+    {% if question_comments %}
+    <h3>Comments:</h3>
+     <table>
+
+        <thead>
+        <tr>
+            {% for key in question_comments[0] %}
+                {%  if key != 'title' %}
+                    <th> {{ key|replace("_"," ")|title }}</th>
+                {% endif %}
+            {% endfor %}
+
+        </tr>
+
+        </thead>
+
+         <tbody>
+
+            {% for question_comment in question_comments%}
+            <tr>
+                {% for value in question_comment.values() %}
+                    <td>{{ value }} </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+    <a href={{url_for('route_new_question_comment', question_id=question_id)}}>Add comment to the question</a>
+    {% endif%}
+
     {% if answers %}
     <h2>Answers:</h2>
     <table>
@@ -70,11 +101,40 @@
                 {% endfor %}
                 <td><a href="{{url_for('route_delete_answer', answer_id=answer['id'])}}">Delete answer</a></td>
             </tr>
+            {% if answer_comments %}
+            <h3>Comments:</h3>
+            <table>
+                <thead>
+                <tr>
+                    {% for key in answer_comments[0] %}
+                        {%  if key != 'title' %}
+                            <th> {{ key|replace("_"," ")|title }}</th>
+                        {% endif %}
+                    {% endfor %}
+
+                </tr>
+
+                </thead>
+
+                 <tbody>
+
+                    {% for answer_comment in answer_comments%}
+                    <tr>
+                        {% for value in answer_comment.values() %}
+                            <td>{{ value }} </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+            {% endif %}
             {% endfor %}
         </tbody>
 
     </table>
     {% endif %}
+
     <h4><a href="{{url_for('route_new_answer', question_id = question_id)}}">Add new answer</a></h4>
     <h4><a href="{{url_for('route_questions')}}">Return to questions</a></h4>
 
