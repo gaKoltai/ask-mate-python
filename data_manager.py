@@ -115,11 +115,14 @@ def add_question(question, image_name):
 
 @connection.connection_handler
 def edit_question(cursor, edited_info, question_id):
+
+    edited_info['question_id'] = question_id
+
     cursor.execute("""
                     UPDATE question
                     SET (title, message) = (%(title)s, %(message)s)
                     WHERE id = %(question_id)s;
-    """,edited_info,{'question_id':question_id})
+    """,edited_info)
 
 
 
