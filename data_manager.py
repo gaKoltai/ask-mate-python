@@ -31,15 +31,6 @@ def add_question_to_db(cursor, data):
                     """,data)
 
 
-def sort_data(data, order_by, order_direction):
-    is_reversed = False if order_direction == "asc" else True
-    order_by = order_by if order_by else 'submission_time'
-    if order_by == 'id' or order_by == 'view_number' or order_by == 'vote_number' or order_by == 'submission_time':
-        return sorted(data, key=lambda item: int(item[order_by]), reverse=is_reversed)
-    else:
-        return sorted(data, key=lambda item: item[order_by], reverse=is_reversed)
-
-
 def vote(item_id, up_or_down, q_or_a):
     if q_or_a == "question":
         f = connection.QUESTION_FILE
@@ -123,15 +114,15 @@ def add_question(question, image_name):
 
 
 @connection.connection_handler
-def edit_question(cursor, edited_info, question_id):
+def edit_question(cursor, data_to_edit, question_id):
 
-    edited_info['question_id'] = question_id
+    data_to_edit['question_id'] = question_id
 
     cursor.execute("""
                     UPDATE question
                     SET (title, message) = (%(title)s, %(message)s)
                     WHERE id = %(question_id)s;
-    """,edited_info)
+    """,data_to_edit)
 
 
 @connection.connection_handler
@@ -200,7 +191,7 @@ def delete_question(question_id):
 
 @connection.connection_handler
 def delete_from_table(cursor, table, parameter, value):
-    cursor.execute(sql.SQL("delete from {0} where {1} = %s")
+    cursor.execute(sql.SQL("DELETE FROM {0} WHERE {1} = %s")
                    .format(sql.Identifier(table),
                            sql.Identifier(parameter)), value)
 
@@ -208,7 +199,7 @@ def delete_from_table(cursor, table, parameter, value):
 @connection.connection_handler
 def get_tag_id(cursor, question_id):
     cursor.execute("""
-        SELECT tag_id from question_tag WHERE question_id=%(question_id)s
+        SELECT tag_id FROM question_tag WHERE question_id=%(question_id)s
     """, {'question_id':question_id})
     tag_id = cursor.fetchall()
     if tag_id:
