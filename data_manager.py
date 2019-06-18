@@ -201,3 +201,21 @@ def get_tag_id(cursor, question_id):
     if tag_id:
         return tag_id[0]['tag_id']
 
+
+
+@connection.connection_handler
+def search_questions(cursor, search_phrase):
+    cursor.execute("""
+                    SELECT DISTINCT question.* FROM question, answer
+                    WHERE answer.message ILIKE concat('%%', %(search)s, '%%') 
+                    OR question.message ILIKE concat('%%', %(search)s, '%%')
+                    OR title ILIKE concat('%%', %(search)s, '%%')
+                    ORDER BY submission_time DESC;             
+                """,{'search':search_phrase})
+
+    searched_questions = cursor.fetchall()
+
+    return searched_questions
+
+
+
