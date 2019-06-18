@@ -45,9 +45,7 @@
         <thead>
         <tr>
             {% for key in question_comments[0] %}
-                {%  if key != 'title' %}
-                    <th> {{ key|replace("_"," ")|title }}</th>
-                {% endif %}
+                <th> {{ key|replace("_"," ")|title }}</th>
             {% endfor %}
 
         </tr>
@@ -102,12 +100,15 @@
                 <td><a href="{{url_for('route_delete_answer', answer_id=answer['id'])}}">Delete answer</a></td>
             </tr>
             {% if answer_comments %}
-            <h3>Comments:</h3>
+            <tr>
+            <td>Comments:</td>
+            </tr>
+            <tr>
             <table>
                 <thead>
                 <tr>
                     {% for key in answer_comments[0] %}
-                        {%  if key != 'title' %}
+                        {%  if key not in ['answer_id', 'question_id']  %}
                             <th> {{ key|replace("_"," ")|title }}</th>
                         {% endif %}
                     {% endfor %}
@@ -120,15 +121,23 @@
 
                     {% for answer_comment in answer_comments%}
                     <tr>
-                        {% for value in answer_comment.values() %}
+                        {% for key, value in answer_comment.items() %}
+                            {% if answer_comment['answer_id'] == answer['id'] and
+                                key not in ['question_id', 'answer_id']%}
                             <td>{{ value }} </td>
+                            {% endif %}
                         {% endfor %}
                     </tr>
                     {% endfor %}
                 </tbody>
 
             </table>
+            </tr>
             {% endif %}
+            <tr>
+                <td><a href="{{url_for('route_new_answer_comment', answer_id = answer['id'])}}">Add new comment to the answer</a></td>
+            </tr>
+
             {% endfor %}
         </tbody>
 

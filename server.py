@@ -31,7 +31,11 @@ def route_question_with_answer(question_id=None):
         question = data_manager.get_question_by_id(question_id=question_id)
         answers = data_manager.get_answers_by_question_id(question_id=question_id)
         question_comments = data_manager.get_comment_by_question_id(question_id=question_id)
-        answer_comments = None
+        if len(answers) != 0:
+            answer_ids = tuple(data_manager.get_answer_ids_by_answers(answers))
+            answer_comments = data_manager.get_comments_by_answer_id(answer_ids=answer_ids)
+        else:
+            answer_comments = None
 
     return render_template('question_with_answers.html',
                            question=question,
@@ -116,12 +120,24 @@ def route_delete_question(question_id=None):
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
 def route_new_question_comment(question_id=None):
     if request.method == 'POST':
-        comment = request.form.get('comment')
+        comment = request.form.get('question_comment')
         data_manager.add_comment_to_question(question_id=question_id, comment_message=comment)
         return redirect(url_for('route_question_with_answer', question_id=question_id))
 
     question = data_manager.get_question_by_id(question_id=question_id)
     return render_template('add_comment.html', question=question)
+
+
+@app.route('/answer/<answer_id>/new-comment', methods=['GET','POST'])
+def route_new_answer_comment(answer_id=None):
+    if request.method == 'POST':
+        comment = request.form.get('answer_comment')
+        data_manager.add_comment_to_answer(answer_id=answer_id, comment_message=comment)
+        question_id = data_manager.get_question_id_by_answer_id(answer_id=answer_id)
+        return redirect(url_for('route_question_with_answer', question_id=question_id))
+
+    answer = data_manager.get_answer_by_id(answer_id=answer_id)
+    return render_template('add_comment.html', answer=answer)
 
 
 if __name__ == '__main__':
