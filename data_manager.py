@@ -118,13 +118,14 @@ def add_question(question, image_name):
 @connection.connection_handler
 def edit_question(cursor, data_to_edit, question_id):
 
-    data_to_edit['question_id'] = question_id
+    edited_data = {key:val for key, val in data_to_edit.items()}
+    edited_data['question_id'] = question_id
 
     cursor.execute("""
                     UPDATE question
                     SET (title, message) = (%(title)s, %(message)s)
                     WHERE id = %(question_id)s;
-    """,data_to_edit)
+    """,edited_data)
 
 
 @connection.connection_handler
