@@ -94,7 +94,7 @@ def route_new_answer(question_id=None):
     return render_template('add_answer.html', question=question, question_id=question_id)
 
 
-@app.route('/answer/<int:answer_id>/delete')
+@app.route('/answer/<answer_id>/delete')
 def route_delete_answer(answer_id):
     question_id = data_manager.get_question_id_by_answer_id(answer_id)
     data_manager.delete_answer_by_answer_id(answer_id)

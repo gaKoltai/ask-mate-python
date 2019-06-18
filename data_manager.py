@@ -156,15 +156,8 @@ def upload_file(file):
 
 
 def delete_answer_by_answer_id(answer_id):
-    answers = connection.get_info_from_file(connection.ANSWER_FILE)
-    for answer in answers:
-        if answer['id'] == str(answer_id):
-            answers.remove(answer)
-            try:
-                os.remove(answer['image'])
-            except FileNotFoundError:
-                pass
-    connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
+    delete_from_table('comment', 'answer_id', answer_id)
+    delete_from_table('answer', 'id', answer_id)
 
 
 @connection.connection_handler
