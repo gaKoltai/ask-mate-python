@@ -31,29 +31,22 @@ def add_question_to_db(cursor, data):
                     """,data)
 
 
-def sort_data(data, order_by, order_direction):
-    is_reversed = False if order_direction == "asc" else True
-    order_by = order_by if order_by else 'submission_time'
-    if order_by == 'id' or order_by == 'view_number' or order_by == 'vote_number' or order_by == 'submission_time':
-        return sorted(data, key=lambda item: int(item[order_by]), reverse=is_reversed)
-    else:
-        return sorted(data, key=lambda item: item[order_by], reverse=is_reversed)
+@connection.connection_handler
+def vote_question(cursor, vote, id):
+    cursor.execute("""
+        UPDATE question
+        SET vote_number = vote_number + %(vote)s
+        WHERE id=%(id)s;
+        """, {'id': id, 'vote': vote})
 
 
-def vote(item_id, up_or_down, q_or_a):
-    if q_or_a == "question":
-        f = connection.QUESTION_FILE
-        header = connection.QUESTION_HEADER
-    else:
-        f = connection.ANSWER_FILE
-        header = connection.ANSWER_HEADER
-    items = connection.get_info_from_file(f)
-    for item in items:
-        if item_id == int(item['id']):
-            item['vote_number'] = int(item['vote_number'])
-            item['vote_number'] += 1 if up_or_down == "vote-up" else -1
-            item['vote_number'] = str(item['vote_number'])
-    connection.write_data_to_file(f, header, items)
+@connection.connection_handler
+def vote_answer(cursor, vote, id):
+    cursor.execute("""
+        UPDATE answer
+        SET vote_number = vote_number + %(vote)s
+        WHERE id=%(id)s;
+        """, {'id': id, 'vote': vote})
 
 
 @connection.connection_handler

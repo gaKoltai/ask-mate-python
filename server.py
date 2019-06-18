@@ -66,17 +66,17 @@ def route_edit_question(question_id):
     return render_template('edit_question.html', question=question, question_id=question_id)
 
 
-@app.route('/question/<int:item_id>/<vote>')
-@app.route('/question/<int:item_id>/<vote>/<q_or_a>')
-@app.route('/question/<int:question_id>/<vote>/<q_or_a>/<int:item_id>')
-def route_vote(item_id=None, vote=None, q_or_a=None, question_id=None):
-    data_manager.vote(item_id, vote, q_or_a)
-    if q_or_a == "question":
+@app.route('/question/<question_id>/<vote>')
+@app.route('/question/<question_id>/<vote>/<answer_id>')
+def route_vote(vote= None,question_id = None, answer_id = None ):
+    if answer_id:
+        data_manager.vote_answer(vote, answer_id)
+        return redirect(url_for('route_question_with_answer', question_id=question_id))
+    else:
+        data_manager.vote_question(vote, question_id)
         return redirect(url_for('route_questions',
                                 order_by=request.args.get('order_by'),
-                                order_direction=request.args.get('order_direction')))
-    else:
-        return redirect(url_for('route_question_with_answer', question_id=question_id))
+                                order_directuion=request.args.get('order_direction')))
 
 
 @app.route('/question/<int:question_id>/new-answer', methods=['GET', 'POST'])
