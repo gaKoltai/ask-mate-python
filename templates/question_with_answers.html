@@ -60,8 +60,8 @@
                                 <td>{% if value %}<img src = "/{{ value }}" alt = "No image" width="20" height="20">{% endif %}</td>
                            {% elif key == "vote_number" %}
                                <td><p class = "vote-item">{{value}}</p>
-                               <a class = "vote-button" href = "{{url_for('route_vote', vote = 'vote-up', q_or_a = 'answer',item_id = answer.id, question_id =question.id)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
-                               <a class = "vote-button" href = "{{url_for('route_vote', vote = 'vote-down', q_or_a = 'answer', item_id = answer.id,question_id =question.id)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
+                               <a class = "vote-button" href = "{{url_for('route_vote', vote = 1, answer_id = answer.id, question_id =question.id)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
+                               <a class = "vote-button" href = "{{url_for('route_vote', vote = -1, answer_id = answer.id,question_id =question.id)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
                            {% elif key == "message" %}
                                 <td class = "message" >{{ value|urlize(40) }}</td>
                            {% else %}

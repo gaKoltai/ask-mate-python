@@ -11,12 +11,12 @@ def get_data_from_db(cursor, table, order_by= None, order_direction=None):
     order_by = 'submission_time' if not order_by else order_by
     if order_direction == "desc":
         cursor.execute(
-            sql.SQL("select * from {table} ORDER BY {order_by} DESC").
+            sql.SQL("SELECT * FROM {table} ORDER BY {order_by} DESC").
                 format(table=sql.Identifier(table),
                        order_by=sql.Identifier(order_by)))
     else:
         cursor.execute(
-            sql.SQL("select * from {table} ORDER BY {order_by}").
+            sql.SQL("SELECT * FROM {table} ORDER BY {order_by}").
                 format(table=sql.Identifier(table), order_by=sql.Identifier(order_by)))
     data = cursor.fetchall()
     return data
@@ -31,20 +31,22 @@ def add_question_to_db(cursor, data):
                     """,data)
 
 
-def vote(item_id, up_or_down, q_or_a):
-    if q_or_a == "question":
-        f = connection.QUESTION_FILE
-        header = connection.QUESTION_HEADER
-    else:
-        f = connection.ANSWER_FILE
-        header = connection.ANSWER_HEADER
-    items = connection.get_info_from_file(f)
-    for item in items:
-        if item_id == int(item['id']):
-            item['vote_number'] = int(item['vote_number'])
-            item['vote_number'] += 1 if up_or_down == "vote-up" else -1
-            item['vote_number'] = str(item['vote_number'])
-    connection.write_data_to_file(f, header, items)
+@connection.connection_handler
+def vote_question(cursor, vote, id):
+    cursor.execute("""
+        UPDATE question
+        SET vote_number = vote_number + %(vote)s
+        WHERE id=%(id)s;
+        """, {'id': id, 'vote': vote})
+
+
+@connection.connection_handler
+def vote_answer(cursor, vote, id):
+    cursor.execute("""
+        UPDATE answer
+        SET vote_number = vote_number + %(vote)s
+        WHERE id=%(id)s;
+        """, {'id': id, 'vote': vote})
 
 
 @connection.connection_handler
@@ -157,15 +159,8 @@ def upload_file(file):
 
 
 def delete_answer_by_answer_id(answer_id):
-    answers = connection.get_info_from_file(connection.ANSWER_FILE)
-    for answer in answers:
-        if answer['id'] == str(answer_id):
-            answers.remove(answer)
-            try:
-                os.remove(answer['image'])
-            except FileNotFoundError:
-                pass
-    connection.write_data_to_file(connection.ANSWER_FILE, connection.ANSWER_HEADER, answers)
+    delete_from_table('comment', 'answer_id', answer_id)
+    delete_from_table('answer', 'id', answer_id)
 
 
 @connection.connection_handler
