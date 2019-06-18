@@ -106,6 +106,17 @@ def route_delete_question(question_id=None):
     return redirect(url_for('route_questions'))
 
 
+@app.route('/search')
+def route_search():
+
+    search_phrase = request.args.get('search')
+    questions = data_manager.search_questions(search_phrase)
+
+    return render_template('search.html', user_questions=questions)
+
+
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
