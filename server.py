@@ -149,6 +149,30 @@ def route_new_answer_comment(answer_id=None):
     return render_template('add_comment.html', answer=answer)
 
 
+@app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
+def route_add_tags(question_id):
+    if request.method == "POST":
+        data_manager.new_tag(request.form['tag_name'])
+
+    question_tags = data_manager.get_question_tags(question_id)
+    rest_of_tags = data_manager.get_rest_of_tags(question_id)
+    return render_template('add_tag.html', question_id=question_id,
+                           question_tags= question_tags,
+                           rest_of_tags = rest_of_tags)
+
+
+@app.route('/question/<question_id>/add_tag/<tag_id>')
+def route_add_tag(question_id, tag_id):
+    data_manager.add_tag(question_id, tag_id)
+    return redirect((url_for('route_add_tags', question_id=question_id)))
+
+
+@app.route('/question/<question_id>/remove_tag/<tag_id>')
+def route_remove_tag(question_id, tag_id):
+    data_manager.remove_tag(question_id, tag_id)
+    return redirect((url_for('route_add_tags', question_id=question_id)))
+
+
 @app.route('/comments/<comment_id>/delete')
 def route_delete_comment(comment_id=None):
     ids = data_manager.get_ids_by_comment_id(comment_id=comment_id)
