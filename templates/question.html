@@ -1,0 +1,27 @@
+<h1>{{ question['title'] }}</h1>
+    <table>
+
+        <thead>
+            <tr>
+                {% for key in question %}
+                    {%  if key != 'title' %}
+                        <th> {{ key|replace("_"," ")|title }}</th>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for key,value in question.items() %}
+                           {% if key == "image" %}
+                                <td>{% if value %}<img src = "/{{ value }}" alt = "No image" height="20" width="20">{% endif %}</td>
+                           {% elif key!= 'title' %}
+                                <td>{{ value|urlize(40) }} </td>
+                           {% endif %}
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+<h4><a href="{{ url_for ('route_edit_question', question_id=question_id) }}">Edit question</a></h4>
+
+

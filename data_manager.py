@@ -376,3 +376,28 @@ def get_comment_by_comment_id(cursor, comment_id):
                    {'c_id': comment_id})
     comment = cursor.fetchall()
     return comment[0]
+
+
+@connection.connection_handler
+def get_latest_questions(cursor):
+    cursor.execute("""
+                    SELECT * FROM question
+                    ORDER BY submission_time DESC 
+                    LIMIT 5;    
+    """,)
+
+    latest_questions = cursor.fetchall()
+
+    return latest_questions
+
+@connection.connection_handler
+def edit_answer(cursor, answer_id, answer):
+
+    edited_answer = {key:val for key, val in answer.items()}
+    edited_answer['id'] = answer_id
+
+    cursor.execute("""
+                    UPDATE answer
+                    SET message = %(answer)s
+                    WHERE id = %(id)s; 
+                    """,edited_answer)
