@@ -1,58 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ question['title'] }}</title>
-    <link rel = "stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}">
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
-</head>
-<body>
+{% extends 'layout.html' %}
+
+{% block content %}
     {% include 'question.html' %}
     {% if question_comments %}
         {% include 'question_comment.html' %}
     {% endif%}
-    {% if not answers %}
-        <h2>There are currently no answers to this question</h2>
-    {% else %}
-        <h2>Answers:</h2>
-        <table>
-            <thead>
-                <tr>
-                    {% for key in answers[0]%}
-                        <th> {{ key|replace("_"," ")|title }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for answer in answers %}
-                    <tr>
-                        {% for key,value in answer.items() %}
-                            {% if key == "image" %}
-                                <td>{% if value %}<img src = "/{{ value }}" alt = "No image" width="20" height="20">{% endif %}</td>
-                            {% elif key == "vote_number" %}
-                                <td><p class = "vote-item">{{value}}</p>
-                                    <a class = "vote-button" href = "{{url_for('route_vote', vote = 1, answer_id = answer.id, question_id =question.id)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
-                                    <a class = "vote-button" href = "{{url_for('route_vote', vote = -1, answer_id = answer.id,question_id =question.id)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
-                            {% elif key == "message" %}
-                                <td class = "message" >{{ value|urlize(40) }}</td>
-                            {% else %}
-                                <td>{{ value}} </td>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
-                    {% for answer_comment in answer_comments %}
-                         <tr>
-                            <td>{{ answer_comment['submission_time'] }}</td>
-                            <td>{{ answer_comment['message'] }}</td>
-                            <td>{{ answer_comment['edited_count'] }}</td>
-                         </tr>
-                    {% endfor %}
-                {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
+    {% include 'answers.html' %}
     <h4><a href="{{url_for('route_new_answer', question_id = question_id)}}">Add new answer</a></h4>
-    <h4><a href="{{url_for('route_questions')}}">Return to questions</a></h4>
     <h4><a href="{{url_for('route_add_tags',question_id = question_id )}}">Add tags</a></h4>
-</body>
+    {% include 'footer.html' %}
+{% endblock %}
 
