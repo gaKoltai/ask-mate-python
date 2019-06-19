@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add a new question</title>
-    <link rel = "stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}">
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
-</head>
-<body>
+{% extends 'layout.html' %}
+
+{% block content %}
     <h1>Post a new question</h1>
     <form action="/add-question" method="post" enctype="multipart/form-data">
         <p>
@@ -30,5 +24,4 @@
             <button type="Submit">Submit question</button>
         </p>
     </form>
-</body>
-</html>
+{% endblock %}

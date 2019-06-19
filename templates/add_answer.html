@@ -1,31 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Add answer</title>
-    <link rel = "stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}">
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
-</head>
-<body>
-<h1>Add Answer</h1>
-<h2>Question:</h2>
-<p>
-    {{question['title']}}
-</p>
-<form action="{{url_for('route_new_answer', question_id = question_id)}}" method="post" enctype="multipart/form-data">
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h1>Add Answer</h1>
+    <h2>Question:</h2>
     <p>
-        <label for="answer">Answer:</label>
+        {{question['title']}}
     </p>
-    <p>
-        <textarea id="answer" name="answer" minlength="10" cols="40" rows="6"></textarea><br>
-    </p>
-    <p>
-        <label for="image">Upload image</label>
-    </p>
-    <p>
-        <input type="file" name="image" id="image" alt="No image">
-    </p>
-    <button type="submit">Submit</button>
-</form>
-</body>
-</html>
+    <form action="{{url_for('route_new_answer', question_id = question_id)}}" method="post" enctype="multipart/form-data">
+        <p>
+            <label for="answer">Answer:</label>
+        </p>
+        <p>
+            <textarea id="answer" name="answer" minlength="10" cols="40" rows="6"></textarea><br>
+        </p>
+        <p>
+            <label for="image">Upload image</label>
+        </p>
+        <p>
+            <input type="file" name="image" id="image" alt="No image">
+        </p>
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import connection
 import data_manager
+import util
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
@@ -54,7 +55,7 @@ def route_ask_new_question():
 
     if request.method == 'POST':
 
-        data_manager.upload_file(request.files['image'])
+        util.upload_file(request.files['image'])
 
         new_question = data_manager.add_question(request.form, request.files['image'].filename)
         data_manager.add_question_to_db(new_question)
@@ -99,7 +100,7 @@ def route_new_answer(question_id=None):
 
         answer = request.form.get('answer')
 
-        data_manager.upload_file(request.files['image'])
+        util.upload_file(request.files['image'])
         data_manager.add_answer(question_id=question_id, answer=answer, image_name=request.files['image'].filename)
 
         return redirect(url_for('route_question_with_answer', question_id=question_id))
