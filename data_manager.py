@@ -1,9 +1,9 @@
 import connection
 from datetime import datetime
-import os
-from werkzeug.utils import secure_filename
 from psycopg2 import sql
 
+
+#GENERAL DATA MANAGER functions
 
 @connection.connection_handler
 def get_data_from_db(cursor, table, order_by= None, order_direction=None):
@@ -20,6 +20,15 @@ def get_data_from_db(cursor, table, order_by= None, order_direction=None):
     data = cursor.fetchall()
     return data
 
+
+@connection.connection_handler
+def delete_from_table(cursor, table, parameter, value):
+    cursor.execute(sql.SQL("DELETE FROM {0} WHERE {1} = %s")
+                   .format(sql.Identifier(table),
+                           sql.Identifier(parameter)), value)
+
+
+#functions dealing with questions
 
 @connection.connection_handler
 def add_question_to_db(cursor, data):
@@ -40,36 +49,6 @@ def vote_question(cursor, vote, id):
 
 
 @connection.connection_handler
-def vote_answer(cursor, vote, id):
-    cursor.execute("""
-        UPDATE answer
-        SET vote_number = vote_number + %(vote)s
-        WHERE id=%(id)s;
-        """, {'id': id, 'vote': vote})
-
-
-@connection.connection_handler
-def increment_view_number(cursor, item_id):
-    cursor.execute('''
-                    UPDATE question
-                    SET view_number = (SELECT view_number
-                                        FROM question
-                                        WHERE id = %(question_id)s) + 1
-                    WHERE id = %(question_id)s;
-                    ''',
-                   {'question_id': item_id})
-
-
-def add_line_breaks_to_data(user_data):
-    for data in user_data:
-        for header, info in data.items():
-            if type(info) == str:
-                data[header] = info.replace('\n', '<br>')
-
-    return user_data
-
-
-@connection.connection_handler
 def get_question_by_id(cursor,question_id):
     cursor.execute("""
                     SELECT * FROM question
@@ -78,18 +57,6 @@ def get_question_by_id(cursor,question_id):
 
     question = cursor.fetchall()
     return question[0]
-
-
-@connection.connection_handler
-def get_answers_by_question_id(cursor, question_id):
-    cursor.execute('''
-                    SELECT *
-                    FROM answer
-                    WHERE question_id = %(question_id)s
-                    ''',
-                   {'question_id': question_id})
-    searched_answers = cursor.fetchall()
-    return searched_answers
 
 
 def add_question(question, image_name):
@@ -128,42 +95,6 @@ def edit_question(cursor, data_to_edit, question_id):
 
 
 @connection.connection_handler
-def add_answer(cursor, question_id, answer, image_name):
-    if image_name == '':
-        image_path = ''
-    else:
-        image_path = f'{connection.UPLOAD_FOLDER}/{image_name}'
-    dt = datetime.now()
-    cursor.execute('''
-                    INSERT INTO answer
-                    (submission_time, vote_number, question_id, message, image)
-                    VALUES (%(time)s, %(vote_num)s, %(question_id)s, %(message)s, %(image)s);
-                    ''',
-                   {'time': dt,
-                    'vote_num': 0,
-                    'question_id': question_id,
-                    'message': answer,
-                    'image': image_path}
-                   )
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in connection.ALLOWED_FILE_EXTENSIONS
-
-
-def upload_file(file):
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(connection.UPLOAD_FOLDER, filename))
-
-
-def delete_answer_by_answer_id(answer_id):
-    delete_from_table('comment', 'answer_id', answer_id)
-    delete_from_table('answer', 'id', answer_id)
-
-
-@connection.connection_handler
 def get_question_id_by_answer_id(cursor, answer_id):
     cursor.execute("""
         SELECT question_id FROM answer
@@ -186,10 +117,121 @@ def delete_question(question_id):
 
 
 @connection.connection_handler
-def delete_from_table(cursor, table, parameter, value):
-    cursor.execute(sql.SQL("DELETE FROM {0} WHERE {1} = %s")
-                   .format(sql.Identifier(table),
-                           sql.Identifier(parameter)), value)
+def search_questions(cursor, search_phrase):
+    cursor.execute("""
+                    SELECT DISTINCT question.* FROM question, answer
+                    WHERE answer.message ILIKE concat('%%', %(search)s, '%%') 
+                    OR question.message ILIKE concat('%%', %(search)s, '%%')
+                    OR title ILIKE concat('%%', %(search)s, '%%')
+                    ORDER BY submission_time DESC;             
+                """,{'search':search_phrase})
+
+    searched_questions = cursor.fetchall()
+
+    return searched_questions
+
+
+@connection.connection_handler
+def get_latest_questions(cursor):
+    cursor.execute("""
+                    SELECT * FROM question
+                    ORDER BY submission_time DESC 
+                    LIMIT 5;    
+    """,)
+
+    latest_questions = cursor.fetchall()
+
+    return latest_questions
+
+
+#functions dealing with answers
+
+@connection.connection_handler
+def vote_answer(cursor, vote, id):
+    cursor.execute("""
+        UPDATE answer
+        SET vote_number = vote_number + %(vote)s
+        WHERE id=%(id)s;
+        """, {'id': id, 'vote': vote})
+
+
+@connection.connection_handler
+def increment_view_number(cursor, item_id):
+    cursor.execute('''
+                    UPDATE question
+                    SET view_number = (SELECT view_number
+                                        FROM question
+                                        WHERE id = %(question_id)s) + 1
+                    WHERE id = %(question_id)s;
+                    ''',
+                   {'question_id': item_id})
+
+
+@connection.connection_handler
+def get_answers_by_question_id(cursor, question_id):
+    cursor.execute('''
+                    SELECT *
+                    FROM answer
+                    WHERE question_id = %(question_id)s
+                    ''',
+                   {'question_id': question_id})
+    searched_answers = cursor.fetchall()
+    return searched_answers
+
+
+@connection.connection_handler
+def add_answer(cursor, question_id, answer, image_name):
+    if image_name == '':
+        image_path = ''
+    else:
+        image_path = f'{connection.UPLOAD_FOLDER}/{image_name}'
+    dt = datetime.now()
+    cursor.execute('''
+                    INSERT INTO answer
+                    (submission_time, vote_number, question_id, message, image)
+                    VALUES (%(time)s, %(vote_num)s, %(question_id)s, %(message)s, %(image)s);
+                    ''',
+                   {'time': dt,
+                    'vote_num': 0,
+                    'question_id': question_id,
+                    'message': answer,
+                    'image': image_path}
+                   )
+
+def delete_answer_by_answer_id(answer_id):
+    delete_from_table('comment', 'answer_id', answer_id)
+    delete_from_table('answer', 'id', answer_id)
+
+
+def get_answer_ids_by_answers(answers):
+    return [answer['id'] for answer in answers]
+
+
+@connection.connection_handler
+def get_answer_by_id(cursor, answer_id):
+    cursor.execute('''
+                    SELECT * FROM answer
+                    WHERE id = %(a_id)s;
+                    ''',
+                   {'a_id': answer_id})
+    answer = cursor.fetchall()
+    return answer[0]
+
+
+@connection.connection_handler
+def get_latest_questions(cursor):
+    cursor.execute("""
+                    SELECT * FROM question
+                    ORDER BY submission_time DESC 
+                    LIMIT 5;    
+    """,)
+
+    latest_questions = cursor.fetchall()
+
+    return latest_questions
+
+
+#functions dealing with TAGS
 
 
 def get_question_tags( question_id):
@@ -232,19 +274,33 @@ def get_tag_ids(cursor, question_id):
 
 
 @connection.connection_handler
-def search_questions(cursor, search_phrase):
+def add_tag(cursor, question_id, tag_id):
     cursor.execute("""
-                    SELECT DISTINCT question.* FROM question, answer
-                    WHERE answer.message ILIKE concat('%%', %(search)s, '%%') 
-                    OR question.message ILIKE concat('%%', %(search)s, '%%')
-                    OR title ILIKE concat('%%', %(search)s, '%%')
-                    ORDER BY submission_time DESC;             
-                """,{'search':search_phrase})
+        INSERT INTO question_tag(question_id, tag_id)
+        VALUES(%(question_id)s, %(tag_id)s);
+    """, {'question_id':question_id,
+          'tag_id':tag_id})
 
-    searched_questions = cursor.fetchall()
 
-    return searched_questions
+@connection.connection_handler
+def remove_tag(cursor, question_id, tag_id):
+    cursor.execute("""
+        DELETE FROM question_tag
+        WHERE tag_id=%(tag_id)s
+        AND question_id= %(question_id)s;
+    """, {'question_id':question_id,
+          'tag_id':tag_id})
 
+
+@connection.connection_handler
+def new_tag(cursor, tag_name):
+    cursor.execute("""
+            INSERT INTO tag(name)
+            VALUES(%(tag_name)s);
+        """, {'tag_name': tag_name})
+
+
+#functions dealing with COMMENTS
 
 @connection.connection_handler
 def add_comment_to_question(cursor, comment_message, question_id):
@@ -298,49 +354,6 @@ def get_comments_by_answer_id(cursor, answer_ids):
     return comments
 
 
-def get_answer_ids_by_answers(answers):
-    return [answer['id'] for answer in answers]
-
-
-@connection.connection_handler
-def get_answer_by_id(cursor, answer_id):
-    cursor.execute('''
-                    SELECT * FROM answer
-                    WHERE id = %(a_id)s;
-                    ''',
-                   {'a_id': answer_id})
-    answer = cursor.fetchall()
-    return answer[0]
-
-
-@connection.connection_handler
-def add_tag(cursor, question_id, tag_id):
-    cursor.execute("""
-        INSERT INTO question_tag(question_id, tag_id)
-        VALUES(%(question_id)s, %(tag_id)s);
-    """, {'question_id':question_id,
-          'tag_id':tag_id})
-
-
-@connection.connection_handler
-def remove_tag(cursor, question_id, tag_id):
-    cursor.execute("""
-        DELETE FROM question_tag
-        WHERE tag_id=%(tag_id)s
-        AND question_id= %(question_id)s;
-    """, {'question_id':question_id,
-          'tag_id':tag_id})
-
-
-@connection.connection_handler
-def new_tag(cursor, tag_name):
-    cursor.execute("""
-            INSERT INTO tag(name)
-            VALUES(%(tag_name)s);
-        """, {'tag_name': tag_name})
-
-
-
 @connection.connection_handler
 def get_ids_by_comment_id(cursor, comment_id):
     cursor.execute('''
@@ -376,28 +389,3 @@ def get_comment_by_comment_id(cursor, comment_id):
                    {'c_id': comment_id})
     comment = cursor.fetchall()
     return comment[0]
-
-
-@connection.connection_handler
-def get_latest_questions(cursor):
-    cursor.execute("""
-                    SELECT * FROM question
-                    ORDER BY submission_time DESC 
-                    LIMIT 5;    
-    """,)
-
-    latest_questions = cursor.fetchall()
-
-    return latest_questions
-
-@connection.connection_handler
-def edit_answer(cursor, answer_id, answer):
-
-    edited_answer = {key:val for key, val in answer.items()}
-    edited_answer['id'] = answer_id
-
-    cursor.execute("""
-                    UPDATE answer
-                    SET message = %(answer)s
-                    WHERE id = %(id)s; 
-                    """,edited_answer)
