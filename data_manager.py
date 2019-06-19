@@ -354,6 +354,8 @@ def get_ids_by_comment_id(cursor, comment_id):
 
 @connection.connection_handler
 def update_comment_by_comment_id(cursor, comment_id, message):
+    if is_edited_count_none(comment_id=comment_id):
+        normalize_edited_count(comment_id=comment_id)
     dt = datetime.now()
     cursor.execute('''
                     UPDATE comment
@@ -390,6 +392,7 @@ def get_latest_questions(cursor):
 
     return latest_questions
 
+
 @connection.connection_handler
 def edit_answer(cursor, answer_id, answer):
 
@@ -401,3 +404,28 @@ def edit_answer(cursor, answer_id, answer):
                     SET message = %(answer)s
                     WHERE id = %(id)s; 
                     """,edited_answer)
+
+
+@connection.connection_handler
+def is_edited_count_none(cursor, comment_id):
+    cursor.execute('''
+                    SELECT edited_count
+                    FROM comment
+                    WHERE id = %(c_id)s;
+                    ''',
+                   {'c_id': comment_id})
+    e_count = cursor.fetchall()
+    if e_count[0]['edited_count'] is not None:
+        return False
+    else:
+        return True
+
+
+@connection.connection_handler
+def normalize_edited_count(cursor, comment_id):
+    cursor.execute('''
+                    UPDATE comment
+                    SET edited_count = 0
+                    WHERE id = %(c_id)s;
+                    ''',
+                   {'c_id': comment_id})

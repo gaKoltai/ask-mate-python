@@ -16,6 +16,7 @@
                 {% for value in question_comment.values() %}
                     <td>{{ value }} </td>
                 {% endfor %}
+                <td><a href="{{url_for('route_edit_comment', comment_id=question_comment['id'])}}">Edit comment</a></td>
             </tr>
         {% endfor %}
     </tbody>
