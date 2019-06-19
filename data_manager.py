@@ -292,3 +292,29 @@ def get_ids_by_comment_id(cursor, comment_id):
                    {'comment_id': comment_id})
     ids = cursor.fetchall()
     return ids[0]
+
+
+@connection.connection_handler
+def update_comment_by_comment_id(cursor, comment_id, message):
+    dt = datetime.now()
+    cursor.execute('''
+                    UPDATE comment
+                    SET message= %(message)s, submission_time = %(dt)s, edited_count=(
+                    SELECT edited_count FROM comment WHERE id = %(c_id)s) + 1
+                    WHERE id = %(c_id)s;
+                    ''',
+                   {'message': message,
+                    'c_id': comment_id,
+                    'dt': dt})
+
+
+@connection.connection_handler
+def get_comment_by_comment_id(cursor, comment_id):
+    cursor.execute('''
+                    SELECT *
+                    FROM comment
+                    WHERE id = %(c_id)s;
+                    ''',
+                   {'c_id': comment_id})
+    comment = cursor.fetchall()
+    return comment[0]

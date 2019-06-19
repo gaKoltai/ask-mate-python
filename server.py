@@ -150,7 +150,7 @@ def route_new_answer_comment(answer_id=None):
 
 
 @app.route('/comments/<comment_id>/delete')
-def delete_comment(comment_id=None):
+def route_delete_comment(comment_id=None):
     ids = data_manager.get_ids_by_comment_id(comment_id=comment_id)
     if ids['question_id'] is not None:
         question_id = ids['question_id']
@@ -161,6 +161,21 @@ def delete_comment(comment_id=None):
         data_manager.delete_from_table(table='comment', parameter='id', value=comment_id)
     return redirect(url_for('route_question_with_answer', question_id=question_id))
 
+
+@app.route('/comments/<comment_id>/edit', methods=['GET', 'POST'])
+def route_edit_comment(comment_id=None):
+    if request.method == 'POST':
+        new_message = request.form.get('message')
+        data_manager.update_comment_by_comment_id(comment_id=comment_id, message=new_message)
+        ids = data_manager.get_ids_by_comment_id(comment_id=comment_id)
+        if ids['question_id'] is not None:
+            question_id = ids['question_id']
+        else:
+            question_id = data_manager.get_question_id_by_answer_id(ids['answer_id'])
+        return redirect(url_for('route_question_with_answer', question_id=question_id))
+
+    comment = data_manager.get_comment_by_comment_id(comment_id)
+    return render_template('edit_comment.html')
 
 if __name__ == '__main__':
     app.run(
