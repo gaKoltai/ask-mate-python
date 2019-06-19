@@ -1,0 +1,23 @@
+<h3>Comments:</h3>
+<table>
+    <thead>
+        <tr>
+            {% for key in question_comments[0] %}
+                <th> {{ key|replace("_"," ")|title }}</th>
+            {% endfor %}
+        </tr>
+
+    </thead>
+
+     <tbody>
+
+        {% for question_comment in question_comments%}
+            <tr>
+                {% for value in question_comment.values() %}
+                    <td>{{ value }} </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href={{url_for('route_new_question_comment', question_id=question_id)}}>Add comment to the question</a>
