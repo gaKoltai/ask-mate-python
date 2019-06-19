@@ -1,6 +1,5 @@
 import connection
 from datetime import datetime
-import util
 import os
 from werkzeug.utils import secure_filename
 from psycopg2 import sql
@@ -202,7 +201,6 @@ def get_tag_id(cursor, question_id):
         return tag_id[0]['tag_id']
 
 
-
 @connection.connection_handler
 def search_questions(cursor, search_phrase):
     cursor.execute("""
@@ -216,8 +214,6 @@ def search_questions(cursor, search_phrase):
     searched_questions = cursor.fetchall()
 
     return searched_questions
-
-
 
 
 @connection.connection_handler
@@ -285,3 +281,14 @@ def get_answer_by_id(cursor, answer_id):
                    {'a_id': answer_id})
     answer = cursor.fetchall()
     return answer[0]
+
+
+@connection.connection_handler
+def get_ids_by_comment_id(cursor, comment_id):
+    cursor.execute('''
+                    SELECT question_id, answer_id FROM comment 
+                    WHERE id= %(comment_id)s;
+                    ''',
+                   {'comment_id': comment_id})
+    ids = cursor.fetchall()
+    return ids[0]

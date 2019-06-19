@@ -126,8 +126,6 @@ def route_search():
     return render_template('search.html', user_questions=questions)
 
 
-
-
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
 def route_new_question_comment(question_id=None):
     if request.method == 'POST':
@@ -149,6 +147,19 @@ def route_new_answer_comment(answer_id=None):
 
     answer = data_manager.get_answer_by_id(answer_id=answer_id)
     return render_template('add_comment.html', answer=answer)
+
+
+@app.route('/comments/<comment_id>/delete')
+def delete_comment(comment_id=None):
+    ids = data_manager.get_ids_by_comment_id(comment_id=comment_id)
+    if ids['question_id'] is not None:
+        question_id = ids['question_id']
+    else:
+        question_id = data_manager.get_question_id_by_answer_id(ids['answer_id'])
+
+    if comment_id:
+        data_manager.delete_from_table(table='comment', parameter='id', value=comment_id)
+    return redirect(url_for('route_question_with_answer', question_id=question_id))
 
 
 if __name__ == '__main__':
