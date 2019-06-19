@@ -25,7 +25,7 @@ def get_data_from_db(cursor, table, order_by= None, order_direction=None):
 def delete_from_table(cursor, table, parameter, value):
     cursor.execute(sql.SQL("DELETE FROM {0} WHERE {1} = %s")
                    .format(sql.Identifier(table),
-                           sql.Identifier(parameter)), value)
+                           sql.Identifier(parameter)), [value])
 
 
 #functions dealing with questions
@@ -106,7 +106,10 @@ def get_question_id_by_answer_id(cursor, answer_id):
 
 
 def delete_question(question_id):
-    delete_from_table('answer', 'question_id', question_id)
+    answers = get_answers_by_question_id(question_id=question_id)
+    answer_ids = get_answer_ids_by_answers(answers=answers)
+    for answer_id in answer_ids:
+        delete_answer_by_answer_id(answer_id)
     delete_from_table('comment', 'question_id', question_id)
     tag_id = get_tag_ids(question_id)
     if tag_id:
@@ -197,6 +200,7 @@ def add_answer(cursor, question_id, answer, image_name):
                     'message': answer,
                     'image': image_path}
                    )
+
 
 def delete_answer_by_answer_id(answer_id):
     delete_from_table('comment', 'answer_id', answer_id)
