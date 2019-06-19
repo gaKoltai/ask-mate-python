@@ -7,12 +7,16 @@ app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 
 
 @app.route('/', methods = ['POST', 'GET'])
+def route_index():
+
+    latest_questions = data_manager.get_latest_questions()
+
+    return render_template('list.html', user_questions=latest_questions)
+
 @app.route('/list', methods = ['POST', 'GET'])
 def route_questions():
     if request.method == 'GET':
         user_questions = data_manager.get_data_from_db('question', request.args.get('order_by'), request.args.get('order_direction'))
-        data_manager.add_line_breaks_to_data(user_questions)
-
         return render_template('list.html',
                                user_questions =user_questions,
                                order_by=request.args.get('order_by'),
@@ -149,6 +153,24 @@ def route_new_answer_comment(answer_id=None):
 
     answer = data_manager.get_answer_by_id(answer_id=answer_id)
     return render_template('add_comment.html', answer=answer)
+
+
+@app.route('/answer/<answer_id>/edit', methods=['GET', 'POST'])
+def route_edit_answer(answer_id):
+
+    answer = data_manager.get_answer_by_id(answer_id)
+    question_id = data_manager.get_question_id_by_answer_id(answer_id)
+
+    if request.method == 'POST':
+
+        edited_answer = request.form
+
+        data_manager.edit_answer(answer_id, edited_answer)
+
+        return redirect(url_for('route_question_with_answer', question_id=question_id))
+
+    return render_template('edit_answer.html', answer=answer )
+
 
 
 if __name__ == '__main__':
