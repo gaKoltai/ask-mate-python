@@ -156,7 +156,6 @@ def route_add_tags(question_id):
 
     question_tags = data_manager.get_question_tags(question_id)
     rest_of_tags = data_manager.get_rest_of_tags(question_id)
-    print("question_tags:", question_tags, "rest_of_tags:",  rest_of_tags)
     return render_template('add_tag.html', question_id=question_id,
                            question_tags= question_tags,
                            rest_of_tags = rest_of_tags)
