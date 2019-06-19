@@ -315,6 +315,8 @@ def get_answer_by_id(cursor, answer_id):
                    {'a_id': answer_id})
     answer = cursor.fetchall()
     return answer[0]
+
+
 @connection.connection_handler
 def add_tag(cursor, question_id, tag_id):
     cursor.execute("""
@@ -332,3 +334,11 @@ def remove_tag(cursor, question_id, tag_id):
         AND question_id= %(question_id)s;
     """, {'question_id':question_id,
           'tag_id':tag_id})
+
+
+@connection.connection_handler
+def new_tag(cursor, tag_name):
+    cursor.execute("""
+            INSERT INTO tag(name)
+            VALUES(%(tag_name)s);
+        """, {'tag_name': tag_name})

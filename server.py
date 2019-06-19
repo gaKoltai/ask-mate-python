@@ -126,8 +126,6 @@ def route_search():
     return render_template('search.html', user_questions=questions)
 
 
-
-
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
 def route_new_question_comment(question_id=None):
     if request.method == 'POST':
@@ -151,12 +149,14 @@ def route_new_answer_comment(answer_id=None):
     return render_template('add_comment.html', answer=answer)
 
 
-@app.route('/question/<question_id>/new-tag')
+@app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
 def route_add_tags(question_id):
+    if request.method == "POST":
+        data_manager.new_tag(request.form['tag_name'])
 
     question_tags = data_manager.get_question_tags(question_id)
     rest_of_tags = data_manager.get_rest_of_tags(question_id)
-    print("question_tags:", question_tags,"rest_of_tags:",  rest_of_tags)
+    print("question_tags:", question_tags, "rest_of_tags:",  rest_of_tags)
     return render_template('add_tag.html', question_id=question_id,
                            question_tags= question_tags,
                            rest_of_tags = rest_of_tags)
