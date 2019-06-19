@@ -12,7 +12,6 @@ UPLOAD_FOLDER = "static"
 ALLOWED_FILE_EXTENSIONS = set([ 'png', 'jpg', 'jpeg', 'gif'])
 
 
-
 def get_connection_string():
     # setup connection string
     # to do this, please define these environment variables first

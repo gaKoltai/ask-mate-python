@@ -1,6 +1,5 @@
 import connection
 from datetime import datetime
-import util
 import os
 from werkzeug.utils import secure_filename
 from psycopg2 import sql
@@ -178,9 +177,10 @@ def get_question_id_by_answer_id(cursor, answer_id):
 def delete_question(question_id):
     delete_from_table('answer', 'question_id', question_id)
     delete_from_table('comment', 'question_id', question_id)
-    tag_id = get_tag_id(question_id)
+    tag_id = get_tag_ids(question_id)
     if tag_id:
-        delete_from_table('tag', 'id', tag_id)
+        for id_ in tag_id:
+            delete_from_table('tag', 'id', id_['tag_id'])
     delete_from_table('question_tag', 'question_id', question_id)
     delete_from_table('question', 'id', question_id)
 
@@ -192,15 +192,43 @@ def delete_from_table(cursor, table, parameter, value):
                            sql.Identifier(parameter)), value)
 
 
-@connection.connection_handler
-def get_tag_id(cursor, question_id):
-    cursor.execute("""
-        SELECT tag_id FROM question_tag WHERE question_id=%(question_id)s
-    """, {'question_id':question_id})
-    tag_id = cursor.fetchall()
-    if tag_id:
-        return tag_id[0]['tag_id']
+def get_question_tags( question_id):
+    tag_ids = get_tag_ids(question_id)
+    tags = get_all_tags()
+    if tag_ids:
+        tags = [tag for tag in tags if tag['id'] in tag_ids]
+    else:
+        return None
+    return tags
 
+
+def get_rest_of_tags( question_id):
+    tag_ids = get_tag_ids(question_id)
+    tags = get_all_tags()
+    if tag_ids:
+        tags = [tag for tag in tags if tag['id'] not in tag_ids]
+
+    return tags
+
+
+@connection.connection_handler
+def get_all_tags(cursor):
+    cursor.execute("""
+                        SELECT * FROM tag;
+                    """)
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_tag_ids(cursor, question_id):
+    cursor.execute("""
+        SELECT tag_id FROM question_tag WHERE question_id=%(question_id)s;
+    """, {'question_id': question_id})
+    tags = cursor.fetchall()
+    if tags:
+        tag_ids = tuple(tag['tag_id'] for tag in tags)
+
+        return tag_ids
 
 
 @connection.connection_handler
@@ -216,8 +244,6 @@ def search_questions(cursor, search_phrase):
     searched_questions = cursor.fetchall()
 
     return searched_questions
-
-
 
 
 @connection.connection_handler
@@ -285,6 +311,72 @@ def get_answer_by_id(cursor, answer_id):
                    {'a_id': answer_id})
     answer = cursor.fetchall()
     return answer[0]
+
+
+@connection.connection_handler
+def add_tag(cursor, question_id, tag_id):
+    cursor.execute("""
+        INSERT INTO question_tag(question_id, tag_id)
+        VALUES(%(question_id)s, %(tag_id)s);
+    """, {'question_id':question_id,
+          'tag_id':tag_id})
+
+
+@connection.connection_handler
+def remove_tag(cursor, question_id, tag_id):
+    cursor.execute("""
+        DELETE FROM question_tag
+        WHERE tag_id=%(tag_id)s
+        AND question_id= %(question_id)s;
+    """, {'question_id':question_id,
+          'tag_id':tag_id})
+
+
+@connection.connection_handler
+def new_tag(cursor, tag_name):
+    cursor.execute("""
+            INSERT INTO tag(name)
+            VALUES(%(tag_name)s);
+        """, {'tag_name': tag_name})
+
+
+
+@connection.connection_handler
+def get_ids_by_comment_id(cursor, comment_id):
+    cursor.execute('''
+                    SELECT question_id, answer_id FROM comment 
+                    WHERE id= %(comment_id)s;
+                    ''',
+                   {'comment_id': comment_id})
+    ids = cursor.fetchall()
+    return ids[0]
+
+
+@connection.connection_handler
+def update_comment_by_comment_id(cursor, comment_id, message):
+    dt = datetime.now()
+    cursor.execute('''
+                    UPDATE comment
+                    SET message= %(message)s, submission_time = %(dt)s, edited_count=(
+                    SELECT edited_count FROM comment WHERE id = %(c_id)s) + 1
+                    WHERE id = %(c_id)s;
+                    ''',
+                   {'message': message,
+                    'c_id': comment_id,
+                    'dt': dt})
+
+
+@connection.connection_handler
+def get_comment_by_comment_id(cursor, comment_id):
+    cursor.execute('''
+                    SELECT *
+                    FROM comment
+                    WHERE id = %(c_id)s;
+                    ''',
+                   {'c_id': comment_id})
+    comment = cursor.fetchall()
+    return comment[0]
+
 
 @connection.connection_handler
 def get_latest_questions(cursor):
