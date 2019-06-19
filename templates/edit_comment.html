@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>Edit comment</h1>
-    <form action="{{ url_for('route_edit_comment', comment_id=comment_id) }}" method="post">
+    <form action="{{ url_for('route_edit_comment', comment_id=comment['id']) }}" method="post">
         <p>
             <label for="message">Your commit:</label>
         <p>

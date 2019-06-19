@@ -199,7 +199,8 @@ def route_edit_comment(comment_id=None):
         return redirect(url_for('route_question_with_answer', question_id=question_id))
 
     comment = data_manager.get_comment_by_comment_id(comment_id)
-    return render_template('edit_comment.html')
+    return render_template('edit_comment.html', comment=comment)
+
 
 if __name__ == '__main__':
     app.run(
