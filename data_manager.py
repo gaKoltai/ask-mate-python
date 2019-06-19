@@ -232,6 +232,89 @@ def get_tag_ids(cursor, question_id):
         return tag_ids
 
 
+
+@connection.connection_handler
+def search_questions(cursor, search_phrase):
+    cursor.execute("""
+                    SELECT DISTINCT question.* FROM question, answer
+                    WHERE answer.message ILIKE concat('%%', %(search)s, '%%') 
+                    OR question.message ILIKE concat('%%', %(search)s, '%%')
+                    OR title ILIKE concat('%%', %(search)s, '%%')
+                    ORDER BY submission_time DESC;             
+                """,{'search':search_phrase})
+
+    searched_questions = cursor.fetchall()
+
+    return searched_questions
+
+
+
+
+@connection.connection_handler
+def add_comment_to_question(cursor, comment_message, question_id):
+    dt = datetime.now()
+    cursor.execute('''
+                    INSERT INTO comment
+                    (question_id, answer_id, message, submission_time)
+                     VALUES (%(question_id)s,
+                                NULL,
+                                %(message)s,
+                                %(time)s);
+                    ''', {'question_id': question_id,
+                          'message': comment_message,
+                          'time': dt})
+
+
+@connection.connection_handler
+def get_comment_by_question_id(cursor, question_id):
+    cursor.execute('''
+                    SELECT id, message, submission_time, edited_count FROM comment
+                    WHERE question_id = %(q_id)s;
+                    ''',
+                   {'q_id': question_id})
+    comment = cursor.fetchall()
+    return comment
+
+
+@connection.connection_handler
+def add_comment_to_answer(cursor, comment_message, answer_id):
+    dt = datetime.now()
+    cursor.execute('''
+                    INSERT INTO comment
+                    (question_id, answer_id, message, submission_time)
+                     VALUES (   NULL,
+                                %(answer_id)s,
+                                %(message)s,
+                                %(time)s);
+                    ''', {'answer_id': answer_id,
+                          'message': comment_message,
+                          'time': dt})
+
+
+@connection.connection_handler
+def get_comments_by_answer_id(cursor, answer_ids):
+    cursor.execute('''
+                    SELECT * FROM comment
+                    WHERE answer_id IN %(a_id)s;
+                    ''',
+                   {'a_id': answer_ids})
+    comments = cursor.fetchall()
+    return comments
+
+
+def get_answer_ids_by_answers(answers):
+    return [answer['id'] for answer in answers]
+
+
+@connection.connection_handler
+def get_answer_by_id(cursor, answer_id):
+    cursor.execute('''
+                    SELECT * FROM answer
+                    WHERE id = %(a_id)s;
+                    ''',
+                   {'a_id': answer_id})
+    answer = cursor.fetchall()
+    return answer[0]
 @connection.connection_handler
 def add_tag(cursor, question_id, tag_id):
     cursor.execute("""

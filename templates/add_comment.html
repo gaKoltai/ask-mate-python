@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add comment</title>
+</head>
+<body>
+<h1>Add comment</h1>
+{% if question %}
+    <h2>Question:</h2>
+    <p>
+        {{question['title']}}
+    </p>
+    <form action="{{url_for('route_new_question_comment', question_id = question['id'])}}" method="post" enctype="multipart/form-data">
+        <p>
+            <label for="question_comment">Comment:</label>
+        </p>
+        <p>
+            <textarea id="question_comment" name="question_comment" cols="40" rows="6"></textarea><br>
+        </p>
+        <button type="submit">Submit</button>
+    </form>
+{% elif answer %}
+    <h2>Answer:</h2>
+    <p>
+        {{answer['message']}}
+    </p>
+<form action="{{url_for('route_new_answer_comment', answer_id = answer['id'])}}" method="post" enctype="multipart/form-data">
+        <p>
+            <label for="answer_comment">Comment:</label>
+        </p>
+        <p>
+            <textarea id="answer_comment" name="answer_comment" cols="40" rows="6"></textarea><br>
+        </p>
+        <button type="submit">Submit</button>
+    </form>
+{% endif %}
+</body>
+</html>

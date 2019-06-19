@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>List Questions</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}">
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
+</head>
+    <body>
+        <h1>Ask Mate</h1>
+            <div class="questions-header">
+                <form action="{{ url_for('route_search') }}" method="get">
+                    <label for="search">Search</label>
+                    <input type="text" id="search" name="search" placeholder="Search for something...">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            {% if not user_questions %}
+                <p>Sorry, the question you are looking for does not seem to exist, please try searching for different keywords.</p>
+            {% else %}
+                <table>
+                    <thead>
+                    <tr>
+                        {% for key,value in user_questions[0].items() %}
+                            {% if key != "image" %}
+                                <th> {{ key|replace("_"," ")|title }}</th>
+                            {% endif %}
+                        {% endfor %}
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    {% for question in user_questions %}
+
+                    <tr>
+                        {% autoescape false %}
+                        {% for key,value in question.items() %}
+                            {% if key == "vote_number" %}
+                                <td><p class="vote-item">{{ value }}</p>
+                                    <a class="vote-button"
+                                       href="{{ url_for('route_vote', question_id = question.id, vote = 1, order_by = order_by, order_direction=order_direction) }}"><img
+                                            width="20" height="20" src="/static/vote_up.png" alt="vote_up"></a>
+                                    <a class="vote-button"
+                                       href="{{ url_for('route_vote', question_id= question.id, vote = -1, order_by = order_by, order_direction=order_direction) }}"><img
+                                            width="20" height="20" src="/static/vote_down.png" alt="vote_down"></a></td>
+                            {% elif key == "title" %}
+                                <td>
+                                    <a href="{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">{{ value }}</a>
+                                </td>
+                            {% elif key == "message" %}
+                                <td class="message">{{ value|urlize(40) }} </td>
+                            {% elif key != "image" %}
+                                <td>{{ value }} </td>
+                            {% endif %}
+
+                        {% endfor %}
+                        {% endautoescape %}
+                        <td><a href="{{ url_for('route_delete_question', question_id=question['id']) }}">Delete question</a></td>
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            {% endif %}
+    </body>
+</html>
