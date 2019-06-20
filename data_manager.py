@@ -30,6 +30,13 @@ def delete_from_table(cursor, table, parameter, value):
 
 #functions dealing with questions
 
+
+def search_highlights(searched_phrase, questions):
+    for question in questions:
+        question['title'] = question['title'].replace(searched_phrase, "<b>" + searched_phrase + "</b>")
+        question['message'] = question['message'].replace(searched_phrase, "<b>" + searched_phrase + "</b>")
+
+
 @connection.connection_handler
 def add_question_to_db(cursor, data):
     cursor.execute("""

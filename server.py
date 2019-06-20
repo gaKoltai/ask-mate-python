@@ -130,6 +130,7 @@ def route_search():
 
     search_phrase = request.args.get('search')
     questions = data_manager.search_questions(search_phrase)
+    data_manager.search_highlights(search_phrase,questions)
 
     return render_template('search.html', user_questions=questions)
 
