@@ -12,7 +12,7 @@ def route_index():
 
     latest_questions = data_manager.get_latest_questions()
 
-    return render_template('list.html', user_questions=latest_questions)
+    return render_template('latest_questions.html', user_questions=latest_questions)
 
 
 @app.route('/list', methods = ['POST', 'GET'])
