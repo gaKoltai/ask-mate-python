@@ -30,28 +30,28 @@
                     {% for question in user_questions %}
 
                     <tr>
-                        {% autoescape false %}
+
                         {% for key,value in question.items() %}
+
                             {% if key == "vote_number" %}
                                 <td><p class="vote-item">{{ value }}</p>
-                                    <a class="vote-button"
+                                    <a class="no-underline"
                                        href="{{ url_for('route_vote', question_id = question.id, vote = 1, order_by = order_by, order_direction=order_direction) }}"><img
                                             width="20" height="20" src="/static/vote_up.png" alt="vote_up"></a>
-                                    <a class="vote-button"
+                                    <a class="no-underline"
                                        href="{{ url_for('route_vote', question_id= question.id, vote = -1, order_by = order_by, order_direction=order_direction) }}"><img
                                             width="20" height="20" src="/static/vote_down.png" alt="vote_down"></a></td>
                             {% elif key == "title" %}
                                 <td>
-                                    <a href="{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">{{ value }}</a>
+                                    <a href="{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">{{ value | safe }}</a>
                                 </td>
                             {% elif key == "message" %}
-                                <td class="message">{{ value|urlize(40) }} </td>
+                                <td class="message">{{ value | safe | urlize(40)}} </td>
                             {% elif key != "image" %}
-                                <td>{{ value }} </td>
+                                <td>{{ value | safe }} </td>
                             {% endif %}
 
                         {% endfor %}
-                        {% endautoescape %}
                         <td><a href="{{ url_for('route_delete_question', question_id=question['id']) }}">Delete question</a></td>
                     </tr>
 
@@ -61,4 +61,5 @@
                 </table>
             {% endif %}
     </body>
+{% include 'footer.html' %}
 {% endblock %}

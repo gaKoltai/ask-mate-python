@@ -30,6 +30,13 @@ def delete_from_table(cursor, table, parameter, value):
 
 #functions dealing with questions
 
+
+def search_highlights(searched_phrase, questions):
+    for question in questions:
+        question['title'] = question['title'].replace(searched_phrase, "<b>" + searched_phrase + "</b>")
+        question['message'] = question['message'].replace(searched_phrase, "<b>" + searched_phrase + "</b>")
+
+
 @connection.connection_handler
 def add_question_to_db(cursor, data):
     cursor.execute("""
@@ -52,7 +59,8 @@ def vote_question(cursor, vote, id):
 def get_question_by_id(cursor,question_id):
     cursor.execute("""
                     SELECT * FROM question
-                    WHERE id = %(question_id)s;
+                    WHERE id = %(question_id)s
+                    ORDER BY id;
     """,{'question_id':question_id})
 
     question = cursor.fetchall()
@@ -98,7 +106,8 @@ def edit_question(cursor, data_to_edit, question_id):
 def get_question_id_by_answer_id(cursor, answer_id):
     cursor.execute("""
         SELECT question_id FROM answer
-        WHERE id= %(answer_id)s;
+        WHERE id= %(answer_id)s
+        ORDER BY id;
     """, {'answer_id':answer_id})
     question_id = cursor.fetchall()
     if question_id:
@@ -199,6 +208,7 @@ def get_answers_by_question_id(cursor, question_id):
                     SELECT *
                     FROM answer
                     WHERE question_id = %(question_id)s
+                    ORDER BY id
                     ''',
                    {'question_id': question_id})
     searched_answers = cursor.fetchall()
@@ -238,7 +248,8 @@ def get_answer_ids_by_answers(answers):
 def get_answer_by_id(cursor, answer_id):
     cursor.execute('''
                     SELECT * FROM answer
-                    WHERE id = %(a_id)s;
+                    WHERE id = %(a_id)s
+                    ORDER BY id;
                     ''',
                    {'a_id': answer_id})
     answer = cursor.fetchall()
@@ -305,8 +316,8 @@ def add_tag(cursor, question_id, tag_id):
     cursor.execute("""
         INSERT INTO question_tag(question_id, tag_id)
         VALUES(%(question_id)s, %(tag_id)s);
-    """, {'question_id':question_id,
-          'tag_id':tag_id})
+    """, {'question_id': question_id,
+          'tag_id': tag_id})
 
 
 @connection.connection_handler
@@ -418,6 +429,7 @@ def get_comment_by_comment_id(cursor, comment_id):
                    {'c_id': comment_id})
     comment = cursor.fetchall()
     return comment[0]
+
 
 @connection.connection_handler
 def is_edited_count_none(cursor, comment_id):
