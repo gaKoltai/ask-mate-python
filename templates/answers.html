@@ -26,8 +26,8 @@
                             <td>{{ value}} </td>
                         {% endif %}
                     {% endfor %}
-                    <td><a href="{{url_for('route_delete_answer', answer_id=answer['id'])}}">Delete answer</a></td>
-                    <td><a href="{{url_for('route_new_answer_comment', answer_id = answer['id'])}}">Add new comment to the answer</a></td>
+                    <td><a class ="no-underline"href="{{url_for('route_delete_answer', answer_id=answer['id'])}}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
+                    <td><a href="{{url_for('route_new_answer_comment', answer_id = answer['id'])}}">New comment</a></td>
                 </tr>
                 {% for answer_comment in answer_comments %}
                     {% if answer['id'] == answer_comment['answer_id'] %}

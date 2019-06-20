@@ -120,10 +120,6 @@ def delete_question(question_id):
     for answer_id in answer_ids:
         delete_answer_by_answer_id(answer_id)
     delete_from_table('comment', 'question_id', question_id)
-    tag_id = get_tag_ids(question_id)
-    if tag_id:
-        for id_ in tag_id:
-            delete_from_table('tag', 'id', id_['tag_id'])
     delete_from_table('question_tag', 'question_id', question_id)
     delete_from_table('question', 'id', question_id)
 

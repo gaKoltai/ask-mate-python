@@ -55,7 +55,7 @@
 
             {% endfor %}
 
-            <td><a href="{{ url_for('route_delete_question', question_id=question['id']) }}">Delete question</a></td>
+            <td><a class = "no-underline" href="{{ url_for('route_delete_question', question_id=question['id']) }}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
         </tr>
 
         {% endfor %}
