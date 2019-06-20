@@ -126,9 +126,10 @@ def route_delete_question(question_id=None):
 def route_search():
 
     search_phrase = request.args.get('search')
-    questions = data_manager.search_questions(search_phrase)
+    question_ids = data_manager.search_for_question_ids(search_phrase)
+    searched_questions = data_manager.get_questions_by_id(question_ids)
 
-    return render_template('search.html', user_questions=questions)
+    return render_template('search.html', user_questions=searched_questions)
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
