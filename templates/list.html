@@ -62,4 +62,7 @@
 
         </tbody>
     </table>
+    {% if user_questions | length > 5 %}
+        {% include 'footer.html' %}
+    {% endif %}
 {% endblock %}
