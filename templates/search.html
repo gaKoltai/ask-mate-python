@@ -34,10 +34,10 @@
                         {% for key,value in question.items() %}
                             {% if key == "vote_number" %}
                                 <td><p class="vote-item">{{ value }}</p>
-                                    <a class="vote-button"
+                                    <a class="no-underline"
                                        href="{{ url_for('route_vote', question_id = question.id, vote = 1, order_by = order_by, order_direction=order_direction) }}"><img
                                             width="20" height="20" src="/static/vote_up.png" alt="vote_up"></a>
-                                    <a class="vote-button"
+                                    <a class="no-underline"
                                        href="{{ url_for('route_vote', question_id= question.id, vote = -1, order_by = order_by, order_direction=order_direction) }}"><img
                                             width="20" height="20" src="/static/vote_down.png" alt="vote_down"></a></td>
                             {% elif key == "title" %}
@@ -61,4 +61,5 @@
                 </table>
             {% endif %}
     </body>
+{% include 'footer.html' %}
 {% endblock %}

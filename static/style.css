@@ -37,8 +37,8 @@ a:hover,a:active {
     border-bottom: 1px solid transparent;
 }
 
-.vote-button:link,
-.vote-button:visited{
+.no-underline:link,
+.no-underline:visited{
     border:0;
 }
 
@@ -134,4 +134,13 @@ button:hover, button:active{
     border: 1px solid transparent;
     color: white;
 
+}
+
+.tag{
+    display: inline;
+
+}
+
+.tag a{
+    border:0;
 }

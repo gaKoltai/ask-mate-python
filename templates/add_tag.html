@@ -4,19 +4,23 @@
     <h1>Tags</h1>
     {% if question_tags %}
         {% for tag in question_tags %}
-            <a href="{{url_for('route_remove_tag', question_id = question_id, tag_id = tag.id)}}">{{tag.name}}</a>
+            <a href="{{url_for('route_remove_tag', where_to_redirect = 'route_add_tags', question_id = question_id, tag_id = tag.id)}}">{{tag.name}}</a>
         {% endfor %}
+    {% else %}
+    No tags yet<br>
     {% endif %}
     <h1>Add Tag</h1>
     {% if rest_of_tags %}
         {% for tag in rest_of_tags %}
             <a href="{{url_for('route_add_tag', question_id = question_id, tag_id = tag.id)}}">{{tag.name}}</a>
         {% endfor %}
+    {% else %}
+    No more tags available<br>
     {% endif %}
     <form action = "{{url_for('route_add_tags', question_id = question_id)}}" method="POST">
         <label for="tag_name">New Tag</label>
         <input type="text" name = "tag_name" id = "tag_name">
         <button type="submit">Add</button>
     </form>
-    <a href ="{{url_for('route_question_with_answer', question_id = question_id)}}">Back to question</a>
+    <a href ="{{url_for('route_question_with_answer', question_id = question_id, where_to_redirect = 'route_add_tags')}}">Back to question</a>
 {% endblock %}
