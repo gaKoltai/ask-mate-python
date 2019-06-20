@@ -8,25 +8,11 @@
             <input type="text" id="search" name="search" placeholder="Search for something...">
             <button type="submit">Search</button>
         </form>
-        <form action="{{ url_for('route_questions') }}" method='POST'>
-            <p>Order by:</p>
-            <div class="select-style">
-                <select name="order_by">
-                    {% for key,value in user_questions[0].items() %}
-                        <option value="{{ key }}" {{ "selected" if order_by == key or (order_by == None and key == "submission_time") }}> {{ key|replace("_"," ")|title }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="select-style">
-                <select name="order_direction">
-                    <option {{ "selected" if order_direction == "asc" }} value="asc">Ascending</option>
-                    <option {{ "selected" if order_direction == "desc" or order_direction == None }} value="desc">
-                        Descending
-                    </option>
-                </select>
-            </div>
-            <button type="submit">Sort</button>
-        </form>
+        {% if user_questions | length > 5 %}
+            {% include 'order_by.html' %}
+        {% else %}
+            <p><a href="{{ url_for('route_questions') }}">List all questions</a></p>
+        {% endif %}
         <p><a class="link" href="/add-question">Post a new question</a></p>
     </div>
     <table>
