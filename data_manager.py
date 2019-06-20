@@ -132,9 +132,9 @@ def delete_question(question_id):
 def search_questions(cursor, search_phrase):
     cursor.execute("""
                     SELECT DISTINCT question.* FROM question, answer
-                    WHERE answer.message ILIKE concat('%%', %(search)s, '%%') 
-                    OR question.message ILIKE concat('%%', %(search)s, '%%')
-                    OR title ILIKE concat('%%', %(search)s, '%%')
+                    WHERE answer.message LIKE concat('%', %(search)s, '%') 
+                    OR question.message LIKE concat('%', %(search)s, '%')
+                    OR title LIKE concat('%', %(search)s, '%')
                     ORDER BY submission_time DESC;             
                 """,{'search':search_phrase})
 

@@ -144,3 +144,23 @@ button:hover, button:active{
 .tag a{
     border:0;
 }
+
+#return-button{
+    position:absolute;
+    right:10%;
+    top: 10%;
+    border-radius: 4px;
+    border: 1px solid #63b6ef;
+    color: #63b6ef;
+    background-color: white;
+    padding: 9px 15px;
+    transition: color 0.2s, background-color 0.2s,border 0.2s;
+
+}
+
+#return-button:hover,
+#return-button:active{
+    background-color: #63b6ef;
+    border: 1px solid transparent;
+    color: white;
+}

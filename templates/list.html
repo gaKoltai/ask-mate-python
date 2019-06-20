@@ -62,7 +62,7 @@
                         <a href="{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">{{ value | safe }}</a>
                     </td>
                 {% elif key == "message" %}
-                    <td class="message">{{ value| safe | urlize(40)}} </td>
+                    <td class="message">{{ value | safe | urlize(40)}} </td>
                 {% elif key != "image" %}
                     <td>{{ value | safe }} </td>
                 {% endif %}
