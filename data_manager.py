@@ -396,6 +396,7 @@ def get_comment_by_comment_id(cursor, comment_id):
     comment = cursor.fetchall()
     return comment[0]
 
+
 @connection.connection_handler
 def is_edited_count_none(cursor, comment_id):
     cursor.execute('''

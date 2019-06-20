@@ -14,6 +14,7 @@ def route_index():
 
     return render_template('list.html', user_questions=latest_questions)
 
+
 @app.route('/list', methods = ['POST', 'GET'])
 def route_questions():
     if request.method == 'GET':
@@ -33,6 +34,7 @@ def route_question_with_answer(question_id=None):
     if request.args.get('view_number_increment'):
         data_manager.increment_view_number(item_id=question_id)
     if question_id is not None:
+        tags = data_manager.get_question_tags(question_id)
         question = data_manager.get_question_by_id(question_id=question_id)
         answers = data_manager.get_answers_by_question_id(question_id=question_id)
         question_comments = data_manager.get_comment_by_question_id(question_id=question_id)
@@ -43,6 +45,7 @@ def route_question_with_answer(question_id=None):
             answer_comments = None
 
     return render_template('question_with_answers.html',
+                           tags = tags,
                            question=question,
                            question_id=question_id,
                            answers=answers,
@@ -175,7 +178,8 @@ def route_add_tag(question_id, tag_id):
 @app.route('/question/<question_id>/remove_tag/<tag_id>')
 def route_remove_tag(question_id, tag_id):
     data_manager.remove_tag(question_id, tag_id)
-    return redirect((url_for('route_add_tags', question_id=question_id)))
+    where_to_redirect = request.args.get('where_to_redirect')
+    return redirect((url_for(where_to_redirect, question_id=question_id)))
 
 
 @app.route('/comments/<comment_id>/delete')
@@ -222,7 +226,6 @@ def route_edit_answer(answer_id):
         return redirect(url_for('route_question_with_answer', question_id=question_id))
 
     return render_template('edit_answer.html', answer=answer )
-
 
 
 if __name__ == '__main__':

@@ -1,13 +1,14 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+    {% include 'tags.html' %}
     {% include 'question.html' %}
     {% if question_comments %}
         {% include 'question_comment.html' %}
     {% endif%}
     {% include 'answers.html' %}
     <h4><a href="{{url_for('route_new_answer', question_id = question_id)}}">Add new answer</a></h4>
-    <h4><a href="{{url_for('route_add_tags',question_id = question_id )}}">Add tags</a></h4>
+    <h4><a href="{{url_for('route_add_tags',question_id = question_id )}}">Edit tags</a></h4>
     {% include 'footer.html' %}
 {% endblock %}
 

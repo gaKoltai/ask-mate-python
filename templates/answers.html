@@ -18,8 +18,8 @@
                             <td>{% if value %}<img src = "/{{ value }}" alt = "No image" width="20" height="20">{% endif %}</td>
                         {% elif key == "vote_number" %}
                             <td><p class = "vote-item">{{value}}</p>
-                                <a class = "vote-button" href = "{{url_for('route_vote', vote = 1, answer_id = answer.id, question_id =question.id)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
-                                <a class = "vote-button" href = "{{url_for('route_vote', vote = -1, answer_id = answer.id,question_id =question.id)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
+                                <a class = "no-underline" href = "{{url_for('route_vote', vote = 1, answer_id = answer.id, question_id =question.id)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
+                                <a class = "no-underline" href = "{{url_for('route_vote', vote = -1, answer_id = answer.id,question_id =question.id)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
                         {% elif key == "message" %}
                             <td class = "message" >{{ value|urlize(40) }}</td>
                         {% else %}
@@ -36,7 +36,7 @@
                              <td>{{ answer_comment['message'] }}</td>
                              <td>{{ answer_comment['edited_count'] }}</td>
                              <td><a href="{{url_for('route_edit_comment', comment_id=answer_comment['id'])}}">Edit comment</a></td>
-                             <td><a class="recycle-bin" href="{{url_for('route_delete_comment', comment_id=answer_comment['id'])}}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
+                             <td><a class="no-underline" href="{{url_for('route_delete_comment', comment_id=answer_comment['id'])}}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
                          </tr>
                     {% endif %}
                 {% endfor %}
