@@ -5,6 +5,7 @@
     {% if question_comments %}
         {% include 'question_comment.html' %}
     {% endif%}
+    <a href={{url_for('route_new_question_comment', question_id=question_id)}}>Add comment to the question</a>
     {% include 'answers.html' %}
     <h4><a href="{{url_for('route_new_answer', question_id = question_id)}}">Add new answer</a></h4>
     <h4><a href="{{url_for('route_add_tags',question_id = question_id )}}">Add tags</a></h4>

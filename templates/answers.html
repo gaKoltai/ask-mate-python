@@ -36,7 +36,7 @@
                              <td>{{ answer_comment['message'] }}</td>
                              <td>{{ answer_comment['edited_count'] }}</td>
                              <td><a href="{{url_for('route_edit_comment', comment_id=answer_comment['id'])}}">Edit comment</a></td>
-                             <td><a class="recycle-bin" href="{{url_for('route_delete_comment', comment_id=answer_comment['id'])}}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
+                             <td><a class="recycle-bin" href="{{url_for('route_delete_force', comment_id=answer_comment['id'])}}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
                          </tr>
                     {% endif %}
                 {% endfor %}

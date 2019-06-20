@@ -14,6 +14,7 @@ def route_index():
 
     return render_template('list.html', user_questions=latest_questions)
 
+
 @app.route('/list', methods = ['POST', 'GET'])
 def route_questions():
     if request.method == 'GET':
@@ -185,7 +186,6 @@ def route_delete_comment(comment_id=None):
         question_id = ids['question_id']
     else:
         question_id = data_manager.get_question_id_by_answer_id(ids['answer_id'])
-
     if comment_id:
         data_manager.delete_from_table(table='comment', parameter='id', value=comment_id)
     return redirect(url_for('route_question_with_answer', question_id=question_id))
@@ -223,6 +223,21 @@ def route_edit_answer(answer_id):
 
     return render_template('edit_answer.html', answer=answer )
 
+
+@app.route('/commit/<comment_id>/delete-force')
+def route_delete_force(comment_id=None):
+    comment = data_manager.get_comment_by_comment_id(comment_id=comment_id)
+    return render_template('delete.html', comment=comment)
+
+
+@app.route('/comments/<comment_id>/dont-delete')
+def route_dont_delete_comment(comment_id=None):
+    ids = data_manager.get_ids_by_comment_id(comment_id=comment_id)
+    if ids['question_id'] is not None:
+        question_id = ids['question_id']
+    else:
+        question_id = data_manager.get_question_id_by_answer_id(ids['answer_id'])
+    return redirect(url_for('route_question_with_answer', question_id=question_id))
 
 
 if __name__ == '__main__':
