@@ -8,61 +8,9 @@
             <input type="text" id="search" name="search" placeholder="Search for something...">
             <button type="submit">Search</button>
         </form>
-        {% if user_questions | length > 5 %}
-            {% include 'order_by.html' %}
-        {% else %}
-            <p><a href="{{ url_for('route_questions') }}">List all questions</a></p>
-        {% endif %}
         <p><a class="link" href="/add-question">Post a new question</a></p>
     </div>
-    <table>
-
-        <thead>
-        <tr>
-            {% for key,value in user_questions[0].items() %}
-                {% if key != "image" %}
-                    <th> {{ key|replace("_"," ")|title }}</th>
-                {% endif %}
-            {% endfor %}
-            <th></th>
-        </tr>
-        </thead>
-
-        <tbody>
-
-        {% for question in user_questions %}
-
-        <tr>
-
-            {% for key,value in question.items() %}
-                {% if key == "vote_number" %}
-                    <td><p class="vote-item">{{ value }}</p>
-                        <a class="no-underline"
-                           href="{{ url_for('route_vote', question_id = question.id, vote = 1, order_by = order_by, order_direction=order_direction) }}"><img
-                                width="20" height="20" src="/static/vote_up.png" alt="vote_up"></a>
-                        <a class="no-underline"
-                           href="{{ url_for('route_vote', question_id= question.id, vote = -1, order_by = order_by, order_direction=order_direction) }}"><img
-                                width="20" height="20" src="/static/vote_down.png" alt="vote_down"></a></td>
-                {% elif key == "title" %}
-                    <td>
-                        <a href="{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">{{ value | safe }}</a>
-                    </td>
-                {% elif key == "message" %}
-                    <td class="message">{{ value | safe | urlize(40)}} </td>
-                {% elif key != "image" %}
-                    <td>{{ value | safe }} </td>
-                {% endif %}
-
-            {% endfor %}
-
-            <td><a href="{{ url_for('route_delete_question', question_id=question['id']) }}">Delete question</a></td>
-        </tr>
-
-        {% endfor %}
-
-        </tbody>
-    </table>
-    {% if user_questions | length > 5 %}
+        {% include 'order_by.html' %}
+        {% include 'list_questions.html' %}
         {% include 'footer.html' %}
-    {% endif %}
 {% endblock %}
