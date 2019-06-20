@@ -120,19 +120,42 @@ def delete_question(question_id):
 
 
 @connection.connection_handler
-def search_questions(cursor, search_phrase):
+def search_for_question_ids(cursor, search_phrase):
     cursor.execute("""
-                    SELECT DISTINCT question.* FROM question, answer
-                    WHERE answer.message ILIKE concat('%%', %(search)s, '%%') 
-                    OR question.message ILIKE concat('%%', %(search)s, '%%')
-                    OR title ILIKE concat('%%', %(search)s, '%%')
-                    ORDER BY submission_time DESC;             
+                    SELECT id  FROM question
+                    WHERE message ILIKE concat('%%', %(search)s, '%%')
+                    OR title ILIKE concat('%%', %(search)s, '%%');            
                 """,{'search':search_phrase})
 
-    searched_questions = cursor.fetchall()
+    question_ids = cursor.fetchall()
+
+    cursor.execute("""
+                    SELECT question_id AS id FROM answer
+                    WHERE message ILIKE concat('%%', %(search)s, '%%')
+                    """, {'search':search_phrase})
+
+    question_ids_from_answers = cursor.fetchall()
+
+    question_ids = set([item['id'] for item in question_ids])
+    question_ids_from_answers = set([item['id'] for item in question_ids_from_answers])
+
+    return list(question_ids | question_ids_from_answers)
+
+
+@connection.connection_handler
+def get_questions_by_id(cursor, question_ids):
+
+    print(question_ids)
+
+    cursor.execute("""
+                    SELECT DISTINCT * FROM question
+                    WHERE id = ANY (%(question_ids)s)
+                    ORDER BY submission_time DESC;
+                    """, {'question_ids':question_ids})
+
+    searched_questions=cursor.fetchall()
 
     return searched_questions
-
 
 @connection.connection_handler
 def get_latest_questions(cursor):
