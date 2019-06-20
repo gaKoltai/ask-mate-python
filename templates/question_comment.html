@@ -17,8 +17,8 @@
                     <td>{{ value }} </td>
                 {% endfor %}
                 <td><a href="{{url_for('route_edit_comment', comment_id=question_comment['id'])}}">Edit comment</a></td>
+                <td><a class="recycle-bin" href="{{url_for('route_delete_force', comment_id=question_comment['id'])}}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
             </tr>
         {% endfor %}
     </tbody>
 </table>
-<a href={{url_for('route_new_question_comment', question_id=question_id)}}>Add comment to the question</a>
