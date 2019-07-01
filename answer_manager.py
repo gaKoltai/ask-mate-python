@@ -1,4 +1,6 @@
 import connection
+import datetime
+import data_manager
 
 
 @connection.connection_handler
@@ -56,8 +58,8 @@ def add_answer(cursor, question_id, answer, image_name):
 
 
 def delete_answer_by_answer_id(answer_id):
-    delete_from_table('comment', 'answer_id', answer_id)
-    delete_from_table('answer', 'id', answer_id)
+    data_manager.delete_from_table('comment', 'answer_id', answer_id)
+    data_manager.delete_from_table('answer', 'id', answer_id)
 
 
 def get_answer_ids_by_answers(answers):

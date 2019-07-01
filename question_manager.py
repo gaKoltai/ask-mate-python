@@ -1,4 +1,8 @@
 import connection
+import datetime
+
+from answer_manager import get_answers_by_question_id, get_answer_ids_by_answers, delete_answer_by_answer_id
+from data_manager import delete_from_table
 
 
 def search_highlights(searched_phrase, questions):
@@ -131,6 +135,7 @@ def get_questions_by_id(cursor, question_ids):
     searched_questions=cursor.fetchall()
 
     return searched_questions
+
 
 @connection.connection_handler
 def get_latest_questions(cursor):
