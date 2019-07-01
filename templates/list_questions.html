@@ -1,43 +1,50 @@
-<section class = "questions">
-    {% for question in user_questions %}
+{% for question in user_questions %}
+    <section class = "question">
         <div class = "row">
+            <div class="col span-1-of-6 box">
+                <div class = "row">
+                    {{ question.vote_number }}
+                </div>
+                <div class = "row">
+                    <a class="no-underline"
+                       href="{{ url_for('route_vote', question_id = question.id, vote = 1, order_by = order_by, order_direction=order_direction) }}">
+                        <img width="20" height="20" src="/static/vote_up.png" alt="vote_up"></a>
+                    <a class="no-underline"
+                       href="{{ url_for('route_vote', question_id= question.id, vote = -1, order_by = order_by, order_direction=order_direction) }}">
+                        <img width="20" height="20" src="/static/vote_down.png" alt="vote_down"></a>
+                </div>
+                <div class = "row">
+                    {{ question.view_number }}
+                </div>
+                <div class = "row">
+                    <img width="20" height="20" src="/static/eye.png" alt="view_number">
+                </div>
+                <div class = "row">
+                    <a class = "no-underline" href="{{ url_for('route_delete_question', question_id=question['id']) }}">
+                        <img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a>
+                </div>
 
-            <div class="col span-1-of-3 box">
-                <h2><a href="{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">
-                    {{ question.title | safe }}</a></h2>
             </div>
-
-            <div class="col span-1-of-3 box">
-                {{ question.view_number }}<img width="20" height="20" src="/static/eye.png" alt="view_number">
+            <div class="col span-5-of-6 box">
+                <div class = "row">
+                    <h2><a href="{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">
+                        {{ question.title | safe }}</a></h2>
+                </div>
+                <div class = "row">
+                    <p class = "message">{{ question.message | safe | urlize(40)}}</p>
+                </div>
+                <div class = "row">
+                    <div class="col span-1-of-2 box">
+                        <!-- tags come here -->
+                    </div>
+                    <div class="col span-1-of-2 box">
+                        {{ question.submission_time | safe }}
+                    </div>
+                </div>
             </div>
-
-            <div class="col span-1-of-3 box">
-                <p class="vote-item">{{ question.vote_number }}</p>
-                <a class="no-underline"
-                   href="{{ url_for('route_vote', question_id = question.id, vote = 1, order_by = order_by, order_direction=order_direction) }}">
-                    <img width="20" height="20" src="/static/vote_up.png" alt="vote_up"></a>
-                <a class="no-underline"
-                   href="{{ url_for('route_vote', question_id= question.id, vote = -1, order_by = order_by, order_direction=order_direction) }}">
-                    <img width="20" height="20" src="/static/vote_down.png" alt="vote_down"></a>
-            </div>
-
         </div>
+    </section>
+{% endfor %}
 
-        <div class = "row">
-            <p class = "message">{{ question.message | safe | urlize(40)}}</p>
-        </div>
 
-        <div class = "row">
 
-            <div class ="col span-1-of-2 box">
-                <a class = "no-underline" href="{{ url_for('route_delete_question', question_id=question['id']) }}">
-                    <img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a>
-            </div>
-
-            <div class ="col span-1-of-2 box">
-                <p>{{ question.submission_time | safe }}</p>
-            </div>
-
-        </div>
-    {% endfor %}
-</section>

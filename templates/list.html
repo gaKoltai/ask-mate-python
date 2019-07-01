@@ -1,28 +1,26 @@
 {% extends 'layout.html' %}
+{% block header %}
+    <nav>
+        <div class = "row">
+            <div class ="col span-1-of-4">
+                 <!-- Logo goes here -->
+                <h2>Ask Mate</h2></div>
+            <div class = "col span-3-of-4">
+                <ul class = "main-nav">
+                    <li><a class="link" href="/add-question">Post a new question</a></li>
+                    <li><form action="{{ url_for('route_search') }}" method="get">
+                        <input type="text" id="search" name="search" placeholder="Search for something...">
+                        <button type="submit">Search</button>
+                    </form></li>
+                    <li><!-- login, register goes here--></li>
+                </ul>
 
-{% block content %}
-
-    <section class="section-header">
-    <div class ="row">
-        <h1>Ask Mate</h1>
-        <div class="row">
-            <div class="col span-1-of-3 box">
-                <form action="{{ url_for('route_search') }}" method="get">
-                    <label for="search">Search</label>
-                    <input type="text" id="search" name="search" placeholder="Search for something...">
-                    <button type="submit">Search</button>
-                </form>
-            </div>
-            <div class="col span-1-of-3 box">
-                <p><a class="link" href="/add-question">Post a new question</a></p>
-            </div>
-            <div class="col span-1-of-3 box">
-                {% include 'order_by.html' %}
             </div>
         </div>
-    </div>
-        </section>
-        {% include 'list_questions.html' %}
-        {% include 'footer.html' %}
+    </nav>
+{% endblock %}
 
+{% block content %}
+    <!-- {% include 'order_by.html' %} -->
+    {% include 'list_questions.html' %}
 {% endblock %}

@@ -1,5 +1,25 @@
-.row {
-    /* igy kozepre fog igazodni az oldal mindig, de ey a tag nem kell ha csak egy boxunk van!(?)*/
+/* BASIC SETUP*/
+
+* {
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+
+html,
+body{
+    background-color: #fff;
+    color: #555;
+    font-family: 'Lato', 'Arial', sans-serif;
+    font-size: 20px;
+    font-weight: 300;
+    overflow-x: hidden;
+}
+
+
+/* REUSABLE COMPONENTS */
+.row{
     max-width: 1140px;
     margin: 0 auto;
 }
@@ -9,5 +29,93 @@ section {
 }
 
 .box {
-    padding: 1%;  /* igy nagyobb lesz a tavolsag a 4 oszlop kozott */
+    padding: 1%;
+}
+
+
+
+/*  PARAGRAPHS */
+
+.long-copy {
+    line-height: 145%;
+    width: 70%;  /* azert kell hogz ne legzen ennyi karakter egy sorban, de igy nem kozepen lesz */
+    margin-left: 15%; /* ezzel kozepre kerul hisz 70% szelesseg + 15% margin left + 15% margin right */
+}
+
+.box p {
+    font-size: 90%;   /* ezzel a 2vel nem tunik majd tulzsufoltnak a szoveg */
+    line-height: 145%;
+}
+
+
+/* HEADINGS */
+h1,
+h2,
+h3 {
+    font-weight: 300;
+    text-transform:uppercase;
+}
+
+
+
+.question{
+    padding-bottom: 30px;
+}
+
+
+.vote{
+    display:inline;
+}
+
+.question:after {
+    display: block;
+    height: 2px;
+    background-color: black;
+    content: " ";
+    width: 20%;
+    margin: 2px auto;
+    margin-top: 30px;
+}
+
+
+/* HEADER */
+
+header {
+}
+
+
+
+/*  SECTIONS */
+
+.section {
+	clear: both;
+	padding: 0px;
+	margin: 0px;
+}
+
+
+
+/* NAV */
+
+.main-nav {
+    margin-top:4px;
+    float: right;
+    list-style: none;
+
+}
+
+nav{
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+
+.title{
+    padding: 0px;
+    margin: 0px;
+}
+
+.main-nav li {
+    float:left;
+    display:inline-block;
+    margin-left: 40px;
 }
