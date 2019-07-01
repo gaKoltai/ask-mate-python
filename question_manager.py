@@ -1,5 +1,5 @@
 import connection
-import datetime
+from datetime import datetime
 
 from answer_manager import get_answers_by_question_id, get_answer_ids_by_answers, delete_answer_by_answer_id
 from data_manager import delete_from_table
