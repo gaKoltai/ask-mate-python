@@ -164,3 +164,8 @@ button:hover, button:active{
     border: 1px solid transparent;
     color: white;
 }
+
+
+.content{
+    padding:10%;
+}
