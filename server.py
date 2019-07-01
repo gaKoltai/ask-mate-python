@@ -250,6 +250,18 @@ def route_dont_delete_comment(comment_id=None):
     return redirect(url_for('route_question_with_answer', question_id=question_id))
 
 
+@app.route('/registration', methods=['POST', 'GET'])
+def route_register_user():
+
+    if request.method == 'GET':
+
+        return render_template('user_registration.html')
+
+    new_user_data = request.form
+    data_manager.add_new_user(new_user_data)
+
+    return redirect('/')
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
