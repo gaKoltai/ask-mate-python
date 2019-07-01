@@ -1,16 +1,28 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1>Ask Mate</h1>
-    <div class="questions-header">
-        <form action="{{ url_for('route_search') }}" method="get">
-            <label for="search">Search</label>
-            <input type="text" id="search" name="search" placeholder="Search for something...">
-            <button type="submit">Search</button>
-        </form>
-        <p><a class="link" href="/add-question">Post a new question</a></p>
+
+    <section class="section-header">
+    <div class ="row">
+        <h1>Ask Mate</h1>
+        <div class="row">
+            <div class="col span-1-of-3 box">
+                <form action="{{ url_for('route_search') }}" method="get">
+                    <label for="search">Search</label>
+                    <input type="text" id="search" name="search" placeholder="Search for something...">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            <div class="col span-1-of-3 box">
+                <p><a class="link" href="/add-question">Post a new question</a></p>
+            </div>
+            <div class="col span-1-of-3 box">
+                {% include 'order_by.html' %}
+            </div>
+        </div>
     </div>
-        {% include 'order_by.html' %}
+        </section>
         {% include 'list_questions.html' %}
         {% include 'footer.html' %}
+
 {% endblock %}
