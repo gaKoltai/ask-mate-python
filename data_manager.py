@@ -1,5 +1,7 @@
 import connection
 from psycopg2 import sql
+import util
+from datetime import datetime
 
 
 #GENERAL DATA MANAGER functions
@@ -27,3 +29,12 @@ def delete_from_table(cursor, table, parameter, value):
                            sql.Identifier(parameter)), [value])
 
 
+def add_new_user(new_user_data):
+    new_user = {}
+
+    for key, val in new_user_data.items():
+        new_user[key] = val
+
+    new_user['password'] = util.hash_password(new_user['password'])
+
+    new_user['registration_date'] = datetime.now()
