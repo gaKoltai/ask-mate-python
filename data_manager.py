@@ -27,27 +27,3 @@ def delete_from_table(cursor, table, parameter, value):
                            sql.Identifier(parameter)), [value])
 
 
-#functions dealing with questions
-
-
-
-
-
-
-
-
-
-
-#functions dealing with answers
-
-
-
-
-#functions dealing with TAGS
-
-
-
-
-
-#functions dealing with COMMENTS
-
