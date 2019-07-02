@@ -1,6 +1,9 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+    {% if user_already_exists %}
+        <p>Username or email already taken, please chose another</p>
+    {% endif %}
     <form action="" method="post" enctype="multipart/form-data">
         <label for="userName">Username:</label>
         <input type="text" id="userName" name="username"><br>
