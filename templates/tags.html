@@ -1,10 +1,9 @@
-<div class = 'tag'>
-    <h1>Tags</h1>
+<div class = 'row tag'>
     {% if tags %}
-    {% for tag in tags %}
-    <p class = 'tag'>{{tag.name}} <a href = "{{url_for('route_remove_tag',question_id = question_id, where_to_redirect = 'route_question_with_answer', tag_id = tag.id)}}">X</a></p>
-    {% endfor %}
+        {% for tag in tags %}
+            {{tag.name}} <a href = "{{url_for('route_remove_tag',question_id = question_id, where_to_redirect = 'route_question_with_answer', tag_id = tag.id)}}">X</a>
+        {% endfor %}
     {% else %}
-    <p>No tags for this question</p>
+        <p>No tags for this question</p>
     {% endif %}
 </div>

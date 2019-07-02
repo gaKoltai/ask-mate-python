@@ -1,24 +1,15 @@
-<h3>Comments:</h3>
-<table>
-    <thead>
-        <tr>
-            {% for key in question_comments[0] %}
-                <th> {{ key|replace("_"," ")|title }}</th>
-            {% endfor %}
-        </tr>
-
-    </thead>
-
-     <tbody>
-
-        {% for question_comment in question_comments%}
-            <tr>
-                {% for value in question_comment.values() %}
-                    <td>{{ value }} </td>
-                {% endfor %}
-                <td><a href="{{url_for('route_edit_comment', comment_id=question_comment['id'])}}">Edit comment</a></td>
-                <td><a class="no-underline" href="{{url_for('route_delete_force', comment_id=question_comment['id'])}}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class = "row">
+    <h3>Comments:</h3>
+</div>
+<div class = "comments">
+    {% for question_comment in question_comments %}
+            <div class = "comment">
+                <div class = "row">{{ question_comment.submission_time }}</div>
+                <div class = "row">{{ question_comment.message }}</div>
+                <div class = "row">Edited {{ question_comment.edited_count if question_comment.edited_count else "0" }} times.
+                    <a href="{{url_for('route_edit_comment', comment_id=question_comment.id)}}">Edit comment</a>
+                    <a class="no-underline" href="{{url_for('route_delete_force', comment_id=question_comment['id'])}}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a>
+                </div>
+            </div>
+    {% endfor %}
+</div>

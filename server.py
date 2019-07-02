@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, escape
 import connection
 import data_manager
 import util
@@ -9,6 +9,7 @@ import comment_manager
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
+app.secret_key = b'I\xb8\x82\xadI\x8b6\x05\xac \xb2\xd4\xd0,\xdc\\'
 
 
 @app.route('/', methods = ['POST', 'GET'])
@@ -183,7 +184,7 @@ def route_add_tag(question_id, tag_id):
 
 @app.route('/question/<question_id>/remove_tag/<tag_id>')
 def route_remove_tag(question_id, tag_id):
-    t   .remove_tag(question_id, tag_id)
+    tag_manager.remove_tag(question_id, tag_id)
     where_to_redirect = request.args.get('where_to_redirect')
     return redirect((url_for(where_to_redirect, question_id=question_id)))
 
@@ -248,6 +249,44 @@ def route_dont_delete_comment(comment_id=None):
     else:
         question_id = question_manager.get_question_id_by_answer_id(ids['answer_id'])
     return redirect(url_for('route_question_with_answer', question_id=question_id))
+
+
+@app.route('/registration', methods=['POST', 'GET'])
+def route_register_user():
+
+    if request.method == 'GET':
+        return render_template('user_registration.html')
+
+    if data_manager.check_if_user_exists(request.form.get('username'), request.form.get('email')):
+        user_already_exists = True
+        return render_template('user_registration.html', user_already_exists=user_already_exists )
+
+    new_user_data = request.form
+    data_manager.add_new_user(new_user_data)
+
+    return redirect('/')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def route_user_login():
+    if request.method == 'GET':
+        return render_template('user_login.html')
+
+    user_login = request.form
+
+    if not data_manager.check_user_info_for_login(user_login):
+        bad_login_info = True
+        return render_template('user_login.html', bad_login_info=bad_login_info)
+
+    session['username'] = user_login['username']
+
+    return redirect(url_for('route_index'))
+
+@app.route('/logout')
+def route_logout():
+    session.pop('username', None)
+
+    return redirect(url_for('route_index'))
 
 
 @app.route('/users')

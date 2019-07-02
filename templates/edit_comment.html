@@ -1,14 +1,21 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1>Edit comment</h1>
-    <form action="{{ url_for('route_edit_comment', comment_id=comment['id']) }}" method="post">
-        <p>
-            <label for="message">Your commit:</label>
-        <p>
-            <textarea name="message" id="message" cols="30" rows="10" required>{{ comment['message'] }}</textarea>
-        <p>
-            <button type="Submit">Submit comment</button>
-        </p>
-    </form>
+    <div class ="row">
+        <h1>Edit comment</h1>
+    </div>
+    <div class ="row">
+        <form action="{{ url_for('route_edit_comment', comment_id=comment['id']) }}" method="post">
+            <p>
+                <label for="message">Your comment:</label>
+            </p>
+            <p>
+                <textarea name="message" id="message" cols="30" rows="10" required>{{ comment['message'] }}</textarea>
+            </p>
+            <p>
+                <button type="Submit">Submit comment</button>
+            </p>
+
+        </form>
+    </div>
 {% endblock %}

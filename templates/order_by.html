@@ -1,19 +1,21 @@
 <form action="{{ url_for('route_questions') }}" method='POST'>
-    <p>Order by:</p>
-    <div class="select-style">
-        <select name="order_by">
-            {% for key,value in user_questions[0].items() %}
-                <option value="{{ key }}" {{ "selected" if order_by == key or (order_by == None and key == "submission_time") }}> {{ key|replace("_"," ")|title }}</option>
-            {% endfor %}
-        </select>
+    <div class = "row">
+        <p>Order by:</p>
+        <div class="select-style">
+            <select name="order_by">
+                {% for key,value in user_questions[0].items() %}
+                    <option value="{{ key }}" {{ "selected" if order_by == key or (order_by == None and key == "submission_time") }}> {{ key|replace("_"," ")|title }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="select-style">
+            <select name="order_direction">
+                <option {{ "selected" if order_direction == "asc" }} value="asc">Ascending</option>
+                <option {{ "selected" if order_direction == "desc" or order_direction == None }} value="desc">
+                    Descending
+                </option>
+            </select>
+        </div>
+        <button type="submit">Sort</button>
     </div>
-    <div class="select-style">
-        <select name="order_direction">
-            <option {{ "selected" if order_direction == "asc" }} value="asc">Ascending</option>
-            <option {{ "selected" if order_direction == "desc" or order_direction == None }} value="desc">
-                Descending
-            </option>
-        </select>
-    </div>
-    <button type="submit">Sort</button>
 </form>
