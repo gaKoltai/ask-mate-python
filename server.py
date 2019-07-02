@@ -183,7 +183,7 @@ def route_add_tag(question_id, tag_id):
 
 @app.route('/question/<question_id>/remove_tag/<tag_id>')
 def route_remove_tag(question_id, tag_id):
-    t   .remove_tag(question_id, tag_id)
+    tag_manager.remove_tag(question_id, tag_id)
     where_to_redirect = request.args.get('where_to_redirect')
     return redirect((url_for(where_to_redirect, question_id=question_id)))
 

@@ -1,47 +1,49 @@
-<table>
-
-    <thead>
-    <tr>
-        {% for key,value in user_questions[0].items() %}
-            {% if key != "image" %}
-                <th> {{ key|replace("_"," ")|title }}</th>
-            {% endif %}
-        {% endfor %}
-        <th></th>
-    </tr>
-    </thead>
-
-    <tbody>
-
-    {% for question in user_questions %}
-
-    <tr>
-
-        {% for key,value in question.items() %}
-            {% if key == "vote_number" %}
-                <td><p class="vote-item">{{ value }}</p>
+<section class = "questions">
+{% for question in user_questions %}
+        <div class = "row question">
+            <div class="col span-1-of-10 box icons">
+                <div class = "row">
+                    {{ question.vote_number }}
+                </div>
+                <div class = "row">
                     <a class="no-underline"
-                       href="{{ url_for('route_vote', question_id = question.id, vote = 1, order_by = order_by, order_direction=order_direction) }}"><img
-                            width="20" height="20" src="/static/vote_up.png" alt="vote_up"></a>
+                       href="{{ url_for('route_vote', question_id = question.id, vote = 1, order_by = order_by, order_direction=order_direction) }}">
+                        <img width="20" height="20" src="/static/vote_up.png" alt="vote_up"></a>
                     <a class="no-underline"
-                       href="{{ url_for('route_vote', question_id= question.id, vote = -1, order_by = order_by, order_direction=order_direction) }}"><img
-                            width="20" height="20" src="/static/vote_down.png" alt="vote_down"></a></td>
-            {% elif key == "title" %}
-                <td>
-                    <a href="{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">{{ value | safe }}</a>
-                </td>
-            {% elif key == "message" %}
-                <td class="message">{{ value | safe | urlize(40)}} </td>
-            {% elif key != "image" %}
-                <td>{{ value | safe }} </td>
-            {% endif %}
+                       href="{{ url_for('route_vote', question_id= question.id, vote = -1, order_by = order_by, order_direction=order_direction) }}">
+                        <img width="20" height="20" src="/static/vote_down.png" alt="vote_down"></a>
+                </div>
+                <div class = "row">
+                    {{ question.view_number }}
+                </div>
+                <div class = "row">
+                    <img width="20" height="20" src="/static/eye.png" alt="view_number">
+                </div>
+                <div class = "row">
+                    <a class = "no-underline" href="{{ url_for('route_delete_question', question_id=question['id']) }}">
+                        <img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a>
+                </div>
 
-        {% endfor %}
+            </div>
+            <div class="col span-9-of-10 box">
+                <div class = "row">
+                    <h4><a href="{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">
+                        {{ question.title | safe }}</a></h4>
+                </div>
+                <div class = "row">
+                    <p class = "message">{{ question.message | safe | urlize(40)}}</p>
+                </div>
+                <div class = "row">
+                    <div class="col span-1-of-2 box">
+                        <!-- tags come here -->
+                    </div>
+                    <div class="col span-1-of-2 box date">
+                        {{ question.submission_time | safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endfor %}
+ </section>
 
-        <td><a class = "no-underline" href="{{ url_for('route_delete_question', question_id=question['id']) }}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
-    </tr>
 
-    {% endfor %}
-
-    </tbody>
-</table>

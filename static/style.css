@@ -1,171 +1,126 @@
+/* BASIC SETUP*/
+:root{
+    --border_line: 1px solid rgba(0,0,0,0.2);
+}
+
+
+* {
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+
 html,
-body {
+body{
     background-color: #fff;
     color: #555;
     font-family: 'Lato', 'Arial', sans-serif;
     font-size: 20px;
     font-weight: 300;
-
+    overflow-x: hidden;
 }
 
+
+/* REUSABLE COMPONENTS */
+.row{
+    max-width: 1140px;
+    margin: 0 auto;
+}
+
+
+.row:after{
+    padding:0;
+    margin:0;
+}
+
+
+
+
+/*  PARAGRAPHS */
+
+.long-copy {
+    line-height: 145%;
+    width: 70%;  /* azert kell hogz ne legzen ennyi karakter egy sorban, de igy nem kozepen lesz */
+    margin-left: 15%; /* ezzel kozepre kerul hisz 70% szelesseg + 15% margin left + 15% margin right */
+}
+
+.box p {
+    font-size: 90%;   /* ezzel a 2vel nem tunik majd tulzsufoltnak a szoveg */
+    line-height: 145%;
+}
+
+
+/* HEADINGS */
 h1,
 h2,
-h3{
+h3 {
     font-weight: 300;
-    text-transform:uppercase;}
-
-p{
-    font-size: 90%;
-    line-height: 145%;}
-
-
-td{
-    padding: 20px 10px 20px 10px;
-}
-
-
-a:link, a:visited{
-    color: #1792e6;
-    text-decoration: none;
-    padding-bottom: 1px;
-    border-bottom: 1px solid #1792e6;
-    transition: border-bottom 0.2s, color 0.2s;
-}
-
-a:hover,a:active {
-    color: #555;
-    border-bottom: 1px solid transparent;
-}
-
-.no-underline:link,
-.no-underline:visited{
-    border:0;
-}
-
-
-.vote-item{
-
-    margin-bottom: 5px;
-}
-
-
-table {
-    width: 100%;
-  border-collapse: collapse;
-}
-
-table, th, td {
-  border-bottom: 1px solid black;
-    padding-right: 10px;
-}
-
-th{
-    padding-bottom: 10px;
-    text-align: center;
-}
-
-.message{
-    text-align: left;
-}
-
-td{
-    text-align: center;
-    vertical-align:middle;
-
-}
-img {
-    opacity: 0.7;
-    height: auto;
-    transform: scale(1);
-    transition: transform 0.5s, opacity 0.5s;
-
-}
-
-
-form{
-    margin: 20px;
-}
-textarea, input{
-    width : 600px;
+    text-transform:uppercase;
 }
 
 
 
-img:hover{
-    transform: scale(1.25);
+.question{
+    border-bottom:var(--border_line);
+    border-left:var(--border_line);
+    border-right:var(--border_line);
 }
 
 
-.select-style {
-    border: 1px solid #ccc;
-    width: 120px;
-    border-radius: 3px;
-    overflow: hidden;
+/* HEADER */
 
-}
-
-.select-style select {
-    padding: 5px 8px;
-    width: 130%;
-    border: none;
-    box-shadow: none;
-    background: transparent;
-
-}
-
-.select-style select:focus {
-    outline: none;
-
+header {
 }
 
 
-button{
-    border-radius: 3px;
-    border: 1px solid #ccc;
-    color: black;
-    background-color: white;
-    padding: 5px 8px;
-    cursor: pointer;
-    transition: color 0.2s, background-color 0.2s,border 0.2s;
-}
 
-button:hover, button:active{
-    background-color: #63b6ef;
-    border: 1px solid transparent;
-    color: white;
+/*  SECTIONS */
+
+
+
+
+/* NAV */
+
+.main-nav {
+    margin-top:4px;
+    float: right;
+    list-style: none;
 
 }
 
-.tag{
-    display: inline;
-
-}
-
-.tag a{
-    border:0;
-}
-
-#return-button{
-    position:absolute;
-    right:10%;
-    top: 10%;
-    border-radius: 4px;
-    border: 1px solid #63b6ef;
-    color: #63b6ef;
-    background-color: white;
-    padding: 9px 15px;
-    transition: color 0.2s, background-color 0.2s,border 0.2s;
-
-}
-
-#return-button:hover,
-#return-button:active{
-    background-color: #63b6ef;
-    border: 1px solid transparent;
-    color: white;
+nav{
+    border-bottom: var(--border_line);
 }
 
 
-.content{
-    padding:10%;
+.title{
+    padding: 0px;
+    margin: 0px;
+}
+
+.main-nav li {
+    float:left;
+    display:inline-block;
+    margin-left: 40px;
+
+}
+
+
+.icons{
+    text-align:center;
+}
+
+.date{
+    text-align:right;
+}
+
+.comments{
+    padding-left:40px;
+}
+
+
+#ask_mate{
+    text-decoration:none;
+
 }

@@ -1,7 +1,10 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+    <div class = "row">
     <h1>Post a new question</h1>
+    </div>
+    <div class = "row">
     <form action="/add-question" method="post" enctype="multipart/form-data">
         <p>
             <label for="title">Question title:</label>
@@ -24,4 +27,5 @@
             <button type="Submit">Submit question</button>
         </p>
     </form>
+    </div>
 {% endblock %}

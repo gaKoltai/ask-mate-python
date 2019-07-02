@@ -1,26 +1,42 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1>Tags</h1>
+    <div class = "row">
+        <h1>Tags</h1>
+    </div>
     {% if question_tags %}
-        {% for tag in question_tags %}
-            <a href="{{url_for('route_remove_tag', where_to_redirect = 'route_add_tags', question_id = question_id, tag_id = tag.id)}}">{{tag.name}}</a>
-        {% endfor %}
+        <div class = "row tags">
+            {% for tag in question_tags %}
+                <a class = "tag" href="{{url_for('route_remove_tag', where_to_redirect = 'route_add_tags', question_id = question_id, tag_id = tag.id)}}">{{tag.name}}</a>
+            {% endfor %}
+        </div>
     {% else %}
-    No tags yet<br>
+        <div class ="row">
+            No tags yet
+        </div>
     {% endif %}
-    <h1>Add Tag</h1>
+    <div class ="row">
+        <h1>Add Tag</h1>
+    </div>
     {% if rest_of_tags %}
-        {% for tag in rest_of_tags %}
-            <a href="{{url_for('route_add_tag', question_id = question_id, tag_id = tag.id)}}">{{tag.name}}</a>
-        {% endfor %}
+        <div class = "row tags">
+            {% for tag in rest_of_tags %}
+                <a class = "tag" href="{{url_for('route_add_tag', question_id = question_id, tag_id = tag.id)}}">{{tag.name}}</a>
+            {% endfor %}
+        </div>
     {% else %}
-    No more tags available<br>
+        <div class ="row">
+            No more tags available
+        </div>
     {% endif %}
-    <form action = "{{url_for('route_add_tags', question_id = question_id)}}" method="POST">
-        <label for="tag_name">New Tag</label>
-        <input type="text" name = "tag_name" id = "tag_name">
-        <button type="submit">Add</button>
-    </form>
-    <a href ="{{url_for('route_question_with_answer', question_id = question_id, where_to_redirect = 'route_add_tags')}}">Back to question</a>
+    <div class ="row">
+        <form action = "{{url_for('route_add_tags', question_id = question_id)}}" method="POST">
+            <label for="tag_name">New Tag</label>
+            <input type="text" name = "tag_name" id = "tag_name">
+            <button type="submit">Add</button>
+        </form>
+    </div>
+    <div class ="row">
+        <a href ="{{url_for('route_question_with_answer', question_id = question_id, where_to_redirect = 'route_add_tags')}}">Back to question</a>
+    </div>
 {% endblock %}
