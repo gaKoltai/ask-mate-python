@@ -41,12 +41,12 @@ body{
 
 .long-copy {
     line-height: 145%;
-    width: 70%;  /* azert kell hogz ne legzen ennyi karakter egy sorban, de igy nem kozepen lesz */
-    margin-left: 15%; /* ezzel kozepre kerul hisz 70% szelesseg + 15% margin left + 15% margin right */
+    width: 70%;
+    margin-left: 15%;
 }
 
 .box p {
-    font-size: 90%;   /* ezzel a 2vel nem tunik majd tulzsufoltnak a szoveg */
+    font-size: 90%;
     line-height: 145%;
 }
 
@@ -65,6 +65,17 @@ h3 {
     border-bottom:var(--border_line);
     border-left:var(--border_line);
     border-right:var(--border_line);
+}
+
+/* SIDEBAR */
+.sidebar{
+    top:10%;
+    position: absolute;
+    left: 0;
+    right: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100px; /* Need a specific value to work */
 }
 
 

@@ -8,34 +8,39 @@
     <link href="{{ url_for('static', filename = "normalize.css") }}" type ="text/css" rel="stylesheet">
 </head>
 <header>
-<nav>
-    <div class = "row">
-        <div class ="col span-1-of-4">
-            <!-- Logo goes here -->
-            <h2><a id="ask_mate" href = "/">Ask Mate</a></h2></div>
-        <div class = "col span-3-of-4">
-            <ul class = "main-nav">
-                <li><a class="link" href="/add-question">Post a new question</a></li>
-                {% block menu_items %}{% endblock %}
-                <li><form action="{{ url_for('route_search') }}" method="get">
-                    <input type="text" id="search" name="search" placeholder="Search for something...">
-                    <button type="submit">Search</button>
-                </form></li>
-                <li><!-- login, register goes here--></li>
-            </ul>
+    <nav>
+        <div class = "row">
+            <div class ="col span-1-of-4">
+                <!-- Logo goes here -->
+                <h2><a id="ask_mate" href = "/">Ask Mate</a></h2></div>
+            <div class = "col span-3-of-4">
+                <ul class = "main-nav">
+                    <li><a class="link" href="/add-question">Post a new question</a></li>
+                    {% block menu_items %}{% endblock %}
+                    <li><form action="{{ url_for('route_search') }}" method="get">
+                        <input type="text" id="search" name="search" placeholder="Search for something...">
+                        <button type="submit">Search</button>
+                    </form></li>
+                    <li><!-- login, register goes here--></li>
+                </ul>
 
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 </header>
 <body>
-<div class = "content">
-    {% block content %} {% endblock %}
-</div>
+    <div class = "sidebar">
+    asd
+        {% block sidebar %} {% endblock %}
+    </div>
+    <div class = "content">
+        {% block content %} {% endblock %}
+    </div>
+
 </body>
 <footer>
-{% block footer %}
-    {% include 'footer.html' %}
-{% endblock %}
+    {% block footer %}
+        {% include 'footer.html' %}
+    {% endblock %}
 </footer>
 </html>
