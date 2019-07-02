@@ -1,7 +1,7 @@
 <section class = "questions">
 {% for question in user_questions %}
         <div class = "row question">
-            <div class="col span-1-of-6 box icons">
+            <div class="col span-1-of-10 box icons">
                 <div class = "row">
                     {{ question.vote_number }}
                 </div>
@@ -25,7 +25,7 @@
                 </div>
 
             </div>
-            <div class="col span-5-of-6 box">
+            <div class="col span-9-of-10 box">
                 <div class = "row">
                     <h4><a href="{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">
                         {{ question.title | safe }}</a></h4>
