@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% if bad_login_info %}
+        <p>Wrong username or password!</p>
+    {% endif %}
+    <form action="{{ url_for('route_user_login') }}" method="post" enctype="multipart/form-data">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username"><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br>
+        <label for="submit"></label>
+        <button type="submit">Log in!</button>
+    </form>
+{% endblock %}

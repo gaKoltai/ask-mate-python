@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session, escape
 import connection
 import data_manager
 import util
@@ -254,21 +254,31 @@ def route_dont_delete_comment(comment_id=None):
 def route_register_user():
 
     if request.method == 'GET':
-
         return render_template('user_registration.html')
 
-
     if data_manager.check_if_user_exists(request.form.get('username'), request.form.get('email')):
-
         user_already_exists = True
-
         return render_template('user_registration.html', user_already_exists=user_already_exists )
 
     new_user_data = request.form
-
     data_manager.add_new_user(new_user_data)
 
     return redirect('/')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def route_user_login():
+    if request.method == 'GET':
+        return render_template('user_login.html')
+
+    user_login = request.form
+
+    if not data_manager.check_user_info_for_login(user_login):
+        bad_login_info = True
+        return render_template('user_login.html', bad_login_info=bad_login_info)
+
+    return render_template(url_for('route_index', username = user_login['username']))
+
 
 if __name__ == '__main__':
     app.run(

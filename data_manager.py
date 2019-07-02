@@ -62,3 +62,23 @@ def add_new_user(new_user_data):
     new_user['registration_date'] = datetime.now()
 
     add_new_user_to_db(new_user)
+
+
+@connection.connection_handler
+def get_user_hash_by_username(cursor, username):
+    cursor.execute("""
+                    SELECT password FROM users
+                    WHERE username = %(username)s
+                    """, {'username':username})
+
+    user_hash = cursor.fetchall()
+
+    return user_hash
+
+def check_user_info_for_login(login_data):
+
+    user_hash = get_user_hash_by_username(login_data['username'])
+
+    if not util.verify_password(login_data['password'], user_hash[0]['password']):
+        return False
+    return True
