@@ -257,7 +257,15 @@ def route_register_user():
 
         return render_template('user_registration.html')
 
+
+    if data_manager.check_if_user_exists(request.form.get('username'), request.form.get('email')):
+
+        user_already_exists = True
+
+        return render_template('user_registration.html', user_already_exists=user_already_exists )
+
     new_user_data = request.form
+
     data_manager.add_new_user(new_user_data)
 
     return redirect('/')
