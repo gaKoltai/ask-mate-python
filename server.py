@@ -138,7 +138,7 @@ def route_search():
     searched_questions = question_manager.get_questions_by_id(question_ids)
     question_manager.search_highlights(search_phrase, searched_questions)
 
-    return render_template('search.html', user_questions=searched_questions)
+    return render_template('list.html', user_questions=searched_questions)
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
