@@ -27,3 +27,14 @@ def delete_from_table(cursor, table, parameter, value):
                            sql.Identifier(parameter)), [value])
 
 
+@connection.connection_handler
+def get_all_user(cursor):
+    cursor.execute('''
+                    SELECT id,
+                     username,
+                     email,
+                     registration_date
+                     FROM users
+                    ''')
+    users = cursor.fetchall()
+    return users

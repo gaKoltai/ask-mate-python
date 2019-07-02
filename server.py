@@ -250,6 +250,12 @@ def route_dont_delete_comment(comment_id=None):
     return redirect(url_for('route_question_with_answer', question_id=question_id))
 
 
+@app.route('/users')
+def route_users():
+    users = data_manager.get_all_user()
+    return render_template('list_users.html', users=users)
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
