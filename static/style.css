@@ -103,6 +103,7 @@ nav{
     float:left;
     display:inline-block;
     margin-left: 40px;
+
 }
 
 
@@ -112,4 +113,8 @@ nav{
 
 .date{
     text-align:right;
+}
+
+.comments{
+    padding-left:40px;
 }

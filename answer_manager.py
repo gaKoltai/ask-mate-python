@@ -1,6 +1,6 @@
 import connection
 import datetime
-import data_manager
+from datetime import datetime
 
 
 @connection.connection_handler
