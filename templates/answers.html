@@ -1,46 +1,48 @@
 {% if not answers %}
-    <h2>There are currently no answers to this question</h2>
+    <div class = "row">
+        <h3>No answers to this question</h3>
+    </div>
 {% else %}
     <h2>Answers:</h2>
     <table>
         <thead>
-            <tr>
-                {% for key in answers[0]%}
-                    <th> {{ key|replace("_"," ")|title }}</th>
-                {% endfor %}
-            </tr>
+        <tr>
+            {% for key in answers[0]%}
+                <th> {{ key|replace("_"," ")|title }}</th>
+            {% endfor %}
+        </tr>
         </thead>
         <tbody>
-            {% for answer in answers %}
-                <tr>
-                    {% for key,value in answer.items() %}
-                        {% if key == "image" %}
-                            <td>{% if value %}<img src = "/{{ value }}" alt = "No image" width="20" height="20">{% endif %}</td>
-                        {% elif key == "vote_number" %}
-                            <td><p class = "vote-item">{{value}}</p>
-                                <a class = "no-underline" href = "{{url_for('route_vote', vote = 1, answer_id = answer.id, question_id =question.id)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
-                                <a class = "no-underline" href = "{{url_for('route_vote', vote = -1, answer_id = answer.id,question_id =question.id)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
-                        {% elif key == "message" %}
-                            <td class = "message" >{{ value|urlize(40) }}</td>
-                        {% else %}
-                            <td>{{ value}} </td>
-                        {% endif %}
-                    {% endfor %}
-                    <td><a class ="no-underline"href="{{url_for('route_delete_answer', answer_id=answer['id'])}}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
-                    <td><a href="{{url_for('route_new_answer_comment', answer_id = answer['id'])}}">New comment</a></td>
-                </tr>
-                {% for answer_comment in answer_comments %}
-                    {% if answer['id'] == answer_comment['answer_id'] %}
-                         <tr>
-                             <td>{{ answer_comment['submission_time'] }}</td>
-                             <td>{{ answer_comment['message'] }}</td>
-                             <td>{{ answer_comment['edited_count'] }}</td>
-                             <td><a href="{{url_for('route_edit_comment', comment_id=answer_comment['id'])}}">Edit comment</a></td>
-                             <td><a class="no-underline" href="{{url_for('route_delete_force', comment_id=answer_comment['id'])}}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
-                         </tr>
+        {% for answer in answers %}
+            <tr>
+                {% for key,value in answer.items() %}
+                    {% if key == "image" %}
+                        <td>{% if value %}<img src = "/{{ value }}" alt = "No image" width="20" height="20">{% endif %}</td>
+                    {% elif key == "vote_number" %}
+                        <td><p class = "vote-item">{{value}}</p>
+                            <a class = "no-underline" href = "{{url_for('route_vote', vote = 1, answer_id = answer.id, question_id =question.id)}}"><img width="20" height = "20" src = "/static/vote_up.png" alt = "vote_up"></a>
+                            <a class = "no-underline" href = "{{url_for('route_vote', vote = -1, answer_id = answer.id,question_id =question.id)}}"><img width="20" height = "20"  src = "/static/vote_down.png" alt = "vote_down"></a></td>
+                    {% elif key == "message" %}
+                        <td class = "message" >{{ value|urlize(40) }}</td>
+                    {% else %}
+                        <td>{{ value}} </td>
                     {% endif %}
                 {% endfor %}
+                <td><a class ="no-underline"href="{{url_for('route_delete_answer', answer_id=answer['id'])}}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
+                <td><a href="{{url_for('route_new_answer_comment', answer_id = answer['id'])}}">New comment</a></td>
+            </tr>
+            {% for answer_comment in answer_comments %}
+                {% if answer['id'] == answer_comment['answer_id'] %}
+                    <tr>
+                        <td>{{ answer_comment['submission_time'] }}</td>
+                        <td>{{ answer_comment['message'] }}</td>
+                        <td>{{ answer_comment['edited_count'] }}</td>
+                        <td><a href="{{url_for('route_edit_comment', comment_id=answer_comment['id'])}}">Edit comment</a></td>
+                        <td><a class="no-underline" href="{{url_for('route_delete_force', comment_id=answer_comment['id'])}}"><img width="20" height = "20" src = "/static/recycle_bin.png" alt = "delete"></a></td>
+                    </tr>
+                {% endif %}
             {% endfor %}
+        {% endfor %}
         </tbody>
     </table>
 {% endif %}

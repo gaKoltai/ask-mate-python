@@ -35,10 +35,6 @@ body{
 }
 
 
-.box {
-    padding: 1%;
-}
-
 
 
 /*  PARAGRAPHS */
@@ -112,4 +108,8 @@ nav{
 
 .icons{
     text-align:center;
+}
+
+.date{
+    text-align:right;
 }

@@ -2,12 +2,15 @@
 
 {% block content %}
     {% include 'tags.html' %}
-    <h5><a href="{{url_for('route_add_tags',question_id = question_id )}}">Edit tags</a></h5>
+
     {% include 'question.html' %}
+
     {% if question_comments %}
         {% include 'question_comment.html' %}
     {% endif%}
-    <a href={{url_for('route_new_question_comment', question_id=question_id)}}>Add comment to the question</a>
+    <div class ="row">
+        <a href={{url_for('route_new_question_comment', question_id=question_id)}}>Add comment to the question</a>
+    </div>
     {% include 'answers.html' %}
     <h4><a href="{{url_for('route_new_answer', question_id = question_id)}}">Add new answer</a></h4>
     {% include 'footer.html' %}
