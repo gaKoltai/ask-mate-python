@@ -1,5 +1,6 @@
-<a href="{{ url_for('route_register_user') }}">Register</a>
-<a href="{{ url_for('route_user_login') }}">Login</a>
 {% if session %}
     <a href="{{ url_for('route_logout') }}">Logout</a>
+{% else %}
+    <a href="{{ url_for('route_user_login') }}">Login</a>
+    <a href="{{ url_for('route_register_user') }}">Register</a>
 {% endif %}
