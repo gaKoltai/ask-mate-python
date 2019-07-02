@@ -20,8 +20,16 @@
                 <li><form action="{{ url_for('route_search') }}" method="get">
                     <input type="text" id="search" name="search" placeholder="Search for something...">
                     <button type="submit">Search</button>
-                </form></li>
-                <li><!-- login, register goes here--></li>
+                </form>
+                </li>
+                <li>
+                    {% if session %}
+                        <a href="{{ url_for('route_logout') }}">Logout</a>
+                    {% else %}
+                        <a href="{{ url_for('route_user_login') }}">Login</a>
+                        <a href="{{ url_for('route_register_user') }}">Register</a>
+                    {% endif %}
+                </li>
             </ul>
 
         </div>
