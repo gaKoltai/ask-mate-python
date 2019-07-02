@@ -1,27 +1,31 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h1>Add comment</h1>
+    <div class = "row">
+        <h1>Add comment</h1>
+    </div>
     {% if question %}
-        <h2>Question:</h2>
-        <p>
+
+        <div class = "row">
             {{question['title']}}
-        </p>
-        <form action="{{url_for('route_new_question_comment', question_id = question['id'])}}" method="post" enctype="multipart/form-data">
-            <p>
-                <label for="question_comment">Comment:</label>
-            </p>
-            <p>
-                <textarea id="question_comment" name="question_comment" cols="40" rows="6"></textarea><br>
-            </p>
-            <button type="submit">Submit</button>
-        </form>
+        </div>
+        <div class = "row">
+            <form action="{{url_for('route_new_question_comment', question_id = question['id'])}}" method="post" enctype="multipart/form-data">
+                <p>
+                    <label for="question_comment">Comment:</label>
+                </p>
+                <p>
+                    <textarea id="question_comment" name="question_comment" cols="40" rows="6"></textarea><br>
+                </p>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
     {% elif answer %}
-        <h2>Answer:</h2>
-        <p>
+        <div class = "row">
             {{answer['message']}}
-        </p>
-    <form action="{{url_for('route_new_answer_comment', answer_id = answer['id'])}}" method="post" enctype="multipart/form-data">
+        </div>
+        <div class = "row">
+        <form action="{{url_for('route_new_answer_comment', answer_id = answer['id'])}}" method="post" enctype="multipart/form-data">
             <p>
                 <label for="answer_comment">Comment:</label>
             </p>
@@ -30,5 +34,6 @@
             </p>
             <button type="submit">Submit</button>
         </form>
+        </div>
     {% endif %}
 {% endblock %}

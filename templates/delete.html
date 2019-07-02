@@ -1,11 +1,17 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h2>Comment:</h2>
-<p>
-    {{ comment['message'] }}
-</p>
-<h4>Do you really want to delete this comment?</h4>
-<a href="{{ url_for('route_delete_comment', comment_id = comment['id']) }}">YES</a>
-<a href="{{url_for('route_dont_delete_comment', comment_id = comment['id']) }}">NO</a>
+    <div class ="row">
+        <h2>Comment:</h2>
+    </div>
+    <div class ="row">
+        {{ comment['message'] }}
+    </div>
+    <div class ="row">
+        <h4>Do you really want to delete this comment?</h4>
+    </div>
+    <div class ="row">
+        <a href="{{ url_for('route_delete_comment', comment_id = comment['id']) }}">YES</a>
+        <a href="{{url_for('route_dont_delete_comment', comment_id = comment['id']) }}">NO</a>
+    </div>
 {% endblock %}
