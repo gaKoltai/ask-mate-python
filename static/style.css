@@ -70,8 +70,6 @@ h3 {
 
 /* HEADER */
 
-header {
-}
 
 
 
@@ -94,6 +92,13 @@ nav{
 }
 
 
+.navbar{
+    padding-left:5%;
+    max-width: 1420px;
+
+}
+
+
 .title{
     padding: 0px;
     margin: 0px;
@@ -106,6 +111,8 @@ nav{
 
 }
 
+
+/* OTHER */
 
 .icons{
     text-align:center;
@@ -123,4 +130,9 @@ nav{
 #ask_mate{
     text-decoration:none;
 
+}
+
+.question{
+    padding-right:20px;
+    padding-top:10px;
 }
