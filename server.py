@@ -9,6 +9,7 @@ import comment_manager
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
+app.secret_key = b'I\xb8\x82\xadI\x8b6\x05\xac \xb2\xd4\xd0,\xdc\\'
 
 
 @app.route('/', methods = ['POST', 'GET'])
@@ -277,7 +278,15 @@ def route_user_login():
         bad_login_info = True
         return render_template('user_login.html', bad_login_info=bad_login_info)
 
-    return render_template(url_for('route_index', username = user_login['username']))
+    session['username'] = user_login['username']
+
+    return redirect(url_for('route_index'))
+
+@app.route('/logout')
+def route_logout():
+    session.pop('username', None)
+
+    return redirect(url_for('route_index'))
 
 
 if __name__ == '__main__':
