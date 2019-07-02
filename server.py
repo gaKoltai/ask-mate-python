@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, escape
+from flask import Flask, render_template, request, redirect, url_for, session
 import connection
 import data_manager
 import util
@@ -285,7 +285,6 @@ def route_user_login():
 @app.route('/logout')
 def route_logout():
     session.pop('username', None)
-
     return redirect(url_for('route_index'))
 
 
