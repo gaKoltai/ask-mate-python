@@ -1,18 +1,27 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <h1>Users:</h1>
+    <div class="row user_header">
+        <h1>Users:</h1>
+    </div>
     {% if users %}
-        <div class="users">
-            {% for user in users %}
+        {% for user in users %}
+            <div class="users">
                 <div class="row user">
-                    {% for value in user.values() %}
-                        <div class="col span-1-of-4 box">
-                        {{ value }}
-                        </div>
-                    {% endfor %}
+                    <div class="col span-1-of-12 box">
+                        {{ user.id }}
+                    </div>
+                    <div class="col span-3-of-12 box">
+                        {{ user.username }}
+                    </div>
+                    <div class="col span-4-of-12 box">
+                        {{ user.email }}
+                    </div>
+                    <div class="col span-4-of-12 box">
+                        {{ user.registration_date }}
+                    </div>
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
     {% else %}
         <h2>There are currently no users registered</h2>
     {% endif %}
