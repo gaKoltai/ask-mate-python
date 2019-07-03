@@ -15,6 +15,7 @@
             <h2><a id="ask_mate" href = "/">Ask Mate</a></h2></div>
         <div class = "col span-3-of-4">
             <ul class = "main-nav">
+                <li><a class="link" href="{{ url_for('route_users') }}">List users</a></li>
                 <li><a class="link" href="/add-question">Post a new question</a></li>
                 {% block menu_items %}{% endblock %}
                 <li><form action="{{ url_for('route_search') }}" method="get">
