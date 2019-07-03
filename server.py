@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from functools import wraps
 import connection
 import data_manager
 import util
@@ -10,6 +11,18 @@ import comment_manager
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = connection.UPLOAD_FOLDER
 app.secret_key = b'I\xb8\x82\xadI\x8b6\x05\xac \xb2\xd4\xd0,\xdc\\'
+
+
+def login_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'username' in session:
+            return f(*args, **kwargs)
+        else:
+            flash("You need to login first")
+            return redirect(url_for('route_user_login'))
+
+    return wrap
 
 
 @app.route('/', methods = ['POST', 'GET'])
@@ -59,6 +72,7 @@ def route_question_with_answer(question_id=None):
 
 
 @app.route('/add-question', methods=['GET', 'POST'])
+@login_required
 def route_ask_new_question():
 
     if request.method == 'POST':
@@ -74,6 +88,7 @@ def route_ask_new_question():
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
+@login_required
 def route_edit_question(question_id):
 
     question = question_manager.get_question_by_id(question_id=question_id)
@@ -91,6 +106,7 @@ def route_edit_question(question_id):
 
 @app.route('/question/<question_id>/<vote>')
 @app.route('/question/<question_id>/<vote>/<answer_id>')
+@login_required
 def route_vote(vote= None,question_id = None, answer_id = None ):
     if answer_id:
         answer_manager.vote_answer(vote, answer_id)
@@ -103,6 +119,7 @@ def route_vote(vote= None,question_id = None, answer_id = None ):
 
 
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
+@login_required
 def route_new_answer(question_id=None):
     if request.method == 'POST':
 
@@ -118,6 +135,7 @@ def route_new_answer(question_id=None):
 
 
 @app.route('/answer/<answer_id>/delete')
+@login_required
 def route_delete_answer(answer_id):
     question_id = question_manager.get_question_id_by_answer_id(answer_id)
     answer_manager.delete_answer_by_answer_id(answer_id)
@@ -125,6 +143,7 @@ def route_delete_answer(answer_id):
 
 
 @app.route('/question/<question_id>/delete')
+@login_required
 def route_delete_question(question_id=None):
     question_manager.delete_question(question_id)
     return redirect(url_for('route_questions'))
@@ -142,6 +161,7 @@ def route_search():
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
+@login_required
 def route_new_question_comment(question_id=None):
     if request.method == 'POST':
         comment = request.form.get('question_comment')
@@ -153,6 +173,7 @@ def route_new_question_comment(question_id=None):
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=['GET','POST'])
+@login_required
 def route_new_answer_comment(answer_id=None):
     if request.method == 'POST':
         comment = request.form.get('answer_comment')
@@ -165,6 +186,7 @@ def route_new_answer_comment(answer_id=None):
 
 
 @app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
+@login_required
 def route_add_tags(question_id):
     if request.method == "POST":
         tag_manager.new_tag(request.form['tag_name'])
@@ -177,12 +199,14 @@ def route_add_tags(question_id):
 
 
 @app.route('/question/<question_id>/add_tag/<tag_id>')
+@login_required
 def route_add_tag(question_id, tag_id):
     tag_manager.add_tag(question_id, tag_id)
     return redirect((url_for('route_add_tags', question_id=question_id)))
 
 
 @app.route('/question/<question_id>/remove_tag/<tag_id>')
+@login_required
 def route_remove_tag(question_id, tag_id):
     tag_manager.remove_tag(question_id, tag_id)
     where_to_redirect = request.args.get('where_to_redirect')
@@ -190,6 +214,7 @@ def route_remove_tag(question_id, tag_id):
 
 
 @app.route('/comments/<comment_id>/delete')
+@login_required
 def route_delete_comment(comment_id=None):
     ids = comment_manager.get_ids_by_comment_id(comment_id=comment_id)
     if ids['question_id'] is not None:
@@ -203,6 +228,7 @@ def route_delete_comment(comment_id=None):
 
 
 @app.route('/comments/<comment_id>/edit', methods=['GET', 'POST'])
+@login_required
 def route_edit_comment(comment_id=None):
     if request.method == 'POST':
         new_message = request.form.get('message')
@@ -219,6 +245,7 @@ def route_edit_comment(comment_id=None):
 
 
 @app.route('/answer/<answer_id>/edit', methods=['GET', 'POST'])
+@login_required
 def route_edit_answer(answer_id):
 
     answer = answer_manager.get_answer_by_id(answer_id)
