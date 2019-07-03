@@ -125,9 +125,9 @@ def route_new_answer(question_id=None):
     if request.method == 'POST':
 
         answer = request.form.get('answer')
-
+        user_name = session['username']
         util.upload_file(request.files['image'])
-        answer_manager.add_answer(question_id=question_id, answer=answer, image_name=request.files['image'].filename)
+        answer_manager.add_answer(question_id, answer, request.files['image'].filename, user_name)
 
         return redirect(url_for('route_question_with_answer', question_id=question_id))
 
