@@ -3,18 +3,17 @@ from datetime import datetime
 
 
 @connection.connection_handler
-def add_comment_to_question(cursor, comment_message, question_id):
+def add_comment_to_question(cursor, comment_message, question_id, user_name):
     dt = datetime.now()
     cursor.execute('''
                     INSERT INTO comment
-                    (question_id, answer_id, message, submission_time)
-                     VALUES (%(question_id)s,
-                                NULL,
-                                %(message)s,
-                                %(time)s);
+                    (question_id, answer_id, message, submission_time, user_id)
+                     VALUES (%(question_id)s, NULL, %(message)s, %(time)s, 
+                     (SELECT users.id FROM users WHERE username = %(username)s));
                     ''', {'question_id': question_id,
                           'message': comment_message,
-                          'time': dt})
+                          'time': dt,
+                          'username': user_name})
 
 
 @connection.connection_handler
@@ -29,18 +28,17 @@ def get_comment_by_question_id(cursor, question_id):
 
 
 @connection.connection_handler
-def add_comment_to_answer(cursor, comment_message, answer_id):
+def add_comment_to_answer(cursor, comment_message, answer_id, user_name):
     dt = datetime.now()
     cursor.execute('''
                     INSERT INTO comment
-                    (question_id, answer_id, message, submission_time)
-                     VALUES (   NULL,
-                                %(answer_id)s,
-                                %(message)s,
-                                %(time)s);
+                    (question_id, answer_id, message, submission_time, user_id)
+                     VALUES (NULL, %(answer_id)s,%(message)s,%(time)s, 
+                     (SELECT users.id FROM users WHERE username = %(username)s));
                     ''', {'answer_id': answer_id,
                           'message': comment_message,
-                          'time': dt})
+                          'time': dt,
+                          'username': user_name})
 
 
 @connection.connection_handler
