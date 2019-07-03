@@ -166,8 +166,7 @@ def route_search():
 def route_new_question_comment(question_id=None):
     if request.method == 'POST':
         comment = request.form.get('question_comment')
-        user_name = session['username']
-        comment_manager.add_comment_to_question(question_id, comment, user_name)
+        comment_manager.add_comment_to_question(question_id=question_id, comment_message=comment)
         return redirect(url_for('route_question_with_answer', question_id=question_id))
 
     question = question_manager.get_question_by_id(question_id=question_id)
@@ -179,9 +178,8 @@ def route_new_question_comment(question_id=None):
 def route_new_answer_comment(answer_id=None):
     if request.method == 'POST':
         comment = request.form.get('answer_comment')
-        user_name = session['username']
-        comment_manager.add_comment_to_answer(answer_id, comment, user_name)
-        question_id = question_manager.get_question_id_by_answer_id(answer_id)
+        comment_manager.add_comment_to_answer(answer_id=answer_id, comment_message=comment)
+        question_id = question_manager.get_question_id_by_answer_id(answer_id=answer_id)
         return redirect(url_for('route_question_with_answer', question_id=question_id))
 
     answer = answer_manager.get_answer_by_id(answer_id=answer_id)
