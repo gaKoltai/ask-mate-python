@@ -98,3 +98,32 @@ def get_all_user(cursor):
                     ''')
     users = cursor.fetchall()
     return users
+
+
+@connection.connection_handler
+def get_all_posts_by_user(cursor, table, user_name):
+    cursor.execute("""
+                    SELECT id from users
+                    WHERE username = %(username)s
+                    """, {'username': user_name})
+
+    user_id = cursor.fetchall()
+
+    cursor.execute(sql.SQL('SELECT id FROM {table} '
+                           'WHERE user_id = %(id)s').format(table=sql.Identifier(table)),
+                   user_id[0])
+
+    post_ids = cursor.fetchall()
+
+    return post_ids
+
+
+def verify_if_id_matches_users_posts(id_, table, user_name):
+
+    users_posts = get_all_posts_by_user(table, user_name)
+
+    for ids in users_posts:
+        if id_ == ids['id']:
+            return True
+
+    return False

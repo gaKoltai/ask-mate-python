@@ -92,7 +92,12 @@ def route_ask_new_question():
 @login_required
 def route_edit_question(question_id):
 
+    if not data_manager.verify_if_id_matches_users_posts(question_id, 'question', session['username']):
+
+        return redirect(url_for("route_index"))
+
     question = question_manager.get_question_by_id(question_id=question_id)
+
 
     if request.method == 'POST':
 
