@@ -43,6 +43,7 @@ def check_if_user_exists(cursor, user_name, user_email):
 
     return True
 
+
 @connection.connection_handler
 def add_new_user_to_db(cursor, new_user_data):
     cursor.execute("""
@@ -50,6 +51,7 @@ def add_new_user_to_db(cursor, new_user_data):
                     (username, password, email, registration_date) 
                     VALUES (%(username)s, %(password)s, %(email)s, %(registration_date)s)
                     """, new_user_data)
+
 
 def add_new_user(new_user_data):
     new_user = {}
@@ -75,6 +77,7 @@ def get_user_hash_by_username(cursor, username):
 
     return user_hash
 
+
 def check_user_info_for_login(login_data):
 
     user_hash = get_user_hash_by_username(login_data['username'])
@@ -82,3 +85,16 @@ def check_user_info_for_login(login_data):
     if not util.verify_password(login_data['password'], user_hash[0]['password']):
         return False
     return True
+
+
+@connection.connection_handler
+def get_all_user(cursor):
+    cursor.execute('''
+                    SELECT id,
+                     username,
+                     email,
+                     registration_date
+                     FROM users
+                    ''')
+    users = cursor.fetchall()
+    return users

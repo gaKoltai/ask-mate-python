@@ -136,3 +136,12 @@ nav{
     padding-right:20px;
     padding-top:10px;
 }
+
+.user{
+    max-width: 850px;
+    margin-left: 360px;
+    border-bottom:var(--border_line);
+    border-left:var(--border_line);
+    border-right:var(--border_line);
+    border-top: var(--border_line);
+}

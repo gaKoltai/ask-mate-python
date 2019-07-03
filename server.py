@@ -288,6 +288,12 @@ def route_logout():
     return redirect(url_for('route_index'))
 
 
+@app.route('/users')
+def route_users():
+    users = data_manager.get_all_user()
+    return render_template('list_users.html', users=users)
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',
