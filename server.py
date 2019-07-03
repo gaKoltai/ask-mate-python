@@ -78,8 +78,9 @@ def route_ask_new_question():
     if request.method == 'POST':
 
         util.upload_file(request.files['image'])
+        user_name = session['username']
 
-        new_question = question_manager.add_question(request.form, request.files['image'].filename)
+        new_question = question_manager.add_question(request.form, request.files['image'].filename, user_name)
         question_manager.add_question_to_db(new_question)
 
         return redirect('/')
