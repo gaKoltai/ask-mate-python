@@ -8,8 +8,7 @@
             <div class="users">
                 <div class="row user">
                     <div class="col span-3-of-12 box">
-                        <h4><a href="{{ url_for('route_user_page',user_id = user.id)}}">
-                            {{ user.username | safe }}</a></h4>
+                        {{ user.username }}
                     </div>
                     <div class="col span-4-of-12 box">
                         {{ user.email }}
