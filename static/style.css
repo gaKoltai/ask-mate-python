@@ -165,6 +165,15 @@ nav{
 .check{
     text-align: right;
 }
+
+.user_answers p.quest,
+.user_question_comment p.quest,
+.user_answer_comment p.quest,
+.user_answer_comment p.ans{
+    font-size: 15px;
+}
+
+
 .error_message {
     text-align: center;
     color: red;
