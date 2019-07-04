@@ -183,7 +183,8 @@ def route_tag_search():
                                                     order_by=request.args.get('order_by'),
                                                     order_direction=request.args.get('order_direction') )
     tags = tag_manager.get_tags_with_number()
-    return render_template('list.html',
+    return render_template('tag_search.html',
+                           tag_id=tag_id,
                            tags=tags,
                            user_questions=questions,
                            order_by=request.args.get('order_by'),
