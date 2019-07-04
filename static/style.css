@@ -77,8 +77,20 @@ h3 {
     margin-left: auto;
     margin-right: auto;
     width: 200px; /* Need a specific value to work */
+    padding-top: 10px;
 }
 
+.sidebar select {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.sidebar button {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100px;
+    border-radius: 4px;
+}
 
 /* HEADER */
 
@@ -224,4 +236,20 @@ button:hover, button:active {
 
 .activity{
     margin-top: 20px;
+}
+
+#search {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 5px;
+    border-radius: 4px;
+}
+
+.search {
+    border-radius: 4px;
+    width: 100px;
+}
+
+#user_data {
+    font-size: 30px;
 }
