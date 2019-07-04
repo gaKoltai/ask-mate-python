@@ -12,13 +12,13 @@
     {% include "flashed_messages.html" %}
     <nav>
         <div class = "row navbar">
-            <div class ="col span-1-of-4">
+            <div class ="col span-1-of-7">
                 <div class="row">
-                    <img src="{{ url_for('static', filename = 'Crow.png') }}" alt="A disabled crow" width="100">
+                    <a href = "/"><img class = "crow" src="{{ url_for('static', filename = 'Crow.png') }}" alt="A disabled crow" width="80"></a>
                     <h2><a id="ask_mate" href = "/">Ask Mate</a></h2>
                 </div>
             </div>
-            <div class = "col span-3-of-4">
+            <div class = "col span-6-of-7">
                 <ul class = "main-nav">
                     <li><a class="link" href="{{ url_for('route_users') }}">List users</a></li>
                     <li><a class="link" href="/add-question">Post a new question</a></li>

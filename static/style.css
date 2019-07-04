@@ -92,6 +92,14 @@ h3 {
 
 /* NAV */
 
+
+.crow{
+    position:absolute;
+    left:10%;
+
+
+}
+
 .main-nav {
     margin-top:4px;
     float: right;
