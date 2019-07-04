@@ -63,8 +63,9 @@ def route_question_with_answer(question_id=None):
             answer_comments = comment_manager.get_comments_by_answer_id(answer_ids=answer_ids)
         else:
             answer_comments = None
-
+        user_id = data_manager.get_user_id_by_user_name(session['username'])[0]['id']
     return render_template('question_with_answers.html',
+                           user_id= user_id,
                            tags = tags,
                            question=question,
                            question_id=question_id,
@@ -357,6 +358,20 @@ def route_logout():
 def route_users():
     users = data_manager.get_all_user()
     return render_template('list_users.html', users=users)
+
+
+@app.route('/mark_accepted')
+def route_mark_as_accepted():
+    answer_manager.mark_as_accepted(request.args.get('answer_id'))
+    return redirect(url_for('route_question_with_answer', question_id = request.args.get('question_id')))
+
+
+@app.route('/unmark_accepted')
+def route_unmark_accepted():
+    answer_manager.unmark_accepted(request.args.get('answer_id'))
+    return redirect(url_for('route_question_with_answer', question_id = request.args.get('question_id')))
+
+
 
 
 if __name__ == '__main__':

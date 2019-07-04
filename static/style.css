@@ -157,3 +157,11 @@ nav{
     border-right:var(--border_line);
     border-top: var(--border_line);
 }
+
+.accepted{
+    background-color: #2ecc71;
+}
+
+.check{
+    text-align: right;
+}
