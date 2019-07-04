@@ -91,3 +91,21 @@ def edit_answer(cursor, answer_id, answer):
                     SET message = %(answer)s
                     WHERE id = %(id)s; 
                     """,edited_answer)
+
+
+@connection.connection_handler
+def mark_as_accepted(cursor, answer_id):
+    cursor.execute("""
+                    UPDATE answer
+                    SET accepted = true
+                    WHERE id = %(id)s; 
+                    """,{'id':answer_id})
+
+
+@connection.connection_handler
+def unmark_accepted(cursor, answer_id):
+    cursor.execute("""
+                    UPDATE answer
+                    SET accepted = false
+                    WHERE id = %(id)s; 
+                    """,{'id':answer_id})

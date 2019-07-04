@@ -81,7 +81,8 @@ def get_user_hash_by_username(cursor, username):
 def check_user_info_for_login(login_data):
 
     user_hash = get_user_hash_by_username(login_data['username'])
-
+    if not user_hash:
+        return False
     if not util.verify_password(login_data['password'], user_hash[0]['password']):
         return False
     return True
@@ -102,12 +103,8 @@ def get_all_user(cursor):
 
 @connection.connection_handler
 def get_all_posts_by_user(cursor, table, user_name):
-    cursor.execute("""
-                    SELECT id from users
-                    WHERE username = %(username)s
-                    """, {'username': user_name})
 
-    user_id = cursor.fetchall()
+    user_id = get_user_id_by_user_name(user_name)
 
     cursor.execute(sql.SQL('SELECT id FROM {table} '
                            'WHERE user_id = %(id)s').format(table=sql.Identifier(table)),
@@ -127,3 +124,12 @@ def verify_if_post_id_matches_users_posts(id_, table, user_name):
             return True
 
     return False
+
+
+@connection.connection_handler
+def get_user_id_by_user_name(cursor,user_name):
+    cursor.execute("""
+                    SELECT id from users
+                    WHERE username = %(username)s
+                    """, {'username': user_name})
+    return cursor.fetchall()

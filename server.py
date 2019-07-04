@@ -27,17 +27,19 @@ def login_required(f):
 
 @app.route('/', methods = ['POST', 'GET'])
 def route_index():
-
+    tags = tag_manager.get_tags_with_number()
     latest_questions = question_manager.get_latest_questions()
 
-    return render_template('latest_questions.html', user_questions=latest_questions)
+    return render_template('latest_questions.html', tags = tags, user_questions=latest_questions)
 
 
 @app.route('/list', methods = ['POST', 'GET'])
 def route_questions():
     if request.method == 'GET':
+        tags = tag_manager.get_tags_with_number()
         user_questions = data_manager.get_data_from_db('question', request.args.get('order_by'), request.args.get('order_direction'))
         return render_template('list.html',
+                               tags = tags,
                                user_questions =user_questions,
                                order_by=request.args.get('order_by'),
                                order_direction=request.args.get('order_direction'))
@@ -61,8 +63,12 @@ def route_question_with_answer(question_id=None):
             answer_comments = comment_manager.get_comments_by_answer_id(answer_ids=answer_ids)
         else:
             answer_comments = None
-
+        try:
+            user_id = data_manager.get_user_id_by_user_name(session['username'])[0]['id']
+        except KeyError:
+            user_id = None
     return render_template('question_with_answers.html',
+                           user_id= user_id,
                            tags = tags,
                            question=question,
                            question_id=question_id,
@@ -99,7 +105,6 @@ def route_edit_question(question_id):
         return redirect(url_for('route_question_with_answers', question_id=question_id))
 
     question = question_manager.get_question_by_id(question_id=question_id)
-
 
     if request.method == 'POST':
 
@@ -180,6 +185,21 @@ def route_search():
     question_manager.search_highlights(search_phrase, searched_questions)
 
     return render_template('list.html', user_questions=searched_questions)
+
+
+@app.route('/tag_search')
+def route_tag_search():
+    tag_id = request.args.get('tag_id')
+    questions = tag_manager.get_questions_by_tag_id(tag_id,
+                                                    order_by=request.args.get('order_by'),
+                                                    order_direction=request.args.get('order_direction') )
+    tags = tag_manager.get_tags_with_number()
+    return render_template('tag_search.html',
+                           tag_id=tag_id,
+                           tags=tags,
+                           user_questions=questions,
+                           order_by=request.args.get('order_by'),
+                           order_direction=request.args.get('order_direction'))
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
@@ -354,6 +374,7 @@ def route_user_login():
 
     return redirect(url_for('route_index'))
 
+
 @app.route('/logout')
 def route_logout():
     session.pop('username', None)
@@ -364,6 +385,19 @@ def route_logout():
 def route_users():
     users = data_manager.get_all_user()
     return render_template('list_users.html', users=users)
+
+
+@app.route('/mark_accepted')
+def route_mark_as_accepted():
+    answer_manager.mark_as_accepted(request.args.get('answer_id'))
+    return redirect(url_for('route_question_with_answer', question_id = request.args.get('question_id')))
+
+
+@app.route('/unmark_accepted')
+def route_unmark_accepted():
+    answer_manager.unmark_accepted(request.args.get('answer_id'))
+    return redirect(url_for('route_question_with_answer', question_id = request.args.get('question_id')))
+
 
 
 
