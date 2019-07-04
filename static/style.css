@@ -145,3 +145,8 @@ nav{
     border-right:var(--border_line);
     border-top: var(--border_line);
 }
+
+.error_message {
+    text-align: center;
+    color: red;
+}

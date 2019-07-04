@@ -94,7 +94,9 @@ def route_edit_question(question_id):
 
     if not data_manager.verify_if_post_id_matches_users_posts(question_id, 'question', session['username']):
 
-        return redirect(url_for("route_index"))
+        flash('Only the creator of a post may edit a question')
+
+        return redirect(url_for('route_question_with_answers', question_id=question_id))
 
     question = question_manager.get_question_by_id(question_id=question_id)
 
@@ -143,11 +145,15 @@ def route_new_answer(question_id=None):
 @app.route('/answer/<answer_id>/delete')
 @login_required
 def route_delete_answer(answer_id):
+    question_id = question_manager.get_question_id_by_answer_id(answer_id)
+
     if not data_manager.verify_if_post_id_matches_users_posts(answer_id, 'answer', session['username']):
 
-        return redirect(url_for("route_index"))
+        flash('Only the creator of this post may delete an answer')
 
-    question_id = question_manager.get_question_id_by_answer_id(answer_id)
+        return redirect(url_for('route_question_with_answer', question_id=question_id))
+
+
     answer_manager.delete_answer_by_answer_id(answer_id)
     return redirect(url_for('route_question_with_answer', question_id=question_id))
 
@@ -157,7 +163,9 @@ def route_delete_answer(answer_id):
 def route_delete_question(question_id=None):
     if not data_manager.verify_if_post_id_matches_users_posts(question_id, 'question', session['username']):
 
-        return redirect(url_for("route_index"))
+        flash('Only the creator of the post may delete a question')
+
+        return redirect(url_for('route_question_with_answer', question_id=question_id))
 
     question_manager.delete_question(question_id)
     return redirect(url_for('route_questions'))
@@ -226,7 +234,9 @@ def route_add_tag(question_id, tag_id):
 def route_remove_tag(question_id, tag_id):
     if not data_manager.verify_if_post_id_matches_users_posts(question_id, 'question', session['username']):
 
-        return redirect(url_for("route_index"))
+        flash("Only the creator of the question may remove tags")
+
+        return redirect(url_for("route_question_with_answer", question_id=question_id))
 
     tag_manager.remove_tag(question_id, tag_id)
     where_to_redirect = request.args.get('where_to_redirect')
@@ -241,6 +251,12 @@ def route_delete_comment(comment_id=None):
         question_id = ids['question_id']
     else:
         question_id = question_manager.get_question_id_by_answer_id(ids['answer_id'])
+
+    if not data_manager.verify_if_post_id_matches_users_posts(comment_id, 'comment', session['username']):
+
+        flash('Only the creator of the post may delete a comment')
+
+        return redirect(url_for('route_question_with_answer', question_id=question_id))
 
     if comment_id:
         data_manager.delete_from_table(table='comment', parameter='id', value=comment_id)
@@ -260,6 +276,11 @@ def route_edit_comment(comment_id=None):
             question_id = question_manager.get_question_id_by_answer_id(ids['answer_id'])
         return redirect(url_for('route_question_with_answer', question_id=question_id))
 
+    if not data_manager.verify_if_post_id_matches_users_posts(comment_id, 'comment', session['username']):
+        flash('Only the creator of the post may edit a comment')
+
+        return redirect(url_for(request.referrer))
+
     comment = comment_manager.get_comment_by_comment_id(comment_id)
     return render_template('edit_comment.html', comment=comment)
 
@@ -270,6 +291,10 @@ def route_edit_answer(answer_id):
 
     answer = answer_manager.get_answer_by_id(answer_id)
     question_id = question_manager.get_question_id_by_answer_id(answer_id)
+
+    if not data_manager.verify_if_post_id_matches_users_posts(answer_id, 'answer', session['username']):
+        flash('Only the creator of a post may edit an answer')
+        return redirect(url_for('route_question_with_answer', question_id=question_id))
 
     if request.method == 'POST':
 
@@ -322,8 +347,8 @@ def route_user_login():
     user_login = request.form
 
     if not data_manager.check_user_info_for_login(user_login):
-        bad_login_info = True
-        return render_template('user_login.html', bad_login_info=bad_login_info)
+        flash('Wrong username or password')
+        return redirect(url_for('route_user_login'))
 
     session['username'] = user_login['username']
 
@@ -339,6 +364,7 @@ def route_logout():
 def route_users():
     users = data_manager.get_all_user()
     return render_template('list_users.html', users=users)
+
 
 
 if __name__ == '__main__':
