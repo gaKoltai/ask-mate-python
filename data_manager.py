@@ -118,7 +118,7 @@ def get_all_posts_by_user(cursor, table, user_name):
     return post_ids
 
 
-def verify_if_id_matches_users_posts(id_, table, user_name):
+def verify_if_post_id_matches_users_posts(id_, table, user_name):
 
     users_posts = get_all_posts_by_user(table, user_name)
 
