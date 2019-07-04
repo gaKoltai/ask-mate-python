@@ -382,6 +382,7 @@ def route_logout():
 
 
 @app.route('/users')
+@login_required
 def route_users():
     users = data_manager.get_all_user()
     return render_template('list_users.html', users=users)
