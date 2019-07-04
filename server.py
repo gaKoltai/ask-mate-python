@@ -63,7 +63,10 @@ def route_question_with_answer(question_id=None):
             answer_comments = comment_manager.get_comments_by_answer_id(answer_ids=answer_ids)
         else:
             answer_comments = None
-        user_id = data_manager.get_user_id_by_user_name(session['username'])[0]['id']
+        try:
+            user_id = data_manager.get_user_id_by_user_name(session['username'])[0]['id']
+        except KeyError:
+            user_id = None
     return render_template('question_with_answers.html',
                            user_id= user_id,
                            tags = tags,
@@ -100,7 +103,6 @@ def route_edit_question(question_id):
         return redirect(url_for("route_index"))
 
     question = question_manager.get_question_by_id(question_id=question_id)
-
 
     if request.method == 'POST':
 
