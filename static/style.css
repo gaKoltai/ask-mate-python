@@ -145,3 +145,11 @@ nav{
     border-right:var(--border_line);
     border-top: var(--border_line);
 }
+
+.user_answers p.quest,
+.user_question_comment p.quest,
+.user_answer_comment p.quest,
+.user_answer_comment p.ans{
+    font-size: 15px;
+}
+

@@ -1,0 +1,95 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="row user-data">
+        <div class="col span-2-of-5 box">{{ user_data.username }}</div>
+        <div class="col span-3-of-5 box">{{ user_data.email }}</div>
+    </div>
+    {% if not questions %}
+        <div class = "row">
+            <h3>There is no questions yet</h3>
+        </div>
+    {% else %}
+        <div class="row question_header">
+            <h3>Questions:</h3>
+        </div>
+        {% for question in questions %}
+            <div class="row user_questions">
+                <div class="col span-1-of-1 box">
+                    <div class = "row">
+                    <a href="{{ url_for('route_question_with_answer',question_id = question.id, view_number_increment = True) }}">
+                        {{ question.title | safe }}</a>
+                    </div>
+                    <div class = "row">
+                    <p class = "message">{{ question.message | safe | urlize(40)}}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if not answers %}
+        <div class = "row">
+            <h3>There is no answers yet</h3>
+        </div>
+    {% else %}
+        <div class="row answer_header">
+            <h3>Answers:</h3>
+        </div>
+        {% for answer in answers %}
+            <div class="row user_answers">
+                <div class="col">
+                    <div class = "row">
+                        <p class="quest">Question: <a href="{{ url_for('route_question_with_answer',question_id = answer.question_id, view_number_increment = True) }}">
+                            {{ answer.question_title | safe }}</a></p>
+                    </div>
+                    <div class = "row">
+                    <p class = "message">Answer: {{ answer.answer_message | safe | urlize(40)}}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if not question_comments and not answer_comments %}
+        <div class = "row">
+            <h3>There is no comments yet</h3>
+        </div>
+
+    {% else %}
+        {% if question_comments %}
+            <div class="row question_header">
+                <h3>Question comments:</h3>
+            </div>
+            {% for question_comment in question_comments %}
+                <div class="row user_question_comment">
+                    <div class="col">
+                        <div class="row">
+                            <p class="quest">Question: <a href="{{ url_for('route_question_with_answer',question_id = question_comment.question_id, view_number_increment = True) }}">
+                                {{ question_comment.question_title | safe }}</a></p>
+                        </div>
+                        <div class="row"> Comment: {{ question_comment.comment_message }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if answer_comments %}
+            <div class="row question_header">
+                <h3>Answer comments:</h3>
+            </div>
+            {% for answer_comment in answer_comments %}
+                <div class="row user_answer_comment">
+                    <div class="col">
+                        <div class="row">
+                            <p class="quest">Question: <a href="{{ url_for('route_question_with_answer',question_id = answer_comment.question_id, view_number_increment = True) }}">
+                                {{ answer_comment.question_title | safe }}</a></p>
+                        </div>
+                        <div class="row"><p class="ans">Answer: {{ answer_comment.answer_message }}</p></div>
+                        <div class="row"> Comment: {{ answer_comment.comment_message }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endif %}
+{% endblock %}

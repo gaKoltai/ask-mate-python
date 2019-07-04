@@ -309,6 +309,7 @@ def route_user_login():
 
     return redirect(url_for('route_index'))
 
+
 @app.route('/logout')
 def route_logout():
     session.pop('username', None)
@@ -319,6 +320,25 @@ def route_logout():
 def route_users():
     users = data_manager.get_all_user()
     return render_template('list_users.html', users=users)
+
+
+@app.route('/user/<user_id>')
+@login_required
+def route_user_page(user_id=None):
+    questions = data_manager.get_questions_by_user_id(user_id)
+    answers = data_manager.get_answers_by_user_id(user_id)
+    question_comments = data_manager.get_question_comments_by_user_id(user_id)
+    answer_comments = data_manager.get_answer_comments_by_user_id(user_id)
+    user_data = data_manager.get_user_by_user_id(user_id)
+
+    return render_template('user_page.html',
+                           questions=questions,
+                           answers=answers,
+                           question_comments=question_comments,
+                           answer_comments=answer_comments,
+                           user_data=user_data
+                           )
+
 
 
 if __name__ == '__main__':

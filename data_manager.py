@@ -98,3 +98,79 @@ def get_all_user(cursor):
                     ''')
     users = cursor.fetchall()
     return users
+
+
+@connection.connection_handler
+def get_questions_by_user_id(cursor, user_id):
+    cursor.execute('''
+                    SELECT id, title, message
+                    FROM question
+                    WHERE user_id = %(user_id)s;
+                    ''',
+                   {'user_id': user_id})
+    questions = cursor.fetchall()
+    return questions
+
+
+@connection.connection_handler
+def get_answers_by_user_id(cursor, user_id):
+    cursor.execute('''
+                    SELECT q.id AS question_id,
+                     q.title AS question_title,
+                     a.id AS answer_id,
+                     a.message AS answer_message
+                    FROM answer a
+                    INNER JOIN question q
+                        ON a.question_id = q.id
+                    where a.user_id = %(user_id)s
+                    ''',
+                   {'user_id': user_id})
+    answers = cursor.fetchall()
+    return answers
+
+
+@connection.connection_handler
+def get_question_comments_by_user_id(cursor, user_id):
+    cursor.execute('''
+                    SELECT c.id AS comment_id,
+                           c.message AS comment_message,
+                           q.id AS question_id,
+                           q.title AS question_title
+                    FROM comment c
+                    INNER JOIN question q
+                        ON c.question_id = q.id
+                    WHERE c.user_id = %(user_id)s;
+                    ''', {'user_id': user_id})
+    question_comments = cursor.fetchall()
+    return question_comments
+
+
+@connection.connection_handler
+def get_answer_comments_by_user_id(cursor, user_id):
+    cursor.execute('''
+                    SELECT c.id AS comment_id,
+                           c.message AS comment_message,
+                           a.id AS answer_id,
+                           a.message AS answer_message,
+                           q.id AS question_id,
+                           q.title AS question_title
+                    FROM comment c
+                    INNER JOIN answer a
+                        ON c.answer_id = a.id
+                    INNER JOIN question q
+                        ON a.question_id = q.id
+                    WHERE c.user_id = %(user_id)s;
+                    ''', {'user_id': user_id})
+    answer_comments = cursor.fetchall()
+    return answer_comments
+
+
+@connection.connection_handler
+def get_user_by_user_id(cursor, user_id):
+    cursor.execute('''
+                    SELECT id, username, email
+                    FROM users
+                    WHERE id = %(user_id)s;
+                    ''', {'user_id': user_id})
+    user_data = cursor.fetchall()
+    return user_data[0]
