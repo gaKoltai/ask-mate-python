@@ -170,7 +170,7 @@ def route_delete_question(question_id=None):
 
         flash('Only the creator of the post may delete a question')
 
-        return redirect(url_for('route_question_with_answer', question_id=question_id))
+        return redirect(url_for('route_index'))
 
     question_manager.delete_question(question_id)
     return redirect(url_for('route_questions'))
@@ -299,7 +299,7 @@ def route_edit_comment(comment_id=None):
     if not data_manager.verify_if_post_id_matches_users_posts(comment_id, 'comment', session['username']):
         flash('Only the creator of the post may edit a comment')
 
-        return redirect(url_for(request.referrer))
+        return redirect(url_for('route_index'))
 
     comment = comment_manager.get_comment_by_comment_id(comment_id)
     return render_template('edit_comment.html', comment=comment)
