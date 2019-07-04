@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>List Questions</title>
+    <title>Ask mate</title>
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename = 'Crow.png') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename = 'style.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Lato:100,300,300i,400" rel="stylesheet">
     <link href="{{ url_for('static', filename = "grid.css") }}" type ="text/css" rel="stylesheet">
@@ -9,42 +10,45 @@
 </head>
 <header>
     {% include "flashed_messages.html" %}
-<nav>
-    <div class = "row navbar">
-        <div class ="col span-1-of-4">
-            <!-- Logo goes here -->
-            <h2><a id="ask_mate" href = "/">Ask Mate</a></h2></div>
-        <div class = "col span-3-of-4">
-            <ul class = "main-nav">
-                <li><a class="link" href="{{ url_for('route_users') }}">List users</a></li>
-                <li><a class="link" href="/add-question">Post a new question</a></li>
-                {% block menu_items %}{% endblock %}
-                <li><form action="{{ url_for('route_search') }}" method="get">
-                    <input type="text" id="search" name="search" placeholder="Search for something...">
-                    <button type="submit">Search</button>
-                </form>
-                </li>
-                <li>
-                    {% if 'username' in session %}
-                        <a href="{{ url_for('route_logout') }}">Logout</a>
-                    {% else %}
-                        <a href="{{ url_for('route_user_login') }}">Login</a>
-                        <a href="{{ url_for('route_register_user') }}">Register</a>
-                    {% endif %}
-                </li>
-            </ul>
+    <nav>
+        <div class = "row navbar">
+            <div class ="col span-1-of-4">
+                <div class="row">
+                    <img src="{{ url_for('static', filename = 'Crow.png') }}" alt="A disabled crow" width="100">
+                    <h2><a id="ask_mate" href = "/">Ask Mate</a></h2>
+                </div>
+            </div>
+            <div class = "col span-3-of-4">
+                <ul class = "main-nav">
+                    <li><a class="link" href="{{ url_for('route_users') }}">List users</a></li>
+                    <li><a class="link" href="/add-question">Post a new question</a></li>
+                    {% block menu_items %}{% endblock %}
+                    <li><form action="{{ url_for('route_search') }}" method="get">
+                        <input type="text" id="search" name="search" placeholder="Search for something...">
+                        <button type="submit">Search</button>
+                    </form>
+                    </li>
+                    <li>
+                        {% if 'username' in session %}
+                            <a href="{{ url_for('route_logout') }}">Logout</a>
+                        {% else %}
+                            <a href="{{ url_for('route_user_login') }}">Login</a>
+                            <a href="{{ url_for('route_register_user') }}">Register</a>
+                        {% endif %}
+                    </li>
+                </ul>
 
             </div>
         </div>
     </nav>
 </header>
 <body>
-    <div class = "sidebar">
-        {% block sidebar %} {% endblock %}
-    </div>
-    <div class = "content">
-        {% block content %} {% endblock %}
-    </div>
+<div class = "sidebar">
+    {% block sidebar %} {% endblock %}
+</div>
+<div class = "content">
+    {% block content %} {% endblock %}
+</div>
 
 </body>
 <footer>
