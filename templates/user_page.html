@@ -1,9 +1,9 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <div class="row user-data">
-        <div class="col span-2-of-5 box">{{ user_data.username }}</div>
-        <div class="col span-3-of-5 box">{{ user_data.email }}</div>
+    <div class="row user-data" id="user-data">
+        <div class="col span-2-of-5 box"><h5>Username: {{ user_data.username }}</h5></div>
+        <div class="col span-3-of-5 box"><h5>Email: {{ user_data.email }}</h5></div>
     </div>
     {% if not questions and not answers and not answer_comments and not answer_comments %}
         <div class = "row">
