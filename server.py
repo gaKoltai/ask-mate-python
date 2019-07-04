@@ -92,7 +92,7 @@ def route_ask_new_question():
 @login_required
 def route_edit_question(question_id):
 
-    if not data_manager.verify_if_id_matches_users_posts(question_id, 'question', session['username']):
+    if not data_manager.verify_if_post_id_matches_users_posts(question_id, 'question', session['username']):
 
         return redirect(url_for("route_index"))
 
@@ -143,6 +143,10 @@ def route_new_answer(question_id=None):
 @app.route('/answer/<answer_id>/delete')
 @login_required
 def route_delete_answer(answer_id):
+    if not data_manager.verify_if_post_id_matches_users_posts(answer_id, 'answer', session['username']):
+
+        return redirect(url_for("route_index"))
+
     question_id = question_manager.get_question_id_by_answer_id(answer_id)
     answer_manager.delete_answer_by_answer_id(answer_id)
     return redirect(url_for('route_question_with_answer', question_id=question_id))
@@ -151,6 +155,10 @@ def route_delete_answer(answer_id):
 @app.route('/question/<question_id>/delete')
 @login_required
 def route_delete_question(question_id=None):
+    if not data_manager.verify_if_post_id_matches_users_posts(question_id, 'question', session['username']):
+
+        return redirect(url_for("route_index"))
+
     question_manager.delete_question(question_id)
     return redirect(url_for('route_questions'))
 
@@ -216,6 +224,10 @@ def route_add_tag(question_id, tag_id):
 @app.route('/question/<question_id>/remove_tag/<tag_id>')
 @login_required
 def route_remove_tag(question_id, tag_id):
+    if not data_manager.verify_if_post_id_matches_users_posts(question_id, 'question', session['username']):
+
+        return redirect(url_for("route_index"))
+
     tag_manager.remove_tag(question_id, tag_id)
     where_to_redirect = request.args.get('where_to_redirect')
     return redirect((url_for(where_to_redirect, question_id=question_id)))

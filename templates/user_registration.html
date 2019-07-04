@@ -2,16 +2,20 @@
 
 {% block content %}
     {% if user_already_exists %}
-        <p>Username or email already taken, please chose another</p>
+        <div class="row"  >
+            <p>Username or email already taken, please chose another</p>
+        </div>
     {% endif %}
-    <form action="" method="post" enctype="multipart/form-data">
-        <label for="userName">Username:</label>
-        <input type="text" id="userName" name="username"><br>
-        <label for="userEmail">Email address:</label>
-        <input type="email" id="userEmail" name="email"><br>
-        <label for="userPassword">Password:</label>
-        <input type="password" id="userPassword" name="password"><br>
-        <label for="submit"></label>
-        <button type="submit">Register!</button><br>
-    </form>
+    <div class="row">
+        <form action="" method="post" enctype="multipart/form-data">
+            <label for="userName">Username:</label><br>
+            <input type="text" id="userName" name="username"><br>
+            <label for="userEmail">Email address:</label><br>
+            <input type="email" id="userEmail" name="email"><br>
+            <label for="userPassword">Password:</label><br>
+            <input type="password" id="userPassword" name="password"><br>
+            <label for="submit"></label>
+            <button type="submit">Register!</button><br>
+        </form>
+    </div>
 {% endblock %}
