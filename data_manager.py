@@ -81,7 +81,8 @@ def get_user_hash_by_username(cursor, username):
 def check_user_info_for_login(login_data):
 
     user_hash = get_user_hash_by_username(login_data['username'])
-
+    if not user_hash:
+        return False
     if not util.verify_password(login_data['password'], user_hash[0]['password']):
         return False
     return True
