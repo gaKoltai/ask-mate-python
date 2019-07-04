@@ -1,4 +1,5 @@
 import connection
+from psycopg2 import sql
 
 
 def get_question_tags( question_id):
@@ -71,8 +72,23 @@ def new_tag(cursor, tag_name):
 def get_tags_with_number(cursor):
     cursor.execute(
         """
-        SELECT tag.name, COUNT(question_tag.tag_id) as count FROM tag
+        SELECT  tag.id, tag.name, COUNT(question_tag.tag_id) as count FROM tag
         RIGHT JOIN question_tag on(question_tag.tag_id = tag.id)
-        GROUP BY tag.name;
+        GROUP BY tag.name,tag.id;
         """)
+    return cursor.fetchall()
+
+
+@connection.connection_handler
+def get_questions_by_tag_id(cursor, tag_id, order_by, order_direction):
+    order_by = 'submission_time' if not order_by else order_by
+    if order_direction == "desc":
+        cursor.execute(
+            sql.SQL("SELECT question.* FROM question LEFT JOIN question_tag qt on question.id = qt.question_id WHERE qt.tag_id = %(tag_id)s ORDER BY {order_by} DESC").
+                format(order_by=sql.Identifier(order_by)), {'tag_id': tag_id})
+    else:
+        cursor.execute(
+            sql.SQL(
+                "SELECT question.* FROM question LEFT JOIN question_tag qt on question.id = qt.question_id WHERE qt.tag_id = %(tag_id)s ORDER BY {order_by}").
+                format(order_by=sql.Identifier(order_by)), {'tag_id': tag_id})
     return cursor.fetchall()

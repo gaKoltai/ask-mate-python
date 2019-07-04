@@ -3,7 +3,7 @@
 {%  if tags %}
     {% for tag in tags %}
         <div class="row">
-            <a href = "#">{{ tag.name }}</a>  ({{ tag.count }})
+            <a href = "{{ url_for("route_tag_search",tag_id=tag.id) }}">{{ tag.name }}</a>  ({{ tag.count }})
         </div>
     {%  endfor %}
 {% endif %}

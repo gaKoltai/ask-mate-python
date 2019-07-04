@@ -37,7 +37,6 @@ def route_index():
 def route_questions():
     if request.method == 'GET':
         tags = tag_manager.get_tags_with_number()
-        print(tags)
         user_questions = data_manager.get_data_from_db('question', request.args.get('order_by'), request.args.get('order_direction'))
         return render_template('list.html',
                                tags = tags,
@@ -162,6 +161,20 @@ def route_search():
     question_manager.search_highlights(search_phrase, searched_questions)
 
     return render_template('list.html', user_questions=searched_questions)
+
+
+@app.route('/tag_search')
+def route_tag_search():
+    tag_id = request.args.get('tag_id')
+    questions = tag_manager.get_questions_by_tag_id(tag_id,
+                                                    order_by=request.args.get('order_by'),
+                                                    order_direction=request.args.get('order_direction') )
+    tags = tag_manager.get_tags_with_number()
+    return render_template('list.html',
+                           tags=tags,
+                           user_questions=questions,
+                           order_by=request.args.get('order_by'),
+                           order_direction=request.args.get('order_direction'))
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
@@ -314,6 +327,7 @@ def route_user_login():
     session['username'] = user_login['username']
 
     return redirect(url_for('route_index'))
+
 
 @app.route('/logout')
 def route_logout():
