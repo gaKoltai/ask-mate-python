@@ -29,8 +29,11 @@ def login_required(f):
 def route_index():
     tags = tag_manager.get_tags_with_number()
     latest_questions = question_manager.get_latest_questions()
-
-    return render_template('latest_questions.html', tags = tags, user_questions=latest_questions)
+    try:
+        user = data_manager.get_user_by_user_id(data_manager.get_user_id_by_user_name(session['username'])[0]['id'])
+    except KeyError:
+        user = None
+    return render_template('latest_questions.html', tags = tags, user_questions=latest_questions, user=user)
 
 
 @app.route('/list', methods = ['POST', 'GET'])

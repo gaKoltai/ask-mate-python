@@ -211,3 +211,7 @@ button:hover, button:active {
     transition: background-color 0.5s;
 }
 
+
+.activity{
+    margin-top: 20px;
+}
