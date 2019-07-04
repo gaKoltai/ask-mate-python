@@ -187,9 +187,11 @@ nav{
 
 .user_login input {
     width: 400px;
-    padding-top: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     border-radius: 4px;
     margin-top: 10px;
+    text-align: center;
 }
 
 button {
