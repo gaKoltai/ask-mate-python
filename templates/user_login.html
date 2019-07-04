@@ -1,17 +1,8 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    {% if bad_login_info %}
-        <div class="row">
-            <p>Wrong username or password!</p>
-        </div>
-    {% elif not_logged_in %}
-        <div class="row">
-            <p>In order to use this feature, you need to be logged in.</p>
-        </div>
-    {% endif %}
     <div class="row">
-        <form action="{{ url_for('route_user_login') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ url_for('route_user_login') }}" method="post" enctype="multipart/form-data" class="user_login">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username"><br>
             <label for="password">Password:</label>

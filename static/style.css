@@ -178,3 +178,36 @@ nav{
     text-align: center;
     color: red;
 }
+
+.user_login {
+    text-align: center;
+    padding-top: 10px;
+
+}
+
+.user_login input {
+    width: 400px;
+    padding-top: 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+button {
+    background-color: #ffffff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.user_login button {
+    border-radius: 4px;
+    margin-top: 10px;
+    width: 200px;
+
+}
+
+button:hover, button:active {
+    background-color: #6eb5e5;
+    color: #ffffff;
+    transition: background-color 0.5s;
+}
+
