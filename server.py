@@ -420,6 +420,15 @@ def route_user_page(user_id=None):
                            user_data=user_data
                            )
 
+@app.route('/logged-in-user')
+@login_required
+def route_navbar_user_data():
+
+    user_id = data_manager.get_user_id_by_user_name(session['username'])
+    user_id = user_id[0]['id']
+
+    return redirect(url_for('route_user_page', user_id=user_id))
+
 
 if __name__ == '__main__':
     app.run(
