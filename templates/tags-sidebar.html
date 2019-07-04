@@ -1,0 +1,9 @@
+{% include 'order_by.html' %}
+
+{%  if tags %}
+    {% for tag in tags %}
+        <div class="row">
+            <a href = "#">{{ tag.name }}</a>  ({{ tag.count }})
+        </div>
+    {%  endfor %}
+{% endif %}

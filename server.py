@@ -27,17 +27,20 @@ def login_required(f):
 
 @app.route('/', methods = ['POST', 'GET'])
 def route_index():
-
+    tags = tag_manager.get_tags_with_number()
     latest_questions = question_manager.get_latest_questions()
 
-    return render_template('latest_questions.html', user_questions=latest_questions)
+    return render_template('latest_questions.html', tags = tags, user_questions=latest_questions)
 
 
 @app.route('/list', methods = ['POST', 'GET'])
 def route_questions():
     if request.method == 'GET':
+        tags = tag_manager.get_tags_with_number()
+        print(tags)
         user_questions = data_manager.get_data_from_db('question', request.args.get('order_by'), request.args.get('order_direction'))
         return render_template('list.html',
+                               tags = tags,
                                user_questions =user_questions,
                                order_by=request.args.get('order_by'),
                                order_direction=request.args.get('order_direction'))

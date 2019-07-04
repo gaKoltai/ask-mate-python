@@ -65,3 +65,14 @@ def new_tag(cursor, tag_name):
             INSERT INTO tag(name)
             VALUES(%(tag_name)s);
         """, {'tag_name': tag_name})
+
+
+@connection.connection_handler
+def get_tags_with_number(cursor):
+    cursor.execute(
+        """
+        SELECT tag.name, COUNT(question_tag.tag_id) as count FROM tag
+        RIGHT JOIN question_tag on(question_tag.tag_id = tag.id)
+        GROUP BY tag.name;
+        """)
+    return cursor.fetchall()
