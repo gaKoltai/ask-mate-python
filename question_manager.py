@@ -15,8 +15,9 @@ def search_highlights(searched_phrase, questions):
 def add_question_to_db(cursor, data):
     cursor.execute("""
                     INSERT INTO question
-                    (submission_time, view_number, vote_number, title, message, image)
-                    VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s);    
+                    (submission_time, view_number, vote_number, title, message, image, user_id)
+                    VALUES(%(submission_time)s, %(view_number)s, %(vote_number)s, %(title)s, %(message)s, %(image)s, (
+                    SELECT users.id FROM users WHERE username = %(username)s));    
                     """,data)
 
 
@@ -41,7 +42,7 @@ def get_question_by_id(cursor,question_id):
     return question[0]
 
 
-def add_question(question, image_name):
+def add_question(question, image_name, user_name):
 
     new_question = {}
 
@@ -59,6 +60,8 @@ def add_question(question, image_name):
                   'image': image_path}
     for header, data in new_question_default.items():
         new_question[header] = data
+
+    new_question['username'] = user_name
 
     return new_question
 

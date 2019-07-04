@@ -27,13 +27,23 @@
                     </div>
 
                 </div>
-                <div class="col span-9-of-10 box">
+                <div class="col span-9-of-10 box ">
                     <div class = "row">
                         <h4>{{ answer.title | safe }}</h4>
                     </div>
                     <div class = "row">
                         <div class = "col span-3-of-4">
-                            <p class = "message">{{ answer.message | safe | urlize(40)}}</p>
+                            <div class = "row">
+                                <div class = "col span-3-of-4">
+                                    <p class = "message">{{ answer.message | safe | urlize(40)}}</p>
+                                </div>
+                                <div class = "col span-1-of-4 check">
+                                    {% if answer.accepted %}
+                                        <img  width="20" height = "20" src = "{{ url_for('static',filename = 'check.png') }}" alt ="accepted">
+                                    {% endif %}
+                                </div>
+                            </div>
+
                         </div>
                         <div class = "col span-1-of-4">
                             {% if value %}<img src = "/{{ value }}" alt = "No image" width="20" height="20">{% endif %}
@@ -41,7 +51,14 @@
                     </div>
                     <div class = "row">
                         <div class="col span-1-of-2 box">
-                            <a href="{{url_for('route_new_answer_comment', answer_id = answer['id'])}}">New comment</a>
+                            <a href="{{url_for('route_new_answer_comment', answer_id = answer.id)}}">New comment</a>
+                            {% if user_id == question.user_id %}
+                                {% if not answer.accepted %}
+                                    <a href="{{url_for('route_mark_as_accepted', answer_id = answer.id, question_id = question.id)}}">Mark as accepted</a>
+                                {% else %}
+                                    <a href="{{url_for('route_unmark_accepted', answer_id = answer.id, question_id = question.id)}}">Unmark accepted</a>
+                                {% endif %}
+                            {% endif %}
                         </div>
                         <div class="col span-1-of-2 box date">
                             {{ question.submission_time | safe }}

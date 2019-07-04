@@ -5,6 +5,10 @@
         <div class="row">
             <p>Wrong username or password!</p>
         </div>
+    {% elif not_logged_in %}
+        <div class="row">
+            <p>In order to use this feature, you need to be logged in.</p>
+        </div>
     {% endif %}
     <div class="row">
         <form action="{{ url_for('route_user_login') }}" method="post" enctype="multipart/form-data">

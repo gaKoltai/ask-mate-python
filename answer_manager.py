@@ -38,7 +38,7 @@ def get_answers_by_question_id(cursor, question_id):
 
 
 @connection.connection_handler
-def add_answer(cursor, question_id, answer, image_name):
+def add_answer(cursor, question_id, answer, image_name, user_name):
     if image_name == '':
         image_path = ''
     else:
@@ -46,14 +46,16 @@ def add_answer(cursor, question_id, answer, image_name):
     dt = datetime.now()
     cursor.execute('''
                     INSERT INTO answer
-                    (submission_time, vote_number, question_id, message, image)
-                    VALUES (%(time)s, %(vote_num)s, %(question_id)s, %(message)s, %(image)s);
+                    (submission_time, vote_number, question_id, message, image, user_id)
+                    VALUES (%(time)s, %(vote_num)s, %(question_id)s, %(message)s, %(image)s, (
+                    SELECT id FROM users WHERE username = %(username)s));
                     ''',
                    {'time': dt,
                     'vote_num': 0,
                     'question_id': question_id,
                     'message': answer,
-                    'image': image_path}
+                    'image': image_path,
+                    'username': user_name}
                    )
 
 
@@ -89,3 +91,21 @@ def edit_answer(cursor, answer_id, answer):
                     SET message = %(answer)s
                     WHERE id = %(id)s; 
                     """,edited_answer)
+
+
+@connection.connection_handler
+def mark_as_accepted(cursor, answer_id):
+    cursor.execute("""
+                    UPDATE answer
+                    SET accepted = true
+                    WHERE id = %(id)s; 
+                    """,{'id':answer_id})
+
+
+@connection.connection_handler
+def unmark_accepted(cursor, answer_id):
+    cursor.execute("""
+                    UPDATE answer
+                    SET accepted = false
+                    WHERE id = %(id)s; 
+                    """,{'id':answer_id})

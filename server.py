@@ -27,17 +27,19 @@ def login_required(f):
 
 @app.route('/', methods = ['POST', 'GET'])
 def route_index():
-
+    tags = tag_manager.get_tags_with_number()
     latest_questions = question_manager.get_latest_questions()
 
-    return render_template('latest_questions.html', user_questions=latest_questions)
+    return render_template('latest_questions.html', tags = tags, user_questions=latest_questions)
 
 
 @app.route('/list', methods = ['POST', 'GET'])
 def route_questions():
     if request.method == 'GET':
+        tags = tag_manager.get_tags_with_number()
         user_questions = data_manager.get_data_from_db('question', request.args.get('order_by'), request.args.get('order_direction'))
         return render_template('list.html',
+                               tags = tags,
                                user_questions =user_questions,
                                order_by=request.args.get('order_by'),
                                order_direction=request.args.get('order_direction'))
@@ -61,8 +63,12 @@ def route_question_with_answer(question_id=None):
             answer_comments = comment_manager.get_comments_by_answer_id(answer_ids=answer_ids)
         else:
             answer_comments = None
-
+        try:
+            user_id = data_manager.get_user_id_by_user_name(session['username'])[0]['id']
+        except KeyError:
+            user_id = None
     return render_template('question_with_answers.html',
+                           user_id= user_id,
                            tags = tags,
                            question=question,
                            question_id=question_id,
@@ -78,8 +84,9 @@ def route_ask_new_question():
     if request.method == 'POST':
 
         util.upload_file(request.files['image'])
+        user_name = session['username']
 
-        new_question = question_manager.add_question(request.form, request.files['image'].filename)
+        new_question = question_manager.add_question(request.form, request.files['image'].filename, user_name)
         question_manager.add_question_to_db(new_question)
 
         return redirect('/')
@@ -90,6 +97,10 @@ def route_ask_new_question():
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 @login_required
 def route_edit_question(question_id):
+
+    if not data_manager.verify_if_post_id_matches_users_posts(question_id, 'question', session['username']):
+
+        return redirect(url_for("route_index"))
 
     question = question_manager.get_question_by_id(question_id=question_id)
 
@@ -124,9 +135,9 @@ def route_new_answer(question_id=None):
     if request.method == 'POST':
 
         answer = request.form.get('answer')
-
+        user_name = session['username']
         util.upload_file(request.files['image'])
-        answer_manager.add_answer(question_id=question_id, answer=answer, image_name=request.files['image'].filename)
+        answer_manager.add_answer(question_id, answer, request.files['image'].filename, user_name)
 
         return redirect(url_for('route_question_with_answer', question_id=question_id))
 
@@ -137,6 +148,10 @@ def route_new_answer(question_id=None):
 @app.route('/answer/<answer_id>/delete')
 @login_required
 def route_delete_answer(answer_id):
+    if not data_manager.verify_if_post_id_matches_users_posts(answer_id, 'answer', session['username']):
+
+        return redirect(url_for("route_index"))
+
     question_id = question_manager.get_question_id_by_answer_id(answer_id)
     answer_manager.delete_answer_by_answer_id(answer_id)
     return redirect(url_for('route_question_with_answer', question_id=question_id))
@@ -145,6 +160,10 @@ def route_delete_answer(answer_id):
 @app.route('/question/<question_id>/delete')
 @login_required
 def route_delete_question(question_id=None):
+    if not data_manager.verify_if_post_id_matches_users_posts(question_id, 'question', session['username']):
+
+        return redirect(url_for("route_index"))
+
     question_manager.delete_question(question_id)
     return redirect(url_for('route_questions'))
 
@@ -160,12 +179,28 @@ def route_search():
     return render_template('list.html', user_questions=searched_questions)
 
 
+@app.route('/tag_search')
+def route_tag_search():
+    tag_id = request.args.get('tag_id')
+    questions = tag_manager.get_questions_by_tag_id(tag_id,
+                                                    order_by=request.args.get('order_by'),
+                                                    order_direction=request.args.get('order_direction') )
+    tags = tag_manager.get_tags_with_number()
+    return render_template('tag_search.html',
+                           tag_id=tag_id,
+                           tags=tags,
+                           user_questions=questions,
+                           order_by=request.args.get('order_by'),
+                           order_direction=request.args.get('order_direction'))
+
+
 @app.route('/question/<question_id>/new-comment', methods=['GET','POST'])
 @login_required
 def route_new_question_comment(question_id=None):
     if request.method == 'POST':
         comment = request.form.get('question_comment')
-        comment_manager.add_comment_to_question(question_id=question_id, comment_message=comment)
+        user_name = session['username']
+        comment_manager.add_comment_to_question(user_name,question_id=question_id, comment_message=comment)
         return redirect(url_for('route_question_with_answer', question_id=question_id))
 
     question = question_manager.get_question_by_id(question_id=question_id)
@@ -177,7 +212,8 @@ def route_new_question_comment(question_id=None):
 def route_new_answer_comment(answer_id=None):
     if request.method == 'POST':
         comment = request.form.get('answer_comment')
-        comment_manager.add_comment_to_answer(answer_id=answer_id, comment_message=comment)
+        user_name = session['username']
+        comment_manager.add_comment_to_answer(user_name, answer_id=answer_id, comment_message=comment)
         question_id = question_manager.get_question_id_by_answer_id(answer_id=answer_id)
         return redirect(url_for('route_question_with_answer', question_id=question_id))
 
@@ -208,6 +244,10 @@ def route_add_tag(question_id, tag_id):
 @app.route('/question/<question_id>/remove_tag/<tag_id>')
 @login_required
 def route_remove_tag(question_id, tag_id):
+    if not data_manager.verify_if_post_id_matches_users_posts(question_id, 'question', session['username']):
+
+        return redirect(url_for("route_index"))
+
     tag_manager.remove_tag(question_id, tag_id)
     where_to_redirect = request.args.get('where_to_redirect')
     return redirect((url_for(where_to_redirect, question_id=question_id)))
@@ -322,6 +362,18 @@ def route_users():
     return render_template('list_users.html', users=users)
 
 
+@app.route('/mark_accepted')
+def route_mark_as_accepted():
+    answer_manager.mark_as_accepted(request.args.get('answer_id'))
+    return redirect(url_for('route_question_with_answer', question_id = request.args.get('question_id')))
+
+
+@app.route('/unmark_accepted')
+def route_unmark_accepted():
+    answer_manager.unmark_accepted(request.args.get('answer_id'))
+    return redirect(url_for('route_question_with_answer', question_id = request.args.get('question_id')))
+
+
 @app.route('/user/<user_id>')
 @login_required
 def route_user_page(user_id=None):
@@ -338,7 +390,6 @@ def route_user_page(user_id=None):
                            answer_comments=answer_comments,
                            user_data=user_data
                            )
-
 
 
 if __name__ == '__main__':
