@@ -253,3 +253,7 @@ button:hover, button:active {
 #user_data {
     font-size: 30px;
 }
+
+.comment{
+    padding-bottom:5px;
+}
