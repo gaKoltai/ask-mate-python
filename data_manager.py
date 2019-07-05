@@ -120,7 +120,8 @@ def verify_if_post_id_matches_users_posts(id_, table, user_name):
     users_posts = get_all_posts_by_user(table, user_name)
 
     for ids in users_posts:
-        if id_ == ids['id']:
+        if id_ == str(ids['id']):
+            print(ids['id'])
             return True
 
     return False

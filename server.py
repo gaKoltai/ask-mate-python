@@ -169,7 +169,7 @@ def route_delete_answer(answer_id):
 @app.route('/question/<question_id>/delete')
 @login_required
 def route_delete_question(question_id=None):
-    if not data_manager.verify_if_post_id_matches_users_posts(question_id, 'question', session['username']):
+    if data_manager.verify_if_post_id_matches_users_posts(question_id, 'question', session['username']) == False:
 
         flash('Only the creator of the post may delete a question')
 
