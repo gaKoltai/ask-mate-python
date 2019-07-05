@@ -105,7 +105,7 @@ def route_edit_question(question_id):
 
         flash('Only the creator of a post may edit a question')
 
-        return redirect(url_for('route_question_with_answers', question_id=question_id))
+        return redirect(url_for('route_question_with_answer', question_id=question_id))
 
     question = question_manager.get_question_by_id(question_id=question_id)
 
